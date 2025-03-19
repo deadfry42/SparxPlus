@@ -40,8 +40,8 @@
                 {
                     type: "toggle",
                     variable: "progressiveDisclosure",
-                    name: "Hide incompleted tasks",
-                    description: "Hide tasks which haven't yet been completed to give you peace of mind (progressive disclosure)",
+                    name: "Progressive Disclosure",
+                    description: "Hide tasks which haven't yet, to motivate you to finish.",
                 }
             ]
         },
@@ -156,6 +156,28 @@
         }, 250);
         
         audio.play();
+    }
+
+    function doProgressiveDisclosure(realnode) {
+        let tasks = realnode.childNodes;
+        for (let task of tasks) {
+            let clist = task.classList;
+            let allowed = false;
+            for (let name of clist) {
+                if (name.includes("Selected")) {
+                    allowed = true;
+                } else if (name.includes("Summary")) {
+                    allowed = true;
+                } else if (name.includes("Correct")) {
+                    allowed = true;
+                }
+            }
+            if (allowed == false) {
+                task.style.display = "none"
+            } else {
+                task.style.display = "flex"
+            }
+        }
     }
 
     addOptionToDDMenuSC("SparxPlus Test", () => {
@@ -363,6 +385,14 @@
                                     log("Maths", "Got question wrong!")
                                     if (customSettings.jumpscareWhenCorrect == true) jumpscare("assets/memes/correct")
                                 }
+                            } else if (name.includes("TaskItemsContainer")) {
+                                // q opened
+                                if (!customSettings.progressiveDisclosure) return;
+                                doProgressiveDisclosure(realnode)
+                            } else if (name.includes("SummaryProgressCounts")) {
+                                if (!customSettings.progressiveDisclosure) return;
+                                let scores = realnode.textContent.split("/")
+                                realnode.textContent = scores[0]
                             }
                         } catch(e) {
                             // log("error", e)
@@ -370,6 +400,19 @@
                         
                     }
                 }
+
+                var target = record.target
+
+                try {
+                    if (target.className.includes("TaskItemLink")) {
+                        log("Maths", "PG Thingy")
+                        if (!customSettings.progressiveDisclosure) return;
+                        doProgressiveDisclosure(target.parentNode)
+                    }
+                } catch(e) {
+
+                }
+                
 
                 var nodes = record.removedNodes
 
@@ -406,4 +449,3 @@
         }, 5000);
     });
 })();
-
