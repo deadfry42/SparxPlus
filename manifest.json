@@ -4,6 +4,11 @@
     "version": "0.1",
     "manifest_version": 3,
     "permissions": ["storage"],
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "sparxplus@nikodem.co.uk"
+        }
+    },
     "background": {
         "service_worker": "./service_worker.js",
         "scripts": ["./service_worker.js"],
