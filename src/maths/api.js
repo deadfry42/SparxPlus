@@ -70,7 +70,7 @@
         },
     ]
 
-    let githublink = "https://nikodem.co.uk"
+    let githublink = "https://github.com/deadfry42/SparxPlus"
 
     function getDescendants(node, accum) {
         var i;
