@@ -3,15 +3,15 @@
     "description": "A browser extension for SparxLearning web apps to improve QoL (without sacrificing learning!) Compatible with SparxMaths.",
     "version": "0.1",
     "manifest_version": 3,
-    "permissions": ["activeTab","scripting","tabs","storage"],
+    "permissions": ["storage"],
     "background": {
         "service_worker": "./service_worker.js",
         "scripts": ["./service_worker.js"],
         "type": "module"
     },
     "host_permissions": [
-        "http://*/*",
-        "https://*/*"
+        "*://www.sparxmaths.uk/*",
+        "*://app.sparxscience.com/*"
     ],
     "web_accessible_resources": [
         {
