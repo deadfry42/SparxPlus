@@ -6,6 +6,10 @@ function getVersion() {
     return "v0.1"
 }
 
+function getGithubLink() {
+    return "https://github.com/deadfry42/SparxPlus"
+}
+
 function getLastUpdated() {
-    return "18th of March, 2025"
+    return "19th of March, 2025"
 }

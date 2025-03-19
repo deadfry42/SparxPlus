@@ -11,6 +11,13 @@
         jumpscareWhenCorrect: false,
         enableStartupNotification: true,
         enableCustomLogo: true,
+        progressiveDisclosure: false,
+
+        test: true,
+
+        // TODO:
+        // darkMode: false,
+        // 
     };
 
     browser.storage.sync.get().then((res) => {
@@ -29,6 +36,12 @@
                     variable: "hideVideoButton",
                     name: "Disable help videos",
                     description: "Remove the video button, so that you can't see the help (basically hardcore mode)",
+                },
+                {
+                    type: "toggle",
+                    variable: "progressiveDisclosure",
+                    name: "Hide incompleted tasks",
+                    description: "Hide tasks which haven't yet been completed to give you peace of mind (progressive disclosure)",
                 }
             ]
         },
@@ -65,12 +78,16 @@
                     variable: "enableStartupNotification",
                     name: "Enable Startup Notification",
                     description: "Whether or not to notify you whenever SparxPlus successfully loads.",
+                },
+                {
+                    type: "toggle",
+                    variable: "test",
+                    name: "Enable Development features",
+                    description: "Enable features which are in development.",
                 }
             ]
         },
     ]
-
-    let githublink = "https://github.com/deadfry42/SparxPlus"
 
     function getDescendants(node, accum) {
         var i;
@@ -154,13 +171,6 @@
         const callback = (mutationRecord, observer) => {
             
             for (let record of mutationRecord) {
-                // if (!debounce && !replacedLogo) {
-                //     debounce = true;
-
-                    
-                //     debounce = false;
-                // }
-                
                 var nodes = record.addedNodes
 
                 for (let node of nodes) {
@@ -191,7 +201,7 @@
 
                                 var panelDebug = createNewSettingsPanel(name)
                                 var textDebug = document.createElement("p")
-                                textDebug.innerHTML = `SparxPlus is a browser extension which modifies Sparx homework platforms, for quality of life, or just for fun. (because let's be honest: doing homework is boring)<br><br>This project is fully open source! The code available <a href="${githublink}">here</a>!<br>(Note: The code will not be very well written lol)<br><br>This project is not affiliated with Sparx, or any of its subsidiaries/brands.`
+                                textDebug.innerHTML = `SparxPlus is a browser extension which modifies Sparx homework platforms, for quality of life, or just for fun. (because let's be honest: doing homework is boring)<br><br>This project is fully open source! The code available <a href="${getGithubLink()}">here</a>!<br>(Note: The code will not be very well written lol)<br><br>This project is not affiliated with Sparx, or any of its subsidiaries/brands.<br><br>SparxPlus version ${getVersion()}, last updated ${getLastUpdated()}`
 
                                 panelDebug.append(textDebug)
                                 sectionDebug.append(subheadingDebug)
@@ -201,7 +211,7 @@
                                 settings.append(SettingsHeader)
 
                                 for (var settingsSection of settingsFrontend) {
-                                    var header = document.createElement("h1")
+                                    var header = document.createElement("h2")
                                     header.textContent = settingsSection.header == null ? "Unknown" : settingsSection.header
 
                                     var section = document.createElement("section")
@@ -233,16 +243,21 @@
 
                                         switch (sType) {
                                             case "toggle":
+                                                let percentage = 90;
                                                 let labelDiv = document.createElement("div")
                                                 labelDiv.ariaOrientation = "vertical"
                                                 labelDiv.setAttribute("data-orientation", "vertical")
+                                                labelDiv.style.padding = "10px"
+                                                labelDiv.style.maxWidth = `${percentage}%`
                                                 // labelDiv.style.float = "right"
 
                                                 let title = document.createElement("h4")
                                                 title.innerHTML = sName
+                                                title.style.maxWidth = `${percentage}%`
                                                 
                                                 let desc = document.createElement("p")
                                                 desc.innerHTML = sDesc
+                                                desc.style.maxWidth = `${percentage}%`
 
                                                 labelDiv.append(title)
                                                 labelDiv.append(desc)
@@ -250,7 +265,7 @@
                                                 let switchlabel = document.createElement("label")
                                                 let inp = document.createElement("input")
                                                 let slider = document.createElement("span")
-    
+
                                                 switchlabel.className = "switch"
                                                 slider.className = "slider round"
                                                 inp.type = "checkbox"
