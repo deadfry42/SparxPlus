@@ -1,0 +1,41 @@
+{
+    "name": "Sparx Plus",
+    "description": "A browser extension for SparxLearning web apps to improve QoL (without sacrificing learning!) Compatible with SparxMaths.",
+    "version": "0.1",
+    "manifest_version": 3,
+    "permissions": ["activeTab","scripting","tabs","storage"],
+    "background": {
+        "service_worker": "./service_worker.js",
+        "scripts": ["./service_worker.js"],
+        "type": "module"
+    },
+    "host_permissions": [
+        "http://*/*",
+        "https://*/*"
+    ],
+    "web_accessible_resources": [
+        {
+        "resources": ["assets/*"],
+        "matches": [ "http://*/*","https://*/*" ]
+        }
+    ],
+    "icons": {
+        "16": "assets/icon/plugin-icon-16.png",
+        "32": "assets/icon/plugin-icon-32.png",
+        "48": "assets/icon/plugin-icon-48.png",
+        "64": "assets/icon/plugin-icon-64.png",
+        "128": "assets/icon/plugin-icon-128.png"
+    },
+    "content_scripts": [
+        {
+            "matches": ["*://www.sparxmaths.uk/*"],
+            "css": ["src/css/maths.css"],
+            "js": ["src/lib/index.js", "src/lib/defaults.js", "src/maths/index.js", "src/maths/api.js", "src/maths/sparxapi.js"]
+        },
+        {
+            "matches": ["*://app.sparxscience.com/*"],
+            "css": [],
+            "js": ["src/lib/index.js", "src/lib/defaults.js", "src/science/index.js"]
+        }
+    ]
+}
