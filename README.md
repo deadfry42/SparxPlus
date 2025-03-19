@@ -1,5 +1,5 @@
 # SparxPlus
-A browser extension for SparxLearning web apps to improve QoL (without sacrificing learning!)  
+A browser (chrome/firefox, soon safari?) extension for SparxLearning web apps to improve QoL (without sacrificing learning!)  
 Compatible with [SparxMaths](https://sparxmaths.com).  
 
 > [!WARNING]
