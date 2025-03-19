@@ -12,6 +12,8 @@
         enableStartupNotification: true,
         enableCustomLogo: true,
         progressiveDisclosure: false,
+        disableNameInTopright: false,
+        disableXPInTopRight: false,
 
         test: true,
 
@@ -41,7 +43,19 @@
                     type: "toggle",
                     variable: "progressiveDisclosure",
                     name: "Progressive Disclosure",
-                    description: "Hide tasks which haven't yet, to motivate you to finish.",
+                    description: "Hide tasks which haven't yet, to motivate you to finish. Doesn't work on revision.",
+                },
+                {
+                    type: "toggle",
+                    variable: "disableNameInTopright",
+                    name: "Hide name",
+                    description: "Hide the name in the top right corner of the screen.",
+                },
+                {
+                    type: "toggle",
+                    variable: "disableXPInTopRight",
+                    name: "Hide XP count",
+                    description: "Hide the XP in the top right corner of the screen.",
                 }
             ]
         },
@@ -252,11 +266,8 @@
 
                                         if (!validConfig || sVar == null) {
                                             log("Settings", "Invalid setting configuration error!")
-                                            console.log(setting)
                                             continue;
                                         }
-
-                                        log("Settings", setting.variable+" == "+sVar)
 
                                         let settingDiv = document.createElement("div")
                                         settingDiv.style.display = "flex"
@@ -297,9 +308,6 @@
                                                 inp.addEventListener('change', e => {
                                                     chrome.storage.sync.set({
                                                         [setting.variable]: inp.checked
-                                                    })
-                                                    chrome.storage.sync.get([setting.variable]).then((res) => {
-                                                        console.log(res)
                                                     })
                                                     
                                                 });
@@ -352,7 +360,6 @@
                                 log("Maths", "Question Changed! (Added)")
                             } else if (name.includes("SMLogo")) {
                                 for (var n of realnode.children) {
-                                    console.log(n.alt)
                                     if (n.constructor.name == document.createElement("img").constructor.name) {
 
                                         if (customSettings.enableCustomLogo) {
@@ -393,6 +400,14 @@
                                 if (!customSettings.progressiveDisclosure) return;
                                 let scores = realnode.textContent.split("/")
                                 realnode.textContent = scores[0]
+                            } else if (name.includes("StudentName")) {
+                                if (customSettings.disableNameInTopright) {
+                                    realnode.style.display = "none"
+                                }
+                            } else if (name.includes("XPCount")) {
+                                if (customSettings.disableXPInTopRight) {
+                                    realnode.style.display = "none"
+                                }
                             }
                         } catch(e) {
                             // log("error", e)
@@ -405,7 +420,6 @@
 
                 try {
                     if (target.className.includes("TaskItemLink")) {
-                        log("Maths", "PG Thingy")
                         if (!customSettings.progressiveDisclosure) return;
                         doProgressiveDisclosure(target.parentNode)
                     }
