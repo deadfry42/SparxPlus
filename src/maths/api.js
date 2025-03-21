@@ -1,14 +1,35 @@
 (async () => {
     var replacedLogo = false;
 
-    function appendStyleSheet(id, content) {
+    browser.storage.sync.get().then((res) => {
+        for (let object of Object.entries(res)) {
+            customSettings[object[0]] = object[1]
+        }
+    })
+
+    function appendStyleContent(id, content) {
         if (!document.querySelector("#" + id)) {
             var head = document.head || document.getElementsByTagName("head")[0];
-            head.appendChild(createStyleElement(id, content));
+            head.appendChild(createStyleElementFromContent(id, content));
         }
     }
 
-    function createStyleElement(id, content) {
+    function appendStyleSheet(id, url) {
+        if (!document.querySelector("#" + id)) {
+            var head = document.head || document.getElementsByTagName("head")[0];
+            head.appendChild(createStyleElementFromFile(id, url));
+        }
+    }
+
+    function createStyleElementFromFile(id, url) {
+        var style = document.createElement("link");
+        style.rel = "stylesheet"
+        style.href = url
+
+        return style;
+    }
+
+    function createStyleElementFromContent(id, content) {
         var style = document.createElement("style");
         style.type = "text/css";
         style.id = id;
@@ -22,12 +43,6 @@
     }
 
     var customDropDownOptions = [];
-
-    browser.storage.sync.get().then((res) => {
-        for (let object of Object.entries(res)) {
-            customSettings[object[0]] = object[1]
-        }
-    })
 
     function getDescendants(node, accum) {
         var i;
@@ -128,11 +143,16 @@
     browser.runtime.sendMessage("SP-Opened")
 
     addEventListener("load", (event) => {
-
-        if (customSettings.darkMode) {
-            log("Maths", "Enabled Darkmode!")
-            appendStyleSheet("darkmodeSP", darkModeCSS);
-        }
+        let darkModeKey = "darkMode"
+        browser.storage.sync.get(darkModeKey).then((res) => {
+            if (res[darkModeKey]) {
+                // raw query cuz customSettings sometimes doesn't update fast enough
+                // race condiiton
+                log("Maths", "Injecting darkMode css file!")
+                appendStyleSheet("darkmodeSP", browser.runtime.getURL("src/css/darkmodemaths.css"));
+            }
+        })
+        
 
         const config = { attributes: true, childList: true, subtree: true };
 
@@ -198,6 +218,7 @@
 
                                         if (!validConfig || sVar == null) {
                                             log("Settings", "Invalid setting configuration error!")
+                                            console.log(setting)
                                             continue;
                                         }
 
@@ -249,6 +270,10 @@
     
                                                 settingDiv.append(switchlabel)
                                                 settingDiv.append(labelDiv)
+                                            break;
+                                            
+                                            case "input":
+
                                             break;
                                         }
 

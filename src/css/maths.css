@@ -61,4 +61,16 @@
     border-radius: 50%;
   } 
 
-  
+  .notificationDiv {
+    position: absolute;
+    top: 82.5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 99999px;
+    padding-left: 10px;
+    padding-right: 10px;
+    box-shadow: 0 0 20px #000000;
+    opacity: 0;
+    z-index: 9999999;
+  }

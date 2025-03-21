@@ -16258,7 +16258,7 @@ html ._ReactQueryDevtools_s1pvn_1 {
     --colours-disabled-text: var(--palette-grey);
     --colours-disabled: var(--palette-light-grey);
     --colours-read-text: var(--palette-mid-grey);
-    --colours-plain-background: var(--palette-black); /*MODIFIED*/
+    --colours-plain-background: var(--palette-darker-blue); /*MODIFIED*/
     --colours-plain-background-inverted: var(--palette-dark-blue);
     --colours-light-background: var(--palette-light-grey);
     --colours-light-background-inverted: var(--palette-dark-grey);

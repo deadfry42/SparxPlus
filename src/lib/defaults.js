@@ -51,6 +51,7 @@ function createNewSettingsPanel(classNameContainer) {
 
 function sendNotification(text, time) {
     var notif = document.createElement("div")
+    notif.className = "notificationDiv";
     notif.style.position = "absolute"
     notif.style.top = "82.5%"
     notif.style.left = "50%"
