@@ -1,107 +1,33 @@
 (async () => {
     var replacedLogo = false;
 
-    const browser = chrome == null ? browser : chrome;
+    function appendStyleSheet(id, content) {
+        if (!document.querySelector("#" + id)) {
+            var head = document.head || document.getElementsByTagName("head")[0];
+            head.appendChild(createStyleElement(id, content));
+        }
+    }
+
+    function createStyleElement(id, content) {
+        var style = document.createElement("style");
+        style.type = "text/css";
+        style.id = id;
+
+        if (style.styleSheet) {
+            style.styleSheet.cssText = content;
+        } else {
+            style.appendChild(document.createTextNode(content));
+        }
+        return style;
+    }
 
     var customDropDownOptions = [];
-
-    var customSettings = { // default settings
-        hideVideoButton: false,
-        jumpscareWhenWrong: false,
-        jumpscareWhenCorrect: false,
-        enableStartupNotification: true,
-        enableCustomLogo: true,
-        progressiveDisclosure: false,
-        disableNameInTopright: false,
-        disableXPInTopRight: false,
-
-        test: true,
-
-        // TODO:
-        // darkMode: false,
-        // 
-    };
 
     browser.storage.sync.get().then((res) => {
         for (let object of Object.entries(res)) {
             customSettings[object[0]] = object[1]
         }
     })
-
-    let settingsFrontend = [
-        {
-            header: "UI Tweaks",
-            description: "Small UI tweaks to fix issues with Sparx.",
-            panel: [
-                {
-                    type: "toggle",
-                    variable: "hideVideoButton",
-                    name: "Disable help videos",
-                    description: "Remove the video button, so that you can't see the help (basically hardcore mode)",
-                },
-                {
-                    type: "toggle",
-                    variable: "progressiveDisclosure",
-                    name: "Progressive Disclosure",
-                    description: "Hide tasks which haven't yet, to motivate you to finish. Doesn't work on revision.",
-                },
-                {
-                    type: "toggle",
-                    variable: "disableNameInTopright",
-                    name: "Hide name",
-                    description: "Hide the name in the top right corner of the screen.",
-                },
-                {
-                    type: "toggle",
-                    variable: "disableXPInTopRight",
-                    name: "Hide XP count",
-                    description: "Hide the XP in the top right corner of the screen.",
-                }
-            ]
-        },
-        {
-            header: "Fun Settings",
-            description: "Fun small additions to make Sparx more enjoyable to use!",
-            panel: [
-                {
-                    type: "toggle",
-                    variable: "jumpscareWhenWrong",
-                    name: "Jumpscare upon incorrect answer",
-                    description: "Play a funny animation whenever you get a question wrong (it's scary) (plays a sound)",
-                },
-                {
-                    type: "toggle",
-                    variable: "jumpscareWhenCorrect",
-                    name: "Jumpscare upon correct answer",
-                    description: "Play a funny animation whenever you get a question correct (it's scary) (plays a sound)",
-                }
-            ]
-        },
-        {
-            header: "Extension Settings",
-            description: "Settings to do with the extension itself",
-            panel: [
-                {
-                    type: "toggle",
-                    variable: "enableCustomLogo",
-                    name: "Enable Custom logo",
-                    description: "Whether or not to use the custom SparxPlus logo in the top left.",
-                },
-                {
-                    type: "toggle",
-                    variable: "enableStartupNotification",
-                    name: "Enable Startup Notification",
-                    description: "Whether or not to notify you whenever SparxPlus successfully loads.",
-                },
-                {
-                    type: "toggle",
-                    variable: "test",
-                    name: "Enable Development features",
-                    description: "Enable features which are in development.",
-                }
-            ]
-        },
-    ]
 
     function getDescendants(node, accum) {
         var i;
@@ -202,6 +128,12 @@
     browser.runtime.sendMessage("SP-Opened")
 
     addEventListener("load", (event) => {
+
+        if (customSettings.darkMode) {
+            log("Maths", "Enabled Darkmode!")
+            appendStyleSheet("darkmodeSP", darkModeCSS);
+        }
+
         const config = { attributes: true, childList: true, subtree: true };
 
         const callback = (mutationRecord, observer) => {

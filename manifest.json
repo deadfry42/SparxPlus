@@ -33,12 +33,12 @@
     },
     "content_scripts": [
         {
-            "matches": ["*://www.sparxmaths.uk/*"],
+            "matches": ["*://www.sparxmaths.uk/*", "*://maths.sparx-learning.com/*"],
             "css": ["src/css/maths.css"],
             "js": ["src/lib/index.js", "src/lib/defaults.js", "src/maths/index.js", "src/maths/api.js", "src/maths/sparxapi.js"]
         },
         {
-            "matches": ["*://app.sparxscience.com/*"],
+            "matches": ["*://app.sparxscience.com/*", "*://science.sparx-learning.com/*"],
             "css": [],
             "js": ["src/lib/index.js", "src/lib/defaults.js", "src/science/index.js"]
         }
