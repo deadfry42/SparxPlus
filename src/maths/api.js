@@ -1,10 +1,18 @@
 (async () => {
     var replacedLogo = false;
-
-    browser.storage.sync.get().then((res) => {
-        for (let object of Object.entries(res)) {
-            customSettings[object[0]] = object[1]
-        }
+    var loadedSettings = false;
+    var getSettings = new Promise((res, rej) => {
+        if (!loadedSettings) {
+            browser.storage.sync.get().then((res) => {
+                for (let object of Object.entries(res)) {
+                    customSettings[object[0]] = object[1]
+                }
+            })
+            loadedSettings = true;
+            res(customSettings)
+        } else {
+            res(customSettings)
+        }   
     })
 
     function appendStyleContent(id, content) {
@@ -135,24 +143,24 @@
         }
     }
 
-    addOptionToDDMenuSC("SparxPlus Test", () => {
-        sendNotification("Testing!", 2500)
-        jumpscare("assets/memes/wrong")
-    })
+    
 
     browser.runtime.sendMessage("SP-Opened")
 
     addEventListener("load", (event) => {
-        let darkModeKey = "darkMode"
-        browser.storage.sync.get(darkModeKey).then((res) => {
-            if (res[darkModeKey]) {
-                // raw query cuz customSettings sometimes doesn't update fast enough
-                // race condiiton
+
+        getSettings.then((ss) => {
+            if (ss.darkMode) {
                 log("Maths", "Injecting darkMode css file!")
                 appendStyleSheet("darkmodeSP", browser.runtime.getURL("src/css/darkmodemaths.css"));
             }
+            if (ss.test) {
+                addOptionToDDMenuSC("SparxPlus Test", () => {
+                    sendNotification("Testing!", 2500)
+                    jumpscare("assets/memes/wrong")
+                })
+            }
         })
-        
 
         const config = { attributes: true, childList: true, subtree: true };
 
