@@ -17,6 +17,9 @@ const customSettings = { // default settings
 };
 
 var loadedTextObject = null;
+var loadedShowObject = null;
+var loadedPanel = null;
+var textObjectExpanded = false;
 
 const settingsFrontend = [
     {
@@ -125,23 +128,65 @@ const settingsFrontend = [
     },
     {
         header: "Logs",
-        description: "Logs that SparxPlus has logged.",
+        description: "Logs that SparxPlus has generated.",
         panel: {
             type: "blank",
             initialise: (section, header, description, panel) => {
                 var logs = document.createElement("p")
                 panel.append(logs);
 
+                loadedPanel = panel;
+                textObjectExpanded = false;
+                loadedShowObject = null;
+
                 if (loadedTextObject == null) {
                     addChangedEvent(() => {
                         if (loadedTextObject != null) {
-                            var txt = "";
-                            for (var log of getLogs()) {
-                                txt += log+"<br>";
+                            if (textObjectExpanded) {
+                                var fullTxt = "";
+                                for (var log of getLogs()) {
+                                    fullTxt += log+"<br>";
+                                }
+                                fullTxt+="-- End of logs --"
+
+                                loadedTextObject.innerHTML = fullTxt;
+                            } else {
+                                var truncatedTxt = "";
+                                var i = 0;
+                                var isTruncated = false;
+                                for (var log of getLogs()) {
+                                    i++;
+                                    if (i <= 5) truncatedTxt += log+"<br>";
+                                    else isTruncated = true;
+                                }
+                                console.log(isTruncated)
+                                console.log(textObjectExpanded)
+                                console.log(loadedShowObject)
+                                if (isTruncated && !textObjectExpanded && loadedShowObject == null) {
+                                    loadedShowObject = document.createElement("a");
+                                    loadedShowObject.textContent = "Click to show more"
+                                    loadedShowObject.style.textDecoration = "underline"
+                                    loadedShowObject.style.color = "blue";
+                                    loadedShowObject.style.cursor = "pointer";
+                                    loadedShowObject.onclick = (e) => {
+                                        textObjectExpanded = true;
+                                        loadedShowObject.remove()
+                                        loadedShowObject = null;
+
+                                        var fullTxt = "";
+                                        for (var log of getLogs()) {
+                                            fullTxt += log+"<br>";
+                                        }
+                                        fullTxt+="-- End of logs --"
+
+                                        loadedTextObject.innerHTML = fullTxt;
+                                    }
+                                    loadedPanel.append(loadedShowObject)
+                                } else {
+                                    truncatedTxt+="-- End of logs --"
+                                }
+                                loadedTextObject.innerHTML = truncatedTxt;
                             }
-                            txt+="-- End of logs --"
-                            if (txt == "-- End of logs --") txt = "No logs yet!"
-                            loadedTextObject.innerHTML = txt;
                         }
                     })
                 }
