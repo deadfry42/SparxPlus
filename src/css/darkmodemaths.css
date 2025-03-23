@@ -1,4 +1,4 @@
 :root {
-    --colours-primary: var(--palette-light-yellow);
-    --colours-interactable: var(--palette-light-yellow);
+    --colours-primary: var(--palette-white);
+    --colours-interactable: var(--palette-white);
 }
