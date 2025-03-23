@@ -47,7 +47,7 @@
             }
         }
     }
-    
+
     browser.runtime.sendMessage("SP-Opened")
 
     addEventListener("load", (event) => {
@@ -60,12 +60,14 @@
             if (res.darkMode) {
                 log("CSS", "Injecting darkMode css file!")
                 appendStyleSheet("darkmodeSP", browser.runtime.getURL("src/css/darkmodemaths.css"));
-            } else if (res.test) {
+            }
+            if (res.test) {
                 addOptionToDDMenuSC("SparxPlus Test", () => {
                     sendNotification("Testing!", 2500)
                     jumpscare("assets/memes/wrong")
                 })
-            } else if (res.customCSS != null && res.customCSS != "") {
+            }
+            if (res.customCSS != null && res.customCSS != "") {
                 log("CSS", "Injecting custom CSS!")
                 baseLog(ss.customCSS)
                 appendStyleContent("customCSS", ss.customCSS)
