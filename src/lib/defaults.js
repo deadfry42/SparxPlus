@@ -52,23 +52,10 @@ function createNewSettingsPanel(classNameContainer) {
 function sendNotification(text, time) {
     var notif = document.createElement("div")
     notif.className = "notificationDiv";
-    notif.style.position = "absolute"
-    notif.style.top = "82.5%"
-    notif.style.left = "50%"
-    notif.style.transform = "translate(-50%, -50%)"
-    notif.style.backgroundColor = "white"
-    notif.style.borderRadius = "9999px"
-    notif.style.paddingLeft = "10px"
-    notif.style.paddingRight = "10px"
-    notif.style.boxShadow = "0 0 20px #000000"
-    notif.style.opacity = 0
-    notif.style.zIndex = 99999;
 
     var txt = document.createElement("p")
+    txt.className = "notificationText";
     txt.innerHTML = text
-    txt.style.color = "#1A365D"
-    txt.style.fontFamily = "'DM Sans', sans-serif"
-    txt.style.fontWeight = "700"
 
     notif.animate(
         [

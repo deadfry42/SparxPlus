@@ -47,3 +47,11 @@
     --question-text-colour: var(--palette-light-grey) !important;
     color: var(--question-text-colour);
 }
+
+.notificationDiv {
+    background-color: #2f2f2c !important;
+}
+
+.notificationText {
+    color: var(--palette-light-grey) !important;
+}
