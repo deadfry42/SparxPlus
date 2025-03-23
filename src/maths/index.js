@@ -123,7 +123,17 @@ const settingsFrontend = [
         description: "About SparxPlus",
         panel: {
             type: "descriptive",
-            text: `SparxPlus is a browser extension which modifies Sparx homework platforms, for quality of life, or just for fun. (because let's be honest: doing homework is boring)<br><br>This project is fully open source! The code available <a href="${getGithubLink()}">here</a>!<br>(Note: The code will not be very well written lol)<br><br>This project is not affiliated with Sparx, or any of its subsidiaries/brands.<br><br>SparxPlus version ${getVersion()}, last updated ${getLastUpdated()}`
+            text: `
+            Thanks for trying SparxPlus! Hope you enjoy it!
+            <br>
+            <br>SparxPlus is a browser extension which modifies Sparx homework platforms, for quality of life, or just for fun. (because let's be honest: doing homework is boring)
+            <br>
+            <br>This project is fully open source! The code available <a href="${getGithubLink()}">here</a>!
+            <br>(Note: The code will not be very well written lol)
+            <br>
+            <br>This project is not affiliated with Sparx, or any of its subsidiaries/brands.
+            <br>
+            <br><h6>[SparxPlus version ${getVersion()}, last updated ${getLastUpdated()}]</h6>`
         }
     },
     {
@@ -159,9 +169,6 @@ const settingsFrontend = [
                                     if (i <= 5) truncatedTxt += log+"<br>";
                                     else isTruncated = true;
                                 }
-                                console.log(isTruncated)
-                                console.log(textObjectExpanded)
-                                console.log(loadedShowObject)
                                 if (isTruncated && !textObjectExpanded && loadedShowObject == null) {
                                     loadedShowObject = document.createElement("a");
                                     loadedShowObject.textContent = "Click to show more"
