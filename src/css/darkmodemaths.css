@@ -26,6 +26,8 @@
     --colours-item-hover: #3b3b37;
     --colours-item: #2f2f2c;
 
+    --colours-unstarted: var(--palette-light-grey);
+
     --colours-question-background: #2f2f2c;
     --question-text-colour: var(--palette-light-grey) !important;
 
