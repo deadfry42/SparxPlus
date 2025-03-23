@@ -9,7 +9,9 @@
     //     if (res) log("Science", "Custom logo loaded!")
     //         else log("Science", "Custom logo failed to load!")
     // }, 1000);
-    browser.runtime.sendMessage("SP-Opened")
-    sendNotification("Sparx Plus is only compatible with SparxMaths at the moment! Check back later!", 2500)
+
+    
+    // browser.runtime.sendMessage("SP-Opened")
+    // sendNotification("Sparx Plus is only compatible with SparxMaths at the moment! Check back later!", 2500)
 })();
 
