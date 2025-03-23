@@ -10,7 +10,7 @@ const customSettings = { // default settings
     customCSS: "",
     darkMode: false,
 
-    test: true,
+    test: false,
 
     // TODO:
     // keyboardShortcuts: true,

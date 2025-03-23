@@ -9,11 +9,6 @@
             "id": "sparxplus@nikodem.co.uk"
         }
     },
-    "background": {
-        "service_worker": "./service_worker.js",
-        "scripts": ["./service_worker.js"],
-        "type": "module"
-    },
     "host_permissions": [
         "*://www.sparxmaths.uk/*",
         "*://app.sparxscience.com/*"

@@ -96,3 +96,83 @@ function sendNotification(text, time) {
         }, 150);
     }, time);
 }
+
+function appendStyleContent(id, content) {
+    if (!document.querySelector("#" + id)) {
+        var head = document.head || document.getElementsByTagName("head")[0];
+        head.appendChild(createStyleElementFromContent(id, content));
+    }
+}
+
+function appendStyleSheet(id, url) {
+    if (!document.querySelector("#" + id)) {
+        var head = document.head || document.getElementsByTagName("head")[0];
+        head.appendChild(createStyleElementFromFile(id, url));
+    }
+}
+
+function createStyleElementFromFile(id, url) {
+    var style = document.createElement("link");
+    style.rel = "stylesheet"
+    style.href = url
+
+    return style;
+}
+
+function createStyleElementFromContent(id, content) {
+    var style = document.createElement("style");
+    style.type = "text/css";
+    style.id = id;
+
+    if (style.styleSheet) {
+        style.styleSheet.cssText = content;
+    } else {
+        style.appendChild(document.createTextNode(content));
+    }
+    return style;
+}
+
+function getDescendants(node, accum) {
+    var i;
+    accum = accum || [];
+    for (i = 0; i < node.childNodes.length; i++) {
+        accum.push(node.childNodes[i])
+        getDescendants(node.childNodes[i], accum);
+    }
+    return accum;
+}
+
+function jumpscare(url) {
+    var audio = new Audio(browser.runtime.getURL(url+".mp3"));
+    var imgElement = document.createElement("img")
+    imgElement.style.zIndex = 99999999;
+    imgElement.style.position = "absolute"
+    imgElement.style.left = 0;
+    imgElement.style.top = 0;
+    imgElement.style.opacity = 1;
+    var width = window.screen.width > window.outerWidth ? window.outerWidth : window.screen.width;
+    var height = window.screen.height > window.outerHeight ? window.outerHeight : window.screen.height;
+    imgElement.style.maxWidth = `${width}px`
+    imgElement.style.maxHeight = `${height}px`
+    imgElement.style.minWidth = `${width}px`
+    imgElement.style.minHeight = `${height}px`
+    // imgElement.style.background = `url(${browser.runtime.getURL(url)})`
+    imgElement.style.pointerEvents = "none"
+    imgElement.src = browser.runtime.getURL(url+".png")
+    document.body.append(imgElement)
+    setTimeout(() => {
+        imgElement.animate(
+            [
+                { opacity: "0" },
+            ], {
+                duration: 1500,
+                fill: 'forwards',
+            }
+        );
+        setTimeout(() => {
+            imgElement.remove()
+        }, 1500);
+    }, 250);
+    
+    audio.play();
+}
