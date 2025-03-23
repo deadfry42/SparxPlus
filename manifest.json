@@ -6,7 +6,7 @@
     "permissions": ["storage"],
     "browser_specific_settings": {
         "gecko": {
-            "id": "sparxplus@nikodem.co.uk"
+            "id": "sparx-plus@nikodem.co.uk"
         }
     },
     "host_permissions": [
