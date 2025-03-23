@@ -67,13 +67,13 @@
             if (res.test) {
                 addOptionToDDMenuSC("SparxPlus Test", () => {
                     sendNotification("Testing!", 2500)
-                    jumpscare("assets/memes/wrong")
+                    jumpscare("assets/memes/wrong", customSettings.audio)
                 })
             }
             if (res.customCSS != null && res.customCSS != "") {
                 log("CSS", "Injecting custom CSS!")
-                baseLog(ss.customCSS)
-                appendStyleContent("customCSS", ss.customCSS)
+                baseLog(res.customCSS)
+                appendStyleContent("customCSS", res.customCSS)
             }
 
             log("Settings", "Successfully synced settings!")
@@ -307,7 +307,11 @@
                                                             if (sWarning.static) {
                                                                 warning2.style.display = "block"
                                                             } else {
-                                                                warning2.style.display = "none"
+                                                                if (inp2.value == "" || inp2.value == null) {
+                                                                    warning2.style.display = "none"
+                                                                } else {
+                                                                    warning2.style.display = "block"
+                                                                }
                                                             }
                                                         }
         
@@ -435,15 +439,6 @@
                                 }
                             } else if (name.includes("VideoNudgePopoverChildren")) {
                                 if (customSettings.hideVideoButton) realnode.remove()
-                            } else if (name.includes("ResultFullWidth")) {
-                                // got question result
-                                if (name.includes("Incorrect")) {
-                                    log("Maths", "Got question wrong!");
-                                    if (customSettings.jumpscareWhenWrong == true) jumpscare("assets/memes/wrong")
-                                } else if (name.includes("Correct")) {
-                                    log("Maths", "Got question wrong!")
-                                    if (customSettings.jumpscareWhenCorrect == true) jumpscare("assets/memes/correct")
-                                }
                             } else if (name.includes("TaskItemsContainer")) {
                                 // q opened
                                 if (!customSettings.progressiveDisclosure) continue;
@@ -488,7 +483,6 @@
                 try {
                     var node = target;
                     var nodename = node.className;
-                    // console.log(node)
                     if (nodename == null || nodename.includes == null) return; 
                     if (nodename.includes("TaskItemLink")) {
                         if (!customSettings.progressiveDisclosure) return;
@@ -499,6 +493,8 @@
                         for (let cnode of getDescendants(node)) {
                             list.push(cnode)
                         }
+
+                        console.log(node)
                         
                         for (let realnode of list) {
                             if (realnode == null) continue;
@@ -514,6 +510,14 @@
                                     if (!realnode.classList.contains("SparxPlusSecondaryButton")) {
                                         // give the text elements a custom class to make the text colouring work
                                         realnode.classList.add("SparxPlusSecondaryButton")
+                                    }
+                                } else if (name.includes("ResultFullWidth")) {
+                                    if (name.includes("Incorrect")) {
+                                        log("Maths", "Got question wrong!");
+                                        if (customSettings.jumpscareWhenWrong) jumpscare("assets/memes/wrong", customSettings.audio)
+                                    } else if (name.includes("Correct")) {
+                                        log("Maths", "Got question wrong!")
+                                        if (customSettings.jumpscareWhenCorrect) jumpscare("assets/memes/correct", customSettings.audio)
                                     }
                                 }
                             } catch(e) {

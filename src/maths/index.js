@@ -9,6 +9,7 @@ const customSettings = { // default settings
     disableXPInTopRight: false,
     customCSS: "",
     darkMode: false,
+    audio: true,
 
     test: false,
 
@@ -93,6 +94,12 @@ const settingsFrontend = [
         panel: {
             type: "settings",
             content: [
+                {
+                    type: "toggle",
+                    variable: "audio",
+                    name: "Play extension audio",
+                    description: "Allows the extension to play sound.",
+                },
                 {
                     type: "toggle",
                     variable: "jumpscareWhenWrong",

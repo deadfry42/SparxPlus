@@ -129,7 +129,12 @@ function getDescendants(node, accum) {
     return accum;
 }
 
-function jumpscare(url) {
+function jumpscare(url, audio) {
+    var canAudio = true;
+    if (audio != null) {
+        if (audio == false) canAudio = false;
+    }
+    console.log(canAudio, audio)
     var audio = new Audio(browser.runtime.getURL(url+".mp3"));
     var imgElement = document.createElement("img")
     imgElement.style.zIndex = 99999999;
@@ -161,7 +166,7 @@ function jumpscare(url) {
         }, 1500);
     }, 250);
     
-    audio.play();
+    if (canAudio) audio.play();
 }
 
 function getSVG(which) {
