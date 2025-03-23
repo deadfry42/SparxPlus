@@ -36,6 +36,10 @@ const settingsFrontend = [
                     variable: "darkMode",
                     name: "Dark mode (Experimental)",
                     description: "Enable a native dark mode for the website (doesn't support images unfortunately)",
+                    warning: {
+                        text: "Dark mode makes remodels the website, and the website may not appear as originally intended.",
+                        static: false,
+                    }
                 },
                 {
                     type: "toggle",
@@ -74,6 +78,10 @@ const settingsFrontend = [
                     description: "Input custom CSS code to style SparxMaths the way you want to.",
                     typeSpecific: {
                         placeholder: "Input custom CSS Code here.\nThis applies when you refresh the page."
+                    },
+                    warning: {
+                        text: "The website may not appear as originally intended with Custom CSS.",
+                        static: false,
                     }
                 }
             ]
@@ -123,6 +131,10 @@ const settingsFrontend = [
                     variable: "test",
                     name: "Enable Development features",
                     description: "Enable features which are in development.",
+                    warning: {
+                        text: "Development features are work in progress, and could cause issues with the website.",
+                        static: true,
+                    }
                 }
             ]
         }

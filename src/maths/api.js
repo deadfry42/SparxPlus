@@ -142,6 +142,8 @@
                                                 let sName = setting.name == null ? validConfig = false : setting.name;
                                                 let sVar = setting.variable == null ? validConfig = false : customSettings[setting.variable];
                                                 let sDesc = setting.description == null ? "" : setting.description;
+
+                                                let sWarning = setting.warning == null ? "" : setting.warning;
         
                                                 if (!validConfig || sVar == null) {
                                                     log("Settings", "Invalid setting configuration error!")
@@ -157,6 +159,22 @@
                                                 switch (sType) {
                                                     case "toggle":
                                                         let percentage = 90;
+
+                                                        let warning = document.createElement("div")
+                                                        warning.className = "WarningContainer"
+
+                                                        let warningInner = document.createElement("div")
+                                                        warningInner.className = "Warning"
+
+                                                        let warningIcon = getSVG("triangle-exclamation")
+
+                                                        let warningText = document.createElement("span")
+                                                        warningText.innerText = sWarning.text == null ? "" : sWarning.text
+
+                                                        warningInner.append(warningIcon)
+                                                        warningInner.append(warningText)
+                                                        warning.append(warningInner);
+
                                                         let labelDiv = document.createElement("div")
                                                         labelDiv.ariaOrientation = "vertical"
                                                         labelDiv.setAttribute("data-orientation", "vertical")
@@ -186,22 +204,50 @@
                                                         inp.checked = sVar
             
                                                         inp.addEventListener('change', e => {
-                                                            console.log(inp.checked)
                                                             chrome.storage.sync.set({
                                                                 [setting.variable]: inp.checked
                                                             })
                                                             
+                                                            if (sWarning != null) {
+                                                                if (sWarning.static) {
+                                                                    if (!inp.checked) {
+                                                                        warning.style.display = "none"
+                                                                    } else {
+                                                                        warning.style.display = "block"
+                                                                    }
+                                                                }
+                                                            }
                                                         });
+
+                                                        if (sWarning != null) {
+                                                            if (sWarning.static) warning.style.display = "block"
+                                                            else warning.style.display = "none"
+                                                        }
             
                                                         switchlabel.append(inp)
                                                         switchlabel.append(slider)
             
                                                         settingDiv.append(switchlabel)
                                                         settingDiv.append(labelDiv)
+                                                        settingDiv.append(warning)
                                                     break;
                                                     
                                                     case "input":
                                                         let percentage2 = 90;
+                                                        let warning2 = document.createElement("div")
+                                                        warning2.className = "WarningContainer"
+
+                                                        let warningInner2 = document.createElement("div")
+                                                        warningInner2.className = "Warning"
+
+                                                        let warningIcon2 = getSVG("triangle-exclamation")
+
+                                                        let warningText2 = document.createElement("span")
+                                                        warningText2.innerText = sWarning.text == null ? "" : sWarning.text
+
+                                                        warningInner2.append(warningIcon2)
+                                                        warningInner2.append(warningText2)
+                                                        warning2.append(warningInner2);
         
                                                         let title2 = document.createElement("h4")
                                                         title2.innerHTML = sName
@@ -222,7 +268,26 @@
                                                             chrome.storage.sync.set({
                                                                 [setting.variable]: e.target.value
                                                             })
+
+                                                            if (sWarning != null) {
+                                                                if (sWarning.static == false) {
+                                                                    if (e.target.value == "" || e.target.value == null) {
+                                                                        warning2.style.display = "none"
+                                                                    } else {
+                                                                        warning2.style.display = "block"
+                                                                    }
+                                                                }
+                                                            }
+                                                            
                                                         });
+
+                                                        if (sWarning != null) {
+                                                            if (sWarning.static) {
+                                                                warning2.style.display = "block"
+                                                            } else {
+                                                                warning2.style.display = "none"
+                                                            }
+                                                        }
         
                                                         if (setting.typeSpecific != null) {
                                                             var placeholder = setting.typeSpecific.placeholder;
@@ -242,11 +307,13 @@
                                                         theDiv.append(title2)
                                                         theDiv.append(desc2)
                                                         theDiv.append(switchlabel2)
+
+                                                        theDiv.append(warning2)
             
                                                         settingDiv.append(theDiv)
                                                     break;
                                                 }
-        
+
                                                 panel.append(settingDiv)
                                             }
         

@@ -2,7 +2,7 @@
  .switch {
     position: relative;
     display: inline-block;
-    width: 60px;
+    min-width: 60px;
     height: 34px;
   }
   
@@ -81,3 +81,24 @@
     font-weight: 700;
     background-color: transparent;
   }
+
+/* taken from sparx maths css for consistency */
+.WarningContainer {
+  overflow: hidden;
+  grid-area: w
+}
+
+.WarningContainer .Warning {
+  background-color: var(--colours-background-warning-message);
+  padding: var(--spx-unit-3) var(--spx-unit-4);
+  border-radius: var(--spx-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-text-fill-color: initial;
+  color: var(--colours-text-warning-message)
+}
+
+.WarningContainer .Warning :first-child {
+  margin-right: var(--spx-unit-2)
+}
