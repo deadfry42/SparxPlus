@@ -1,21 +1,33 @@
 :root {
-    /* --colours-primary: var(--palette-black); */
-    --colours-interactable: var(--palette-white); /* blue highlights */
+    --colours-primary: var(--palette-white);
+    --colours-interactable: var(--palette-blue); /* blue highlights */
     --colours-nav-bar: #2a2a28;
     --colours-nav-bar-hover: #2f2f2c;
     --colours-page-background: #202020; /* white background */
+    --colours-page-background-gradient: #2a2a28; /* white background gradient for questions */
     --colours-plain-background: #2a2a28; /* panel bg */
+    --colours-plain-background-inverted: #3b3b37;
     --colours-nested-item: #2f2f2c; /* colour option bg 8 */
     --colours-text-heading: var(--palette-light-grey); /*text*/
     --colours-text-body: var(--palette-light-grey);
     --colours-text-body-inverted: var(--palette-light-grey);
 
+    --colours-light-background: #2a2a28; /* lets make it not that */
+
     --colours-text-secondary: var(--palette-white);
     --colours-secondary: var(--palette-white);
     --colours-selected: var(--palette-white);
 
+    --colours-primary: var(--palette-black);
+    --colours-background-light: var(--palette-black);
+
     --colours-regular-background: #2f2f2c;
     --colours-item-hover: #3b3b37;
+
+    --colours-question-background: #2f2f2c;
+    --question-text-colour: var(--palette-light-grey) !important;
+
+    --swclient-background: linear-gradient( 120.87deg, var(--colours-page-background) 0%, var(--colours-page-background) 48%, var(--colours-page-background-gradient) 48%, var(--colours-page-background) 100% );
 
     --spx-shadow-sm: 0px 2px 2px rgba(74, 76, 82, 0.5);
     --spx-shadow-sm-dark: 0px 2px 2px rgba(57, 60, 65, .3);
@@ -27,6 +39,9 @@
     --spx-shadow-lg-top: 0px -3px 11px rgba(128, 128, 128, .2);
 }
 
-body {
-    color: #202020;
+/* changing colour of question text */
+/* this class is set by api.js */
+.SparxPlusTextElement {
+    --question-text-colour: var(--palette-light-grey) !important;
+    color: var(--question-text-colour);
 }

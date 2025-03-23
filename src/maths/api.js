@@ -49,6 +49,14 @@
         return accum;
     }
 
+    // function getDescendants(node) {
+    //     var descList = Array.from(node.getElementsByTagName("*"));
+    //     // for (var descendant of descList) {
+    //     //     console.log(descendant)
+    //     // }
+    //     return descList;
+    // }
+
     function addOptionToDDMenuISC(icon, string, callback) {
         var option = {}
         option.string = string;
@@ -161,9 +169,7 @@
         const callback = (mutationRecord, observer) => {
             
             for (let record of mutationRecord) {
-                var nodes = record.addedNodes
-
-                for (let node of nodes) {
+                for (let node of record.addedNodes) {
                     let list = []
                     list.push(node)
                     for (let cnode of getDescendants(node)) {
@@ -172,6 +178,8 @@
                     for (let realnode of list) {
                         if (realnode == null) continue;
                         var name = realnode.className;
+                        if (name == null || name.includes == null) continue;
+                        // console.log(realnode)
                         try {
                             if (name.includes("SectionContainer") && !name.includes("PreviewSectionContainer") && !name.includes("SPARXPLUS")) {
                                 // 99% settings
@@ -401,6 +409,8 @@
                                 }
                             } else if (name.includes("QuestionScrollableContent")) {
                                 log("Maths", "Question Changed! (Added)")
+
+                                // console.log(getDescendants(realnode))
                             } else if (name.includes("SMLogo")) {
                                 for (var n of realnode.children) {
                                     if (n.constructor.name == document.createElement("img").constructor.name) {
@@ -426,11 +436,6 @@
                                 }
                             } else if (name.includes("VideoNudgePopoverChildren")) {
                                 if (customSettings.hideVideoButton) realnode.remove()
-                            } else if (name.includes("PageBackgroundImage")) {
-                                if (customSettings.darkMode) {
-                                    log("CSS", "Changed the background gradient to the dark variant!")
-                                    realnode.src = browser.runtime.getURL("assets/darkmode/gradients/maths.svg")
-                                }
                             } else if (name.includes("ResultFullWidth")) {
                                 // got question result
                                 if (name.includes("Incorrect")) {
@@ -442,10 +447,10 @@
                                 }
                             } else if (name.includes("TaskItemsContainer")) {
                                 // q opened
-                                if (!customSettings.progressiveDisclosure) return;
+                                if (!customSettings.progressiveDisclosure) continue;
                                 doProgressiveDisclosure(realnode)
                             } else if (name.includes("SummaryProgressCounts")) {
-                                if (!customSettings.progressiveDisclosure) return;
+                                if (!customSettings.progressiveDisclosure) continue;
                                 let scores = realnode.textContent.split("/")
                                 realnode.textContent = scores[0]
                             } else if (name.includes("StudentName")) {
@@ -456,9 +461,19 @@
                                 if (customSettings.disableXPInTopRight) {
                                     realnode.style.display = "none"
                                 }
+                            } else if (name.includes("LQDContainer")) {
+                                if (customSettings.darkMode) {
+                                    log("CSS", "Changed the question background gradient to the dark variant!")
+                                    // realnode.src = browser.runtime.getURL("assets/darkmode/gradients/maths.svg")
+                                }
+                            } else if (name.includes("PageBackgroundImage")) {
+                                if (customSettings.darkMode) {
+                                    log("CSS", "Changed the background gradient to the dark variant!")
+                                    realnode.src = browser.runtime.getURL("assets/darkmode/gradients/maths.svg")
+                                }
                             }
                         } catch(e) {
-                            // log("error", e)
+                            log("API", "Error parsing added object! "+e)
                         }
                         
                     }
@@ -467,18 +482,41 @@
                 var target = record.target
 
                 try {
-                    if (target.className.includes("TaskItemLink")) {
+                    var node = target;
+                    var nodename = node.className;
+                    // console.log(node)
+                    if (nodename == null || nodename.includes == null) return; 
+                    if (nodename.includes("TaskItemLink")) {
                         if (!customSettings.progressiveDisclosure) return;
-                        doProgressiveDisclosure(target.parentNode)
+                        doProgressiveDisclosure(node.parentNode)
+                    } else if (nodename.includes("TransitionPage")) {
+                        var list = []
+                        list.push(node)
+                        for (let cnode of getDescendants(node)) {
+                            list.push(cnode)
+                        }
+                        
+                        for (let realnode of list) {
+                            if (realnode == null) continue;
+                            var name = realnode.className;
+                            if (name == null || name.includes == null) continue;
+                            try {
+                                if (name.includes("TextElement")) {
+                                    if (!realnode.classList.contains("SparxPlusTextElement")) {
+                                        // give the text elements a custom class to make the text colouring work
+                                        realnode.classList.add("SparxPlusTextElement")
+                                    }
+                                }
+                            } catch(e) {
+                                log("API", "Error parsing modified object! "+e)
+                            }
+                        }
                     }
                 } catch(e) {
-
+                    log("API", "Error parsing modified object! "+e)
                 }
-                
 
-                var nodes = record.removedNodes
-
-                for (let node of nodes) {
+                for (let node of record.removedNodes) {
                     let list = []
                     list.push(node)
                     for (let cnode of getDescendants(node)) {
@@ -487,14 +525,14 @@
                     for (let realnode of list) {
                         if (realnode == null) continue;
                         var name = realnode.className;
+                        if (name == null || name.includes == null) continue;
                         try {
                             if (name.includes("QuestionScrollableContent")) {
                                 log("Maths", "Question Changed! (Removed)")
                             }
-                        } catch {
-
+                        } catch(e) {
+                            log("API", "Error parsing removed object! "+e)
                         }
-                        
                     }
                 }
             }

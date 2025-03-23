@@ -29,7 +29,7 @@ function getGithubLink() {
 }
 
 function getLastUpdated() {
-    return "23rd of March, 2025"
+    return "24th of March, 2025"
 }
 
 function getLogs() {
