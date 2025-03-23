@@ -9,4 +9,8 @@ Compatible with:
 > Issues you may encounter while using Sparx may be caused by this extension, as it modifies the html page heavily.  
 > This is considered an experimental extension.
 
-This extension is not affiliated with Sparx, otherwise known as [Sparx-Learning](https://sparx-learning.com).
+This extension is not affiliated with Sparx, otherwise known as [Sparx-Learning](https://sparx-learning.com).  
+  
+### Discord
+Join the discord server, see some more information about it!  
+https://discord.gg/uKbdBa4M5B
