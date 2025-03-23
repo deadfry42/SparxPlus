@@ -1,5 +1,4 @@
 (async () => {
-
     log("Maths", "Sparx Plus started with SparxMaths!")
 
     var replacedLogo = false;
@@ -105,6 +104,11 @@
                                 SettingsHeader.textContent = "SparxPlus settings"
 
                                 settings.append(SettingsHeader)
+                                settings.append(createWarningBox("Settings will apply after refreshing the page"))
+
+                                if (!getIsRelease()) {        
+                                    settings.append(createWarningBox("This is not a tagged release version of Sparx Plus - some features may be unintentionally broken, or in the works!"))
+                                }
 
                                 for (var settingsSection of settingsFrontend) {
                                     var header = document.createElement("h2")
@@ -168,23 +172,8 @@
                                                         let mainDiv = document.createElement("div")
                                                         mainDiv.style.display = "flex";
 
-                                                        let warning = document.createElement("div")
-                                                        warning.style.display = "none"
-                                                        warning.style.paddingBottom = "10px"
-                                                        warning.style.paddingTop = "0px"
-                                                        warning.className = "WarningContainer"
-
-                                                        let warningInner = document.createElement("div")
-                                                        warningInner.className = "Warning"
-
-                                                        let warningIcon = getSVG("triangle-exclamation")
-
-                                                        let warningText = document.createElement("span")
-                                                        if (sWarning != null) warningText.innerText = sWarning.text == null ? "" : sWarning.text
-
-                                                        warningInner.append(warningIcon)
-                                                        warningInner.append(warningText)
-                                                        warning.append(warningInner);
+                                                        let warning;
+                                                        if (sWarning != null) warning = createWarningBox(sWarning.text == null ? "" : sWarning.text);
 
                                                         let labelDiv = document.createElement("div")
                                                         labelDiv.ariaOrientation = "vertical"
@@ -234,6 +223,13 @@
                                                             }
                                                         });
 
+                                                        switchlabel.append(inp)
+                                                        switchlabel.append(slider)
+            
+                                                        mainDiv.append(switchlabel)
+                                                        mainDiv.append(labelDiv)
+                                                        settingDiv.append(mainDiv)
+                                                        
                                                         if (sWarning != null) {
                                                             if (sWarning.static) warning.style.display = "block"
                                                             else {
@@ -243,33 +239,16 @@
                                                                     warning.style.display = "block"
                                                                 }
                                                             }
+
+                                                            settingDiv.append(warning)
                                                         }
-            
-                                                        switchlabel.append(inp)
-                                                        switchlabel.append(slider)
-            
-                                                        mainDiv.append(switchlabel)
-                                                        mainDiv.append(labelDiv)
-                                                        settingDiv.append(mainDiv)
-                                                        settingDiv.append(warning)
                                                     break;
                                                     
                                                     case "input":
                                                         let percentage2 = 90;
-                                                        let warning2 = document.createElement("div")
-                                                        warning2.className = "WarningContainer"
 
-                                                        let warningInner2 = document.createElement("div")
-                                                        warningInner2.className = "Warning"
-
-                                                        let warningIcon2 = getSVG("triangle-exclamation")
-
-                                                        let warningText2 = document.createElement("span")
-                                                        warningText2.innerText = sWarning.text == null ? "" : sWarning.text
-
-                                                        warningInner2.append(warningIcon2)
-                                                        warningInner2.append(warningText2)
-                                                        warning2.append(warningInner2);
+                                                        let warning2
+                                                        if (sWarning != null) warning2 = createWarningBox(sWarning.text == null ? "" : sWarning.text);
         
                                                         let title2 = document.createElement("h4")
                                                         title2.innerHTML = sName
@@ -302,18 +281,6 @@
                                                             }
                                                             
                                                         });
-
-                                                        if (sWarning != null) {
-                                                            if (sWarning.static) {
-                                                                warning2.style.display = "block"
-                                                            } else {
-                                                                if (inp2.value == "" || inp2.value == null) {
-                                                                    warning2.style.display = "none"
-                                                                } else {
-                                                                    warning2.style.display = "block"
-                                                                }
-                                                            }
-                                                        }
         
                                                         if (setting.typeSpecific != null) {
                                                             var placeholder = setting.typeSpecific.placeholder;
@@ -334,8 +301,19 @@
                                                         theDiv.append(desc2)
                                                         theDiv.append(switchlabel2)
 
-                                                        theDiv.append(warning2)
-            
+                                                        if (sWarning != null) {
+                                                            if (sWarning.static) {
+                                                                warning2.style.display = "block"
+                                                            } else {
+                                                                if (inp2.value == "" || inp2.value == null) {
+                                                                    warning2.style.display = "none"
+                                                                } else {
+                                                                    warning2.style.display = "block"
+                                                                }
+                                                            }
+                                                            theDiv.append(warning2)
+                                                        }
+
                                                         settingDiv.append(theDiv)
                                                     break;
                                                 }
@@ -472,7 +450,8 @@
                                 }
                             }
                         } catch(e) {
-                            log("API", "Error parsing added object! "+e)
+                            log("API", "Error parsing added object!")
+                            baseLog(e)
                         }
                         
                     }

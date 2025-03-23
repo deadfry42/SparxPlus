@@ -20,8 +20,16 @@ function baseLog(msg) {
     }
 }
 
+// VERY IMPORTANT
+// CHANGE VERSION TO MATCH manifest.json, AND RELEASE TO MATCH RELEASE
+// OTHERWISE BAD :(
+
 function getVersion() {
     return "v0.2.4"
+}
+
+function getIsRelease() {
+    return false;
 }
 
 function getGithubLink() {

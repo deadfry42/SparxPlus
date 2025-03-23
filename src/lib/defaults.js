@@ -181,3 +181,24 @@ function getSVG(which) {
             return null;
     }
 }
+
+function createWarningBox(warningTxt) {
+    var warning = document.createElement("div")
+    warning.style.paddingBottom = "10px"
+    warning.style.paddingTop = "0px"
+    warning.className = "WarningContainer"
+
+    var warningInner = document.createElement("div")
+    warningInner.className = "Warning"
+
+    var warningIcon = getSVG("triangle-exclamation")
+
+    var warningText = document.createElement("span")
+    warningText = warningTxt;
+
+    warningInner.append(warningIcon)
+    warningInner.append(warningText)
+    warning.append(warningInner);
+
+    return warning;
+}
