@@ -160,6 +160,11 @@
                     jumpscare("assets/memes/wrong")
                 })
             }
+            if (ss.customCSS != null && ss.customCSS != "") {
+                log("Maths", "Injecting custom CSS!")
+                console.log(ss.customCSS)
+                appendStyleContent("customCSS", ss.customCSS)
+            }
         })
 
         const config = { attributes: true, childList: true, subtree: true };
@@ -237,28 +242,28 @@
 
                                         switch (sType) {
                                             case "toggle":
-                                                let percentage = 90;
-                                                let labelDiv = document.createElement("div")
+                                                var percentage = 90;
+                                                var labelDiv = document.createElement("div")
                                                 labelDiv.ariaOrientation = "vertical"
                                                 labelDiv.setAttribute("data-orientation", "vertical")
                                                 labelDiv.style.padding = "10px"
                                                 labelDiv.style.maxWidth = `${percentage}%`
                                                 // labelDiv.style.float = "right"
 
-                                                let title = document.createElement("h4")
+                                                var title = document.createElement("h4")
                                                 title.innerHTML = sName
                                                 title.style.maxWidth = `${percentage}%`
                                                 
-                                                let desc = document.createElement("p")
+                                                var desc = document.createElement("p")
                                                 desc.innerHTML = sDesc
                                                 desc.style.maxWidth = `${percentage}%`
 
                                                 labelDiv.append(title)
                                                 labelDiv.append(desc)
 
-                                                let switchlabel = document.createElement("label")
-                                                let inp = document.createElement("input")
-                                                let slider = document.createElement("span")
+                                                var switchlabel = document.createElement("label")
+                                                var inp = document.createElement("input")
+                                                var slider = document.createElement("span")
 
                                                 switchlabel.className = "switch"
                                                 slider.className = "slider round"
@@ -281,7 +286,50 @@
                                             break;
                                             
                                             case "input":
+                                                var percentage = 90;
 
+                                                var title = document.createElement("h4")
+                                                title.innerHTML = sName
+                                                title.style.maxWidth = `${percentage}%`
+                                                
+                                                var desc = document.createElement("p")
+                                                desc.innerHTML = sDesc
+                                                desc.style.maxWidth = `${percentage}%`
+
+                                                var theDiv = document.createElement("div")
+
+                                                var switchlabel = document.createElement("label")
+                                                var inp = document.createElement("textarea")
+    
+                                                inp.value = sVar
+    
+                                                inp.addEventListener('change', (e) => {
+                                                    console.log(e.target.value)
+                                                    chrome.storage.sync.set({
+                                                        [setting.variable]: e.target.value
+                                                    })
+                                                });
+
+                                                if (setting.typeSpecific != null) {
+                                                    var placeholder = setting.typeSpecific.placeholder;
+                                                    if (placeholder != null) {
+                                                        inp.placeholder = placeholder
+                                                    }
+                                                }
+
+                                                inp.style.minWidth = `${100}%`
+                                                inp.style.resize = "both"
+
+                                                settingDiv.ariaOrientation = "vertical"
+                                                settingDiv.setAttribute("data-orientation", "vertical")
+    
+                                                switchlabel.append(inp)
+
+                                                theDiv.append(title)
+                                                theDiv.append(desc)
+                                                theDiv.append(switchlabel)
+    
+                                                settingDiv.append(theDiv)
                                             break;
                                         }
 

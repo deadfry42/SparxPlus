@@ -7,6 +7,7 @@ const customSettings = { // default settings
     progressiveDisclosure: false,
     disableNameInTopright: false,
     disableXPInTopRight: false,
+    customCSS: "",
 
     test: true,
 
@@ -55,6 +56,9 @@ const settingsFrontend = [
                 variable: "customCSS",
                 name: "Custom CSS",
                 description: "Input custom CSS code to style SparxMaths the way you want to.",
+                typeSpecific: {
+                    placeholder: "Input custom CSS Code here.\nThis applies when you refresh the page."
+                }
             }
         ]
     },
