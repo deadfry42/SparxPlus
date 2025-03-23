@@ -426,6 +426,11 @@
                                 }
                             } else if (name.includes("VideoNudgePopoverChildren")) {
                                 if (customSettings.hideVideoButton) realnode.remove()
+                            } else if (name.includes("PageBackgroundImage")) {
+                                if (customSettings.darkMode) {
+                                    log("CSS", "Changed the background gradient to the dark variant!")
+                                    realnode.src = browser.runtime.getURL("assets/darkmode/gradients/maths.svg")
+                                }
                             } else if (name.includes("ResultFullWidth")) {
                                 // got question result
                                 if (name.includes("Incorrect")) {
