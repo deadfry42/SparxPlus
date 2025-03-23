@@ -22,6 +22,8 @@ var loadedShowObject = null;
 var loadedPanel = null;
 var textObjectExpanded = false;
 
+var logLength = 25;
+
 const settingsFrontend = [
     {
         header: "UI Tweaks",
@@ -173,7 +175,7 @@ const settingsFrontend = [
                                 var isTruncated = false;
                                 for (var log of getLogs()) {
                                     i++;
-                                    if (i <= 5) truncatedTxt += log+"<br>";
+                                    if (i <= logLength) truncatedTxt += log+"<br>";
                                     else isTruncated = true;
                                 }
                                 if (isTruncated && !textObjectExpanded && loadedShowObject == null) {
