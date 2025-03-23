@@ -143,7 +143,7 @@
                                                 let sVar = setting.variable == null ? validConfig = false : customSettings[setting.variable];
                                                 let sDesc = setting.description == null ? "" : setting.description;
 
-                                                let sWarning = setting.warning == null ? "" : setting.warning;
+                                                let sWarning = setting.warning == null ? null : setting.warning;
         
                                                 if (!validConfig || sVar == null) {
                                                     log("Settings", "Invalid setting configuration error!")
@@ -152,7 +152,7 @@
                                                 }
         
                                                 let settingDiv = document.createElement("div")
-                                                settingDiv.style.display = "flex"
+                                                // settingDiv.style.display = "flex"
         
                                                 // definetly not stolen from w3schools.com
         
@@ -160,7 +160,13 @@
                                                     case "toggle":
                                                         let percentage = 90;
 
+                                                        let mainDiv = document.createElement("div")
+                                                        mainDiv.style.display = "flex";
+
                                                         let warning = document.createElement("div")
+                                                        warning.style.display = "none"
+                                                        warning.style.paddingBottom = "10px"
+                                                        warning.style.paddingTop = "0px"
                                                         warning.className = "WarningContainer"
 
                                                         let warningInner = document.createElement("div")
@@ -169,7 +175,7 @@
                                                         let warningIcon = getSVG("triangle-exclamation")
 
                                                         let warningText = document.createElement("span")
-                                                        warningText.innerText = sWarning.text == null ? "" : sWarning.text
+                                                        if (sWarning != null) warningText.innerText = sWarning.text == null ? "" : sWarning.text
 
                                                         warningInner.append(warningIcon)
                                                         warningInner.append(warningText)
@@ -180,7 +186,8 @@
                                                         labelDiv.setAttribute("data-orientation", "vertical")
                                                         labelDiv.style.padding = "10px"
                                                         labelDiv.style.maxWidth = `${percentage}%`
-                                                        // labelDiv.style.float = "right"
+                                                        labelDiv.style.paddingBottom = "3px"
+                                                        labelDiv.style.marginBottom = "3px"
         
                                                         let title = document.createElement("h4")
                                                         title.innerHTML = sName
@@ -189,6 +196,8 @@
                                                         let desc = document.createElement("p")
                                                         desc.innerHTML = sDesc
                                                         desc.style.maxWidth = `${percentage}%`
+                                                        desc.style.padding = 0
+                                                        desc.style.margin = 0;
         
                                                         labelDiv.append(title)
                                                         labelDiv.append(desc)
@@ -198,6 +207,7 @@
                                                         let slider = document.createElement("span")
         
                                                         switchlabel.className = "switch"
+                                                        switchlabel.style.marginTop = "10px"
                                                         slider.className = "slider round"
                                                         inp.type = "checkbox"
             
@@ -209,7 +219,7 @@
                                                             })
                                                             
                                                             if (sWarning != null) {
-                                                                if (sWarning.static) {
+                                                                if (!sWarning.static) {
                                                                     if (!inp.checked) {
                                                                         warning.style.display = "none"
                                                                     } else {
@@ -221,14 +231,21 @@
 
                                                         if (sWarning != null) {
                                                             if (sWarning.static) warning.style.display = "block"
-                                                            else warning.style.display = "none"
+                                                            else {
+                                                                if (!inp.checked) {
+                                                                    warning.style.display = "none"
+                                                                } else {
+                                                                    warning.style.display = "block"
+                                                                }
+                                                            }
                                                         }
             
                                                         switchlabel.append(inp)
                                                         switchlabel.append(slider)
             
-                                                        settingDiv.append(switchlabel)
-                                                        settingDiv.append(labelDiv)
+                                                        mainDiv.append(switchlabel)
+                                                        mainDiv.append(labelDiv)
+                                                        settingDiv.append(mainDiv)
                                                         settingDiv.append(warning)
                                                     break;
                                                     

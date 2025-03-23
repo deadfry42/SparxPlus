@@ -133,7 +133,7 @@ const settingsFrontend = [
                     description: "Enable features which are in development.",
                     warning: {
                         text: "Development features are work in progress, and could cause issues with the website.",
-                        static: true,
+                        static: false,
                     }
                 }
             ]

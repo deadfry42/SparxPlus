@@ -1,6 +1,6 @@
 :root {
     --colours-primary: var(--palette-white);
-    --colours-interactable: var(--palette-blue); /* blue highlights */
+    --colours-interactable: #4f4f4a; /* blue highlights */
     --colours-nav-bar: #2a2a28;
     --colours-nav-bar-hover: #2f2f2c;
     --colours-page-background: #202020; /* white background */
@@ -17,7 +17,7 @@
 
     --colours-text-secondary: var(--palette-white);
     --colours-secondary: var(--palette-white);
-    --colours-selected: var(--palette-white);
+    --colours-selected: var(--palette-light-blue);
 
     --colours-primary: var(--palette-black);
     --colours-background-light: var(--palette-black);
@@ -28,6 +28,9 @@
 
     --colours-question-background: #2f2f2c;
     --question-text-colour: var(--palette-light-grey) !important;
+
+    --secondary-bg-hover: #3b3b37;
+    --secondary-bg: #2f2f2c;
 
     --swclient-background: linear-gradient( 120.87deg, var(--colours-page-background) 0%, var(--colours-page-background) 48%, var(--colours-page-background-gradient) 48%, var(--colours-page-background) 100% );
 
