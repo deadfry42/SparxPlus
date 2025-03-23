@@ -31,7 +31,7 @@ const settingsFrontend = [
                 {
                     type: "toggle",
                     variable: "darkMode",
-                    name: "Dark mode",
+                    name: "Dark mode (Experimental)",
                     description: "Enable a native dark mode for the website (doesn't support images unfortunately)",
                 },
                 {
