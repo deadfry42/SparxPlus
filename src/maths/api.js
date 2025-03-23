@@ -1,4 +1,7 @@
 (async () => {
+
+    log("Maths", "Sparx Plus started with SparxMaths!")
+
     var replacedLogo = false;
     var customDropDownOptions = [];
 
@@ -48,7 +51,9 @@
         }
     }
 
-    addEventListener("load", (event) => {
+    const loadedPage = () => {
+
+        log("HTML", "Page finished loading!")
 
         browser.storage.sync.get().then((res) => {
             for (let object of Object.entries(res)) {
@@ -70,6 +75,8 @@
                 baseLog(ss.customCSS)
                 appendStyleContent("customCSS", ss.customCSS)
             }
+
+            log("Settings", "Successfully synced settings!")
         })
 
         const config = { attributes: true, childList: true, subtree: true };
@@ -549,5 +556,9 @@
                 sendNotification("Sparx Plus failed to load! (Please report this to the developer!) This extension was last updated on: "+getLastUpdated(), 5000)
             }
         }, 5000);
+    };
+
+    addEventListener("pageshow", (event) => {
+        loadedPage();
     });
-})();
+})()
