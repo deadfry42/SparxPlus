@@ -1,7 +1,12 @@
 # SparxPlus
-A browser (chrome/firefox, soon safari?) extension for SparxLearning web apps to improve QoL (without sacrificing learning!)  
-Compatible with [SparxMaths](https://sparxmaths.com).  
+A browser (chrome and firefox, and soon maybe safari?) extension for SparxLearning web apps to improve QoL (without sacrificing learning!)  
+Compatible with:
+* <img width=14 src="assets/icon/sparx/maths.svg"> [SparxMaths](https://sparxmaths.com).
+* More is planned in the future.
 
 > [!WARNING]
-> This is not officially supported by Sparx, and can be removed, banned or made dysfunctional whenever.  
-> This extension was made in a few days, with no plan to actually maintain in the future, so the code is messy and hard to adapt.
+> This is not officially supported by Sparx, and can be removed, banned or stop working whenever.  
+> Issues you may encounter while using Sparx may be caused by this extension, as it modifies the html page heavily.  
+> This is considered an experimental extension.
+
+This extension is not affiliated with Sparx, otherwise known as [Sparx-Learning](https://sparx-learning.com).
