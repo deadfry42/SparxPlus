@@ -8,6 +8,7 @@
     --colours-plain-background: #2a2a28; /* panel bg */
     --colours-plain-background-inverted: #3b3b37;
     --colours-nested-item: #2f2f2c; /* colour option bg 8 */
+    --colours-nested-item-hover: #3b3b37; /* colour option bg 8 */
     --colours-text-heading: var(--palette-light-grey); /*text*/
     --colours-text-body: var(--palette-light-grey);
     --colours-text-body-inverted: var(--palette-light-grey);

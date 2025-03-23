@@ -8,11 +8,12 @@ const customSettings = { // default settings
     disableNameInTopright: false,
     disableXPInTopRight: false,
     customCSS: "",
+    darkMode: false,
 
     test: true,
 
     // TODO:
-    darkMode: false,
+    // keyboardShortcuts: true,
     // 
 };
 
@@ -57,6 +58,12 @@ const settingsFrontend = [
                     variable: "disableXPInTopRight",
                     name: "Hide XP count",
                     description: "Hide the XP in the top right corner of the screen.",
+                },
+                {
+                    type: "toggle",
+                    variable: "keyboardShortcuts",
+                    name: "Enable keyboard shortcuts",
+                    description: "Enable shortcuts to make using Sparx on a keyboard easier",
                 },
                 {
                     type: "input",
