@@ -21,7 +21,7 @@ function baseLog(msg) {
 }
 
 function getVersion() {
-    return "v0.1"
+    return "v0.2-dev"
 }
 
 function getGithubLink() {
