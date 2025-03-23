@@ -465,6 +465,11 @@
                                     log("CSS", "Changed the background gradient to the dark variant!")
                                     realnode.src = browser.runtime.getURL("assets/darkmode/gradients/maths.svg")
                                 }
+                            } else if (name.includes("ButtonSecondary")) {
+                                if (!realnode.classList.contains("SparxPlusSecondaryButton")) {
+                                    // give the text elements a custom class to make the text colouring work
+                                    realnode.classList.add("SparxPlusSecondaryButton")
+                                }
                             }
                         } catch(e) {
                             log("API", "Error parsing added object! "+e)
@@ -499,6 +504,11 @@
                                     if (!realnode.classList.contains("SparxPlusTextElement")) {
                                         // give the text elements a custom class to make the text colouring work
                                         realnode.classList.add("SparxPlusTextElement")
+                                    } 
+                                } else if (name.includes("ButtonSecondary")) {
+                                    if (!realnode.classList.contains("SparxPlusSecondaryButton")) {
+                                        // give the text elements a custom class to make the text colouring work
+                                        realnode.classList.add("SparxPlusSecondaryButton")
                                     }
                                 }
                             } catch(e) {

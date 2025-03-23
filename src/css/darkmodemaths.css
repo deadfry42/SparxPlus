@@ -29,8 +29,8 @@
     --colours-question-background: #2f2f2c;
     --question-text-colour: var(--palette-light-grey) !important;
 
-    --secondary-bg-hover: #3b3b37;
-    --secondary-bg: #2f2f2c;
+    --secondary-bg-hover: #3b3b37 !important;
+    --secondary-bg: #2f2f2c !important;
 
     --swclient-background: linear-gradient( 120.87deg, var(--colours-page-background) 0%, var(--colours-page-background) 48%, var(--colours-page-background-gradient) 48%, var(--colours-page-background) 100% );
 
@@ -50,6 +50,16 @@
     --question-text-colour: var(--palette-light-grey) !important;
     color: var(--question-text-colour);
 }
+
+/* changing colour of secondary buttons */
+/* this class is set by api.js */
+.SparxPlusSecondaryButton {
+    background-color: #2f2f2c;
+}
+
+/* .SparxPlusSecondaryButton :hover {
+    background-color: #3b3b37;
+} */
 
 .notificationDiv {
     background-color: #2f2f2c !important;
