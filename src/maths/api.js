@@ -48,8 +48,6 @@
         }
     }
 
-    browser.runtime.sendMessage("SP-Opened")
-
     addEventListener("load", (event) => {
 
         browser.storage.sync.get().then((res) => {
