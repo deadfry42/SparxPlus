@@ -2,17 +2,23 @@
     var replacedLogo = false;
     var loadedSettings = false;
     var getSettings = new Promise((res, rej) => {
-        if (!loadedSettings) {
-            browser.storage.sync.get().then((res) => {
-                for (let object of Object.entries(res)) {
-                    customSettings[object[0]] = object[1]
-                }
-            })
-            loadedSettings = true;
-            res(customSettings)
-        } else {
-            res(customSettings)
-        }   
+        try {
+            if (!loadedSettings) {
+                browser.storage.sync.get().then((res) => {
+                    for (let object of Object.entries(res)) {
+                        customSettings[object[0]] = object[1]
+                    }
+                })
+                loadedSettings = true;
+                res(customSettings)
+            } else {
+                res(customSettings)
+            }  
+        } catch(e) {
+            log("Settings", "Sparx Plus failed to get settings!")
+            rej()
+        }
+         
     })
 
     function appendStyleContent(id, content) {
@@ -151,7 +157,7 @@
 
         getSettings.then((ss) => {
             if (ss.darkMode) {
-                log("Maths", "Injecting darkMode css file!")
+                log("CSS", "Injecting darkMode css file!")
                 appendStyleSheet("darkmodeSP", browser.runtime.getURL("src/css/darkmodemaths.css"));
             }
             if (ss.test) {
@@ -161,8 +167,8 @@
                 })
             }
             if (ss.customCSS != null && ss.customCSS != "") {
-                log("Maths", "Injecting custom CSS!")
-                console.log(ss.customCSS)
+                log("CSS", "Injecting custom CSS!")
+                baseLog(ss.customCSS)
                 appendStyleContent("customCSS", ss.customCSS)
             }
         })
@@ -192,23 +198,6 @@
                                 var SettingsHeader = document.createElement("h1")
                                 SettingsHeader.textContent = "SparxPlus settings"
 
-                                var sectionDebug = document.createElement("section")
-                                
-                                var subheadingDebug = document.createElement("h2")
-                                subheadingDebug.textContent = "About"
-
-                                var descDebug = document.createElement("p")
-                                descDebug.textContent = "About SparxPlus"
-
-                                var panelDebug = createNewSettingsPanel(name)
-                                var textDebug = document.createElement("p")
-                                textDebug.innerHTML = `SparxPlus is a browser extension which modifies Sparx homework platforms, for quality of life, or just for fun. (because let's be honest: doing homework is boring)<br><br>This project is fully open source! The code available <a href="${getGithubLink()}">here</a>!<br>(Note: The code will not be very well written lol)<br><br>This project is not affiliated with Sparx, or any of its subsidiaries/brands.<br><br>SparxPlus version ${getVersion()}, last updated ${getLastUpdated()}`
-
-                                panelDebug.append(textDebug)
-                                sectionDebug.append(subheadingDebug)
-                                sectionDebug.append(descDebug)
-                                sectionDebug.append(panelDebug)
-
                                 settings.append(SettingsHeader)
 
                                 for (var settingsSection of settingsFrontend) {
@@ -221,129 +210,186 @@
                                     description.innerHTML = settingsSection.description == null ? "" : settingsSection.description
 
                                     var panel = createNewSettingsPanel(name)
+                                    let validConfig = true;
 
-                                    for (let setting of settingsSection.panel) {
-                                        let validConfig = true;
-                                        let sType = setting.type == null ? validConfig = false : setting.type;
-                                        let sName = setting.name == null ? validConfig = false : setting.name;
-                                        let sVar = setting.variable == null ? validConfig = false : customSettings[setting.variable];
-                                        let sDesc = setting.description == null ? "" : setting.description;
+                                    var psetting = settingsSection.panel == null ? validConfig = false : settingsSection.panel;
 
-                                        if (!validConfig || sVar == null) {
-                                            log("Settings", "Invalid setting configuration error!")
-                                            console.log(setting)
-                                            continue;
-                                        }
+                                    if (!validConfig) {
+                                        log("Settings", "Invalid panel configuration error!")
+                                        baseLog(psetting);
+                                        continue;
+                                    }
+                                    
+                                    var pType = psetting.type == null ? validConfig = false : psetting.type;
+                                    var pText = psetting.text;
+                                    var pContent = psetting.content;
+                                    var pInitialise = psetting.initialise;
 
-                                        let settingDiv = document.createElement("div")
-                                        settingDiv.style.display = "flex"
-
-                                        // definetly not stolen from w3schools.com
-
-                                        switch (sType) {
-                                            case "toggle":
-                                                var percentage = 90;
-                                                var labelDiv = document.createElement("div")
-                                                labelDiv.ariaOrientation = "vertical"
-                                                labelDiv.setAttribute("data-orientation", "vertical")
-                                                labelDiv.style.padding = "10px"
-                                                labelDiv.style.maxWidth = `${percentage}%`
-                                                // labelDiv.style.float = "right"
-
-                                                var title = document.createElement("h4")
-                                                title.innerHTML = sName
-                                                title.style.maxWidth = `${percentage}%`
-                                                
-                                                var desc = document.createElement("p")
-                                                desc.innerHTML = sDesc
-                                                desc.style.maxWidth = `${percentage}%`
-
-                                                labelDiv.append(title)
-                                                labelDiv.append(desc)
-
-                                                var switchlabel = document.createElement("label")
-                                                var inp = document.createElement("input")
-                                                var slider = document.createElement("span")
-
-                                                switchlabel.className = "switch"
-                                                slider.className = "slider round"
-                                                inp.type = "checkbox"
-    
-                                                inp.checked = sVar
-    
-                                                inp.addEventListener('change', e => {
-                                                    chrome.storage.sync.set({
-                                                        [setting.variable]: inp.checked
-                                                    })
-                                                    
-                                                });
-    
-                                                switchlabel.append(inp)
-                                                switchlabel.append(slider)
-    
-                                                settingDiv.append(switchlabel)
-                                                settingDiv.append(labelDiv)
-                                            break;
-                                            
-                                            case "input":
-                                                var percentage = 90;
-
-                                                var title = document.createElement("h4")
-                                                title.innerHTML = sName
-                                                title.style.maxWidth = `${percentage}%`
-                                                
-                                                var desc = document.createElement("p")
-                                                desc.innerHTML = sDesc
-                                                desc.style.maxWidth = `${percentage}%`
-
-                                                var theDiv = document.createElement("div")
-
-                                                var switchlabel = document.createElement("label")
-                                                var inp = document.createElement("textarea")
-    
-                                                inp.value = sVar
-    
-                                                inp.addEventListener('change', (e) => {
-                                                    console.log(e.target.value)
-                                                    chrome.storage.sync.set({
-                                                        [setting.variable]: e.target.value
-                                                    })
-                                                });
-
-                                                if (setting.typeSpecific != null) {
-                                                    var placeholder = setting.typeSpecific.placeholder;
-                                                    if (placeholder != null) {
-                                                        inp.placeholder = placeholder
-                                                    }
-                                                }
-
-                                                inp.style.minWidth = `${100}%`
-                                                inp.style.resize = "both"
-
-                                                settingDiv.ariaOrientation = "vertical"
-                                                settingDiv.setAttribute("data-orientation", "vertical")
-    
-                                                switchlabel.append(inp)
-
-                                                theDiv.append(title)
-                                                theDiv.append(desc)
-                                                theDiv.append(switchlabel)
-    
-                                                settingDiv.append(theDiv)
-                                            break;
-                                        }
-
-                                        panel.append(settingDiv)
+                                    if (!validConfig) {
+                                        log("Settings", "Invalid panel configuration error!")
+                                        baseLog(psetting);
+                                        continue;
                                     }
 
+                                    switch (pType) {
+                                        case "settings":
+                                            if (pContent == null) validConfig = false;
+                                            else
+                                            for (let setting of pContent) {
+                                                let validConfig = true;
+                                                let sType = setting.type == null ? validConfig = false : setting.type;
+                                                let sName = setting.name == null ? validConfig = false : setting.name;
+                                                let sVar = setting.variable == null ? validConfig = false : customSettings[setting.variable];
+                                                let sDesc = setting.description == null ? "" : setting.description;
+        
+                                                if (!validConfig || sVar == null) {
+                                                    log("Settings", "Invalid setting configuration error!")
+                                                    baseLog(setting)
+                                                    continue;
+                                                }
+        
+                                                let settingDiv = document.createElement("div")
+                                                settingDiv.style.display = "flex"
+        
+                                                // definetly not stolen from w3schools.com
+        
+                                                switch (sType) {
+                                                    case "toggle":
+                                                        var percentage = 90;
+                                                        var labelDiv = document.createElement("div")
+                                                        labelDiv.ariaOrientation = "vertical"
+                                                        labelDiv.setAttribute("data-orientation", "vertical")
+                                                        labelDiv.style.padding = "10px"
+                                                        labelDiv.style.maxWidth = `${percentage}%`
+                                                        // labelDiv.style.float = "right"
+        
+                                                        var title = document.createElement("h4")
+                                                        title.innerHTML = sName
+                                                        title.style.maxWidth = `${percentage}%`
+                                                        
+                                                        var desc = document.createElement("p")
+                                                        desc.innerHTML = sDesc
+                                                        desc.style.maxWidth = `${percentage}%`
+        
+                                                        labelDiv.append(title)
+                                                        labelDiv.append(desc)
+        
+                                                        var switchlabel = document.createElement("label")
+                                                        var inp = document.createElement("input")
+                                                        var slider = document.createElement("span")
+        
+                                                        switchlabel.className = "switch"
+                                                        slider.className = "slider round"
+                                                        inp.type = "checkbox"
+            
+                                                        inp.checked = sVar
+            
+                                                        inp.addEventListener('change', e => {
+                                                            chrome.storage.sync.set({
+                                                                [setting.variable]: inp.checked
+                                                            })
+                                                            
+                                                        });
+            
+                                                        switchlabel.append(inp)
+                                                        switchlabel.append(slider)
+            
+                                                        settingDiv.append(switchlabel)
+                                                        settingDiv.append(labelDiv)
+                                                    break;
+                                                    
+                                                    case "input":
+                                                        var percentage = 90;
+        
+                                                        var title = document.createElement("h4")
+                                                        title.innerHTML = sName
+                                                        title.style.maxWidth = `${percentage}%`
+                                                        
+                                                        var desc = document.createElement("p")
+                                                        desc.innerHTML = sDesc
+                                                        desc.style.maxWidth = `${percentage}%`
+        
+                                                        var theDiv = document.createElement("div")
+        
+                                                        var switchlabel = document.createElement("label")
+                                                        var inp = document.createElement("textarea")
+            
+                                                        inp.value = sVar
+            
+                                                        inp.addEventListener('change', (e) => {
+                                                            chrome.storage.sync.set({
+                                                                [setting.variable]: e.target.value
+                                                            })
+                                                        });
+        
+                                                        if (setting.typeSpecific != null) {
+                                                            var placeholder = setting.typeSpecific.placeholder;
+                                                            if (placeholder != null) {
+                                                                inp.placeholder = placeholder
+                                                            }
+                                                        }
+        
+                                                        inp.style.minWidth = `${100}%`
+                                                        inp.style.resize = "both"
+        
+                                                        settingDiv.ariaOrientation = "vertical"
+                                                        settingDiv.setAttribute("data-orientation", "vertical")
+            
+                                                        switchlabel.append(inp)
+        
+                                                        theDiv.append(title)
+                                                        theDiv.append(desc)
+                                                        theDiv.append(switchlabel)
+            
+                                                        settingDiv.append(theDiv)
+                                                    break;
+                                                }
+        
+                                                panel.append(settingDiv)
+                                            }
+        
+                                            
+                                        break;
+
+                                        case "descriptive":
+                                            if (pText == null) validConfig = false;
+                                            else
+                                            var content = document.createElement("p")
+                                            content.innerHTML = pText;
+
+                                            panel.append(content)
+                                        break;
+
+                                        case "blank":
+
+                                        break;
+
+                                        default:
+                                            validConfig = false;
+                                        break;
+                                    }
+
+                                    if (!validConfig) {
+                                        log("Settings", "Invalid panel configuration error!")
+                                        baseLog(psetting);
+                                        continue;
+                                    }
+                                    
                                     section.append(header)
                                     section.append(description)
                                     section.append(panel)
-
+        
                                     settings.append(section)
-                                }
 
-                                settings.append(sectionDebug)
+                                    if (pInitialise != null) {
+                                        try {
+                                            pInitialise(section, header, description, panel);
+                                        } catch(e) {
+                                            log("Settings", "Failed to run panel initialisation!")
+                                            baseLog(e)
+                                        }
+                                    }
+                                }
 
                                 log("Settings", "Added settings page successfully!")
                             } else if (name.includes("DropdownMenuContent")) {
@@ -385,9 +431,9 @@
                                             n.remove();
                                             realnode.append(newImg);
 
-                                            log("Maths", "Custom logo loaded and enabled!")
+                                            log("Logo", "Custom logo loaded and enabled!")
                                         } else {
-                                            log("Maths", "Custom logo loaded, but not enabled!")
+                                            log("Logo", "Custom logo loaded, but not enabled!")
                                         }
 
                                         if (customSettings.enableStartupNotification) sendNotification("Sparx Plus successfully loaded! (Maths)", 2500)
@@ -470,7 +516,7 @@
 
         setTimeout(() => {
             if (!replacedLogo) {
-                log("Maths", "Logo check failed!")
+                log("Logo", "Logo check failed!")
                 sendNotification("Sparx Plus failed to load! (Please report this to the developer!) This extension was last updated on: "+getLastUpdated(), 5000)
             }
         }, 5000);

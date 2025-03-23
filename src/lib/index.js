@@ -1,5 +1,23 @@
+var logs = [];
+var changedEvents = [];
+
 function log(department, msg) {
-    console.log("[SparxPlus] "+department+" // "+msg)
+    var res = "[SparxPlus] "+department+" // "+msg
+    console.log(res)
+    logs.push(res)
+
+    for (let event of changedEvents) {
+        event();
+    }
+}
+
+function baseLog(msg) {
+    console.log(msg)
+    logs.push(msg)
+
+    for (let event of changedEvents) {
+        event();
+    }
 }
 
 function getVersion() {
@@ -12,4 +30,12 @@ function getGithubLink() {
 
 function getLastUpdated() {
     return "19th of March, 2025"
+}
+
+function getLogs() {
+    return logs;
+}
+
+function addChangedEvent(event) {
+    changedEvents.push(event);
 }
