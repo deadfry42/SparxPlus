@@ -161,7 +161,7 @@ const settingsFrontend = [
             <br>
             <br>This project is not affiliated with Sparx, or any of its subsidiaries/brands.
             <br>
-            <br><h6>[SparxPlus version ${getVersion()}, last updated ${getLastUpdated()}]</h6>`
+            <br><h6>[SparxPlus version ${getVersion()+(!getIsRelease() ? "-dev" : "")}, last updated ${getLastUpdated()}]</h6>`
         }
     },
     {
