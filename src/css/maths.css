@@ -85,7 +85,17 @@
 /* taken from sparx maths css for consistency */
 .WarningContainer {
   overflow: hidden;
-  grid-area: w
+  grid-area: w;
+
+  animation: show 0.4s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
+
+  opacity: 0;
+}
+
+@keyframes show {
+  100% {
+    opacity: 1;
+  }
 }
 
 .WarningContainer .Warning {
