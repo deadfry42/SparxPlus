@@ -53,6 +53,10 @@
     --spx-shadow-lg-top: 0px -3px 11px rgba(128, 128, 128, .2);
 }
 
+p, h1, h2, h3, h4, h5, h6 {
+  color: var(--palette-light-grey) !important;
+}
+
 /* changing colour of question text */
 /* this class is set by api.js */
 .SparxPlusTextElement {
@@ -80,4 +84,8 @@
 
 .SparxPlusTopicFilterLabel {
     color: var(--palette-light-grey) !important;
+}
+
+.experimental {
+  color: white !important;
 }

@@ -194,10 +194,9 @@
                                                         titleTxt.style.maxWidth = "auto"
 
                                                         if (sExperimental) {
-                                                            let experimental = getSVG("experimental")
+                                                            let experimental = getSVG("experimental", "experimental")
                                                             experimental.style.width = 20
                                                             experimental.style.height = 20;
-                                                            experimental.style.color = "white"
                                                             title.append(experimental)
                                                         }
                                                         title.append(titleTxt)
@@ -274,10 +273,9 @@
                                                         title2Txt.style.maxWidth = "auto"
 
                                                         if (sExperimental) {
-                                                            let experimental = getSVG("experimental")
+                                                            let experimental = getSVG("experimental", "experimental")
                                                             experimental.style.width = 20
                                                             experimental.style.height = 20;
-                                                            experimental.style.color = "white"
                                                             title2.append(experimental)
                                                         }
                                                         title2.append(title2Txt)
@@ -496,12 +494,13 @@
 
                 try {
                     var node = target;
+                    console.log(node);
                     var nodename = node.className;
                     if (nodename == null || nodename.includes == null) return; 
                     if (nodename.includes("TaskItemLink")) {
                         if (!customSettings.progressiveDisclosure) return;
                         doProgressiveDisclosure(node.parentNode)
-                    } else if (nodename.includes("TransitionPage")) {
+                    } else if (nodename.includes("TransitionPage") || nodename.includes("Activity") || nodename.includes("QuestionContainer")) {
                         var list = []
                         list.push(node)
                         for (let cnode of getDescendants(node)) {

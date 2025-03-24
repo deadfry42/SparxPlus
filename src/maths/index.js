@@ -105,13 +105,13 @@ const settingsFrontend = [
                 {
                     type: "toggle",
                     variable: "jumpscareWhenWrong",
-                    name: "Jumpscare upon incorrect answer (broken)",
+                    name: "Jumpscare upon incorrect answer",
                     description: "Play a funny animation whenever you get a question wrong (it's scary) (plays a sound)",
                 },
                 {
                     type: "toggle",
                     variable: "jumpscareWhenCorrect",
-                    name: "Jumpscare upon correct answer (broken)",
+                    name: "Jumpscare upon correct answer",
                     description: "Play a funny animation whenever you get a question correct (it's scary) (plays a sound)",
                 }
             ]
@@ -163,7 +163,7 @@ const settingsFrontend = [
             <br>
             <br>This project is not affiliated with Sparx, or any of its subsidiaries/brands.
             <br>
-            <br><h6>[SparxPlus version ${getVersion()+(!getIsRelease() ? "-dev" : "")}, last updated ${getLastUpdated()}]</h6>`
+            <br><h6>[SparxPlus version ${getVersion()}, last updated ${getLastUpdated()}]</h6>`
         }
     },
     {

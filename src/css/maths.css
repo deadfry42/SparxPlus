@@ -112,3 +112,7 @@
 .WarningContainer .Warning :first-child {
   margin-right: var(--spx-unit-2)
 }
+
+.experimental {
+  color: black;
+}
