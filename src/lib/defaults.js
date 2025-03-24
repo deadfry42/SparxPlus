@@ -185,24 +185,32 @@ function getSVG(which, className) {
             return svg.firstChild;
         break;
 
+        case "empty":
+            var svg = document.createElement("svg")
+            svg.innerHTML = ""
+            return svg;
+        break;
+
         default:
-            return null;
+            return getSVG("empty");
     }
 }
 
-function createWarningBox(warningTxt) {
+function createWarningBox(warningTxt, isInformational) {
     var warning = document.createElement("div")
     warning.style.paddingBottom = "10px"
     warning.style.paddingTop = "0px"
-    warning.className = "WarningContainer"
+    warning.className = isInformational == null ? "WarningContainer" : isInformational ? "InfoContainer" : "WarningContainer"
 
     var warningInner = document.createElement("div")
-    warningInner.className = "Warning"
+    warningInner.className = isInformational == null ? "Warning" : isInformational ? "Info" : "Warning"
 
-    var warningIcon = getSVG("triangle-exclamation")
+    var warningIcon = isInformational == null ? getSVG("triangle-exclamation") : isInformational ? getSVG("empty") : getSVG("triangle-exclamation")
 
     var warningText = document.createElement("span")
-    warningText = warningTxt;
+    warningText.innerHTML = warningTxt;
+    warningText.className = isInformational == null ? "WarningText" : isInformational ? "InfoText" : "WarningText"
+    // warningText = warningTxt;
 
     warningInner.append(warningIcon)
     warningInner.append(warningText)

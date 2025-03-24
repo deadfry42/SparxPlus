@@ -73,6 +73,11 @@ const settingsFrontend = [
                     experimental: true,
                     name: "Enable keyboard shortcuts",
                     description: "Enable shortcuts to make using Sparx on a keyboard easier",
+                    warning: {
+                        text: "C - open Compulsary tab<br>X - open XP Boost tab<br>T - open Target tab<br>I - open Independent Learning tab<br>Q - Open the assignment at the top of the page<br>[1-9] - Open task 1-9<br>Esc - Use the back button, or press the logo if no back buttons exist.",
+                        static: false,
+                        info: true,
+                    }
                 },
                 {
                     type: "input",

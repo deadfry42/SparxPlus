@@ -92,6 +92,15 @@
   opacity: 0;
 }
 
+.InfoContainer {
+  overflow: hidden;
+  grid-area: w;
+
+  animation: show 0.4s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
+
+  opacity: 0;
+}
+
 @keyframes show {
   100% {
     opacity: 1;
@@ -106,11 +115,25 @@
   align-items: center;
   justify-content: center;
   -webkit-text-fill-color: initial;
-  color: var(--colours-text-warning-message)
+  color: var(--colours-text-warning-message);
 }
 
 .WarningContainer .Warning :first-child {
-  margin-right: var(--spx-unit-2)
+  margin-right: var(--spx-unit-2);
+}
+.InfoContainer .Info :first-child {
+  margin-right: var(--spx-unit-2);
+}
+
+.InfoContainer .Info {
+  background-color: rgb(190 232 224);
+  padding: var(--spx-unit-3) var(--spx-unit-4);
+  border-radius: var(--spx-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-text-fill-color: initial;
+  color: rgb(42 169 173);
 }
 
 .experimental {

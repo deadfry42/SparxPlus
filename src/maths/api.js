@@ -181,7 +181,7 @@
                                                         mainDiv.style.display = "flex";
 
                                                         let warning;
-                                                        if (sWarning != null) warning = createWarningBox(sWarning.text == null ? "" : sWarning.text);
+                                                        if (sWarning != null) warning = createWarningBox(sWarning.text == null ? "" : sWarning.text, sWarning.info == null ? false : sWarning.info);
 
                                                         let labelDiv = document.createElement("div")
                                                         labelDiv.ariaOrientation = "vertical"
@@ -268,7 +268,7 @@
                                                     
                                                     case "input":
                                                         let warning2
-                                                        if (sWarning != null) warning2 = createWarningBox(sWarning.text == null ? "" : sWarning.text);
+                                                        if (sWarning != null) warning2 = createWarningBox(sWarning.text == null ? "" : sWarning.text, sWarning.info == null ? false : sWarning.info);
         
                                                         let title2 = document.createElement("div")
                                                         title2.ariaOrientation = "horizontal"
@@ -470,7 +470,6 @@
                             } else if (name.includes("LQDContainer")) {
                                 if (customSettings.darkMode) {
                                     log("CSS", "Changed the question background gradient to the dark variant!")
-                                    // realnode.src = browser.runtime.getURL("assets/darkmode/gradients/maths.svg")
                                 }
                             } else if (name.includes("PageBackgroundImage")) {
                                 if (customSettings.darkMode) {
@@ -479,13 +478,22 @@
                                 }
                             } else if (name.includes("ButtonSecondary")) {
                                 if (!realnode.classList.contains("SparxPlusSecondaryButton")) {
-                                    // give the text elements a custom class to make the text colouring work
                                     realnode.classList.add("SparxPlusSecondaryButton")
                                 }
                             } else if (name.includes("TopicFilterLabel")) {
                                 if (!realnode.classList.contains("SparxPlusTopicFilterLabel")) {
-                                    // give the text elements a custom class to make the text colouring work
                                     realnode.classList.add("SparxPlusTopicFilterLabel")
+                                }
+                            } else if (name.includes("SupportTipsItem")) {
+                                if (!realnode.classList.contains("SparxPlusSupportTipsItem")) {
+                                    realnode.classList.add("SparxPlusSupportTipsItem")
+
+                                    // sparx doesn't add any variable i can easily change to this text
+                                    // hard coded fixes to the rescue!!!
+
+                                    for (var child of realnode.children) {
+                                        if (!child.classList.contains("SparxPlusSupportTipsItem")) child.classList.add("SparxPlusSupportTipsText")
+                                    }
                                 }
                             }
                         } catch(e) {
