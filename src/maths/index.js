@@ -14,7 +14,7 @@ const customSettings = { // default settings
     test: false,
 
     // TODO:
-    keyboardShortcuts: true,
+    keyboardShortcuts: false,
     // 
 };
 

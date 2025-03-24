@@ -201,8 +201,8 @@
 
                                                         if (sExperimental) {
                                                             let experimental = getSVG("experimental", "experimental")
-                                                            experimental.style.width = 20
-                                                            experimental.style.height = 20;
+                                                            experimental.style.maxWidth = 20
+                                                            experimental.style.maxHeight = 20;
                                                             title.append(experimental)
                                                         }
                                                         title.append(titleTxt)
@@ -280,8 +280,8 @@
 
                                                         if (sExperimental) {
                                                             let experimental = getSVG("experimental", "experimental")
-                                                            experimental.style.width = 20
-                                                            experimental.style.height = 20;
+                                                            experimental.style.maxWidth = 20
+                                                            experimental.style.maxHeight = 20;
                                                             title2.append(experimental)
                                                         }
                                                         title2.append(title2Txt)
