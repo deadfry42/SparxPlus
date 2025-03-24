@@ -68,6 +68,14 @@
                     sendNotification("Testing!", 2500)
                     jumpscare("assets/memes/wrong", customSettings.audio)
                 })
+                addOptionToDDMenuSC("SparxPlus Test 2", () => {
+                    sendNotification("Testing among us sus !", 2500)
+                    jumpscare("assets/memes/correct", customSettings.audio)
+                })
+                addOptionToDDMenuSC("SparxPlus Test Yes", () => {
+                    sendNotification("Testing ohio !", 2500)
+                    jumpscare("assets/memes/wrong2", customSettings.audio)
+                })
             }
             if (res.customCSS != null && res.customCSS != "") {
                 log("CSS", "Injecting custom CSS!")
@@ -411,7 +419,7 @@
 
                                     for (let o of customDropDownOptions) {
                                         if (o.icon != null) Icon = o.icon;
-                                        var newOption = createNewOptionInDDM(cNameA, cNameDiv, Icon, o.string)
+                                        var newOption = createNewOptionInDDM(cNameA, cNameDiv, Icon.cloneNode(true), o.string)
 
                                         newOption.onclick = (event) => {
                                             o.callback();
