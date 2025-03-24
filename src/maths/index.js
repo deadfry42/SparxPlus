@@ -105,13 +105,13 @@ const settingsFrontend = [
                 {
                     type: "toggle",
                     variable: "jumpscareWhenWrong",
-                    name: "Jumpscare upon incorrect answer",
+                    name: "Jumpscare upon incorrect answer (broken)",
                     description: "Play a funny animation whenever you get a question wrong (it's scary) (plays a sound)",
                 },
                 {
                     type: "toggle",
                     variable: "jumpscareWhenCorrect",
-                    name: "Jumpscare upon correct answer",
+                    name: "Jumpscare upon correct answer (broken)",
                     description: "Play a funny animation whenever you get a question correct (it's scary) (plays a sound)",
                 }
             ]
