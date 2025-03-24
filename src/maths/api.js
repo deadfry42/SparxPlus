@@ -478,6 +478,11 @@
                                     // give the text elements a custom class to make the text colouring work
                                     realnode.classList.add("SparxPlusSecondaryButton")
                                 }
+                            } else if (name.includes("TopicFilterLabel")) {
+                                if (!realnode.classList.contains("SparxPlusTopicFilterLabel")) {
+                                    // give the text elements a custom class to make the text colouring work
+                                    realnode.classList.add("SparxPlusTopicFilterLabel")
+                                }
                             }
                         } catch(e) {
                             log("API", "Error parsing added object!")
@@ -502,8 +507,6 @@
                         for (let cnode of getDescendants(node)) {
                             list.push(cnode)
                         }
-
-                        console.log(node)
                         
                         for (let realnode of list) {
                             if (realnode == null) continue;

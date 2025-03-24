@@ -9,11 +9,18 @@
     --colours-plain-background-inverted: #3b3b37;
     --colours-nested-item: #2f2f2c; /* colour option bg 8 */
     --colours-nested-item-hover: #3b3b37; /* colour option bg 8 */
+    --colours-nested-item-correct: rgba(12 111 69 1);
     --colours-text-heading: var(--palette-light-grey); /*text*/
     --colours-text-body: var(--palette-light-grey);
     --colours-text-body-inverted: var(--palette-light-grey);
 
+    --colours-locked: #202020;
+
     --colours-light-background: #2a2a28; /* lets make it not that */
+    --colours-background-info: #2a2a28;
+    --colours-background-highlighted: #3b3b37;
+
+    --colours-tab-hover: var(--palette-dark-blue);
 
     --colours-text-secondary: var(--palette-white);
     --colours-secondary: var(--palette-white);
@@ -68,5 +75,9 @@
 }
 
 .notificationText {
+    color: var(--palette-light-grey) !important;
+}
+
+.SparxPlusTopicFilterLabel {
     color: var(--palette-light-grey) !important;
 }
