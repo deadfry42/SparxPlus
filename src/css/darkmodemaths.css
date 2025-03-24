@@ -1,6 +1,6 @@
 :root {
     --colours-primary: var(--palette-white);
-    --colours-interactable: #4f4f4a; /* blue highlights */
+    --colours-interactable: var(--palette-light-blue); /*#4f4f4a;*/ /* blue highlights */
     --colours-nav-bar: #2a2a28;
     --colours-nav-bar-hover: #2f2f2c;
     --colours-page-background: #202020; /* white background */
@@ -42,6 +42,8 @@
     --secondary-bg-hover: #3b3b37 !important;
     --secondary-bg: #2f2f2c !important;
 
+    --spx-button-outlined-color: var(--palette-dark-blue) !important;
+
     --swclient-background: linear-gradient( 120.87deg, var(--colours-page-background) 0%, var(--colours-page-background) 48%, var(--colours-page-background-gradient) 48%, var(--colours-page-background) 100% );
 
     --spx-shadow-sm: 0px 2px 2px rgba(74, 76, 82, 0.5);
@@ -74,6 +76,14 @@ p, h1, h2, h3, h4, h5, h6 {
 .SparxPlusKeypadButton {
     background-color: #3b3b37;
     color: var(--palette-light-grey);
+}
+
+.SparxPlusIndependentLearningNoContentMessageText {
+    color: var(--palette-light-grey);
+}
+
+.SparxPlusInlineSlotOptions {
+    background-color: #3b3b37 !important;
 }
 
 /* .SparxPlusSecondaryButton :hover {

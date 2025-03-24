@@ -134,7 +134,6 @@ function jumpscare(url, audio) {
     if (audio != null) {
         if (audio == false) canAudio = false;
     }
-    console.log(canAudio, audio)
     var audio = new Audio(browser.runtime.getURL(url+".mp3"));
     var imgElement = document.createElement("img")
     imgElement.style.zIndex = 99999999;

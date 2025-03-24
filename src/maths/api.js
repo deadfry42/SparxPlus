@@ -495,6 +495,14 @@
                                         if (!child.classList.contains("SparxPlusSupportTipsItem")) child.classList.add("SparxPlusSupportTipsText")
                                     }
                                 }
+                            } else if (name.includes("IndependentLearningNoContentMessage")) {
+                                for (var child of realnode.children) {
+                                    if (!child.classList.contains("SparxPlusIndependentLearningNoContentMessageText")) child.classList.add("SparxPlusIndependentLearningNoContentMessageText")
+                                }
+                            } else if (name.includes("InlineSlotOptions")) {
+                                if (!realnode.classList.contains("SparxPlusInlineSlotOptions")) {
+                                    realnode.classList.add("SparxPlusInlineSlotOptions")
+                                }
                             }
                         } catch(e) {
                             log("API", "Error parsing added object!")
@@ -540,8 +548,10 @@
                                             var cname = children.className;
                                             if (cname == null || cname.includes == null) continue;
                                             if (cname.includes("Content")) {
-                                                if (children.firstChild.data.toLowerCase() == "back") {
-                                                    realnode.classList.add("SparxPlusBackQuestionButton")
+                                                if (children.firstChild.data != null) {
+                                                    if (children.firstChild.data.toLowerCase() == "back") {
+                                                        realnode.classList.add("SparxPlusBackQuestionButton")
+                                                    }
                                                 }
                                             }
                                         }
@@ -553,6 +563,10 @@
                                     } else if (name.includes("Correct")) {
                                         log("Maths", "Got question wrong!")
                                         if (customSettings.jumpscareWhenCorrect) jumpscare("assets/memes/correct", customSettings.audio)
+                                    }
+                                } else if (name.includes("InlineSlotOptions")) {
+                                    if (!realnode.classList.contains("SparxPlusInlineSlotOptions")) {
+                                        realnode.classList.add("SparxPlusInlineSlotOptions")
                                     }
                                 }
                                 if (name.includes("Button") && realnode) {
