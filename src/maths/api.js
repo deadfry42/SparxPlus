@@ -74,6 +74,12 @@
                 baseLog(res.customCSS)
                 appendStyleContent("customCSS", res.customCSS)
             }
+            if (res.keyboardShortcuts) {
+                log("Settings", "Enabling keyboard shortcuts")
+                addEventListener("keydown", (event) => {
+                    doKeyboardInput(event)
+                });
+            }
 
             log("Settings", "Successfully synced settings!")
         })
@@ -494,7 +500,7 @@
 
                 try {
                     var node = target;
-                    console.log(node);
+                    // console.log(node);
                     var nodename = node.className;
                     if (nodename == null || nodename.includes == null) return; 
                     if (nodename.includes("TaskItemLink")) {
@@ -519,8 +525,18 @@
                                     } 
                                 } else if (name.includes("ButtonSecondary")) {
                                     if (!realnode.classList.contains("SparxPlusSecondaryButton")) {
-                                        // give the text elements a custom class to make the text colouring work
                                         realnode.classList.add("SparxPlusSecondaryButton")
+                                    }
+                                    if (!realnode.classList.contains("SparxPlusBackQuestionButton")) {
+                                        for (var children of realnode.children) {
+                                            var cname = children.className;
+                                            if (cname == null || cname.includes == null) continue;
+                                            if (cname.includes("Content")) {
+                                                if (children.firstChild.data.toLowerCase() == "back") {
+                                                    realnode.classList.add("SparxPlusBackQuestionButton")
+                                                }
+                                            }
+                                        }
                                     }
                                 } else if (name.includes("ResultFullWidth")) {
                                     if (name.includes("Incorrect")) {
@@ -529,6 +545,16 @@
                                     } else if (name.includes("Correct")) {
                                         log("Maths", "Got question wrong!")
                                         if (customSettings.jumpscareWhenCorrect) jumpscare("assets/memes/correct", customSettings.audio)
+                                    }
+                                }
+                                if (name.includes("Button") && realnode) {
+                                    var id = realnode.id;
+                                    if (id != null && id.includes != null) {
+                                        if (id.includes("button-")) {
+                                            if (!realnode.classList.contains("SparxPlusKeypadButton")) {
+                                                realnode.classList.add("SparxPlusKeypadButton")
+                                            }
+                                        }
                                     }
                                 }
                             } catch(e) {
@@ -576,4 +602,107 @@
     addEventListener("pageshow", (event) => {
         loadedPage();
     });
+
+    const doKeyboardInput = (event) => {
+        // i have to implement keyboard shortcuts in this way
+        // because some elements are created then deleted
+        // so we have to parse them when the key is pressed
+        // it's not very performant but it is easy to do :p
+
+        let matched = false;
+        for (let mapping of keyboardMapping) {
+            if (matched) break;
+            var viable = true;
+            var matches = mapping.classMatches == null ? viable = false : mapping.classMatches;
+            var keys = mapping.keys == null ? viable = false : mapping.keys;
+            var action = mapping.action == null ? viable = false : mapping.action;
+
+            var elementCheck = mapping.elementCheck;
+            var keyStarted = mapping.keyStarted;
+            var keySuccessful = mapping.keySuccessful;
+
+            if (!viable) continue;
+
+            var foundKey = null;
+
+            for (let key of keys) {
+                if (key == event.key) {
+                    foundKey = key;
+                    break;
+                }
+            }
+
+            if (foundKey == null) continue;
+
+            if (keyStarted != null) keyStarted(foundKey)
+
+            let element;
+
+            for (let match of matches) {
+                if (matched == true) break;
+                for (let node of document.body.querySelectorAll("*")) {
+                    if (matched == true) break;
+                    let name = node.className;
+                    if (name == null) continue;
+                    if (name.includes == null) continue;
+
+                    if (name.includes(match)) {
+                        if (elementCheck == null) {
+                            matched = true;
+                            element = node;
+                            break;
+                        } else {
+                            var res = elementCheck(node)
+                            matched = res ? true : matched
+                            if (res) {
+                                element = node;
+                                break;
+                            }
+                            
+                        }
+                        continue;
+                    }
+                }
+            }
+
+            if (!matched) break;
+
+            // match, key pressed
+
+            switch(action.toLowerCase()) {
+                case "click":
+                    element.dispatchEvent(new MouseEvent("click", {
+                        view: window,
+                        button: 0,
+                        cancelable: false,
+                        bubbles: true,
+                        relatedTarget: element
+                    }));
+                    if (keySuccessful != null) keySuccessful(element, foundKey)
+                break;
+
+                case "rightclick":
+                    element.dispatchEvent(new MouseEvent("click", {
+                        view: window,
+                        button: 2,
+                        cancelable: false,
+                        bubbles: true,
+                        relatedTarget: element
+                    }));
+                    if (keySuccessful != null) keySuccessful(element, foundKey)
+                break;
+
+                case "button":
+                    element.click();
+                    if (keySuccessful != null) keySuccessful(element, foundKey)
+                break;
+
+                case "none":
+                    if (keySuccessful != null) keySuccessful(element, foundKey)
+                break;
+            }
+            
+            
+        }
+    }
 })()

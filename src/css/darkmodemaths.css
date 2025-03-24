@@ -15,6 +15,7 @@
     --colours-text-body-inverted: var(--palette-light-grey);
 
     --colours-locked: #202020;
+    --colours-disabled: #202020;
 
     --colours-light-background: #2a2a28; /* lets make it not that */
     --colours-background-info: #2a2a28;
@@ -23,7 +24,7 @@
     --colours-tab-hover: var(--palette-dark-blue);
 
     --colours-text-secondary: var(--palette-white);
-    --colours-secondary: var(--palette-white);
+    --colours-secondary: #3b3b37;
     --colours-selected: var(--palette-light-blue);
 
     --colours-primary: var(--palette-black);
@@ -53,7 +54,7 @@
     --spx-shadow-lg-top: 0px -3px 11px rgba(128, 128, 128, .2);
 }
 
-p, h1, h2, h3, h4, h5, h6 {
+p, h1, h2, h3, h4, h5, h6, span {
   color: var(--palette-light-grey) !important;
 }
 
@@ -68,6 +69,11 @@ p, h1, h2, h3, h4, h5, h6 {
 /* this class is set by api.js */
 .SparxPlusSecondaryButton {
     background-color: #2f2f2c;
+}
+
+.SparxPlusKeypadButton {
+    background-color: #3b3b37;
+    color: var(--palette-light-grey);
 }
 
 /* .SparxPlusSecondaryButton :hover {
@@ -88,4 +94,9 @@ p, h1, h2, h3, h4, h5, h6 {
 
 .experimental {
   color: white !important;
+}
+
+/* make loading screen dark, make question flashing disappear */
+body {
+    background-color: #2a2a28;
 }

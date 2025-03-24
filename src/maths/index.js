@@ -233,3 +233,98 @@ const settingsFrontend = [
         }
     },
 ]
+
+const keyboardMapping = [
+    // see https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values
+    // for key names
+    {
+        classMatches: ["SparxPlusBackQuestionButton", "BackButton", "SMLogo"],
+        keys: ["Escape"],
+        action: "button",
+    },
+    {
+        classMatches: ["SMLogo"],
+        keys: ["p"],
+        action: "button",
+    },
+    {
+        classMatches: ["NavButton"],
+        elementCheck: (element) => {
+            try {
+                return element.children[1].firstChild.data.toLowerCase() == "compulsory"
+            } catch(e) {
+                return false;
+            }
+        },
+        keys: ["c"],
+        action: "button",
+    },
+    {
+        classMatches: ["NavButton"],
+        elementCheck: (element) => {
+            try {
+                return element.children[1].firstChild.data.toLowerCase() == "xp boost"
+            } catch(e) {
+                return false;
+            }
+        },
+        keys: ["x"],
+        action: "button",
+    },
+    {
+        classMatches: ["NavButton"],
+        elementCheck: (element) => {
+            try {
+                return element.children[1].firstChild.data.toLowerCase() == "target"
+            } catch(e) {
+                return false;
+            }
+        },
+        keys: ["t"],
+        action: "button",
+    },
+    {
+        classMatches: ["NavButton"],
+        elementCheck: (element) => {
+            try {
+                return element.children[1].firstChild.data.toLowerCase() == "independent learning"
+            } catch(e) {
+                return false;
+            }
+        },
+        keys: ["i"],
+        action: "button",
+    },
+    {
+        classMatches: ["PackageAccordionTrigger"],
+        keys: ["q"],
+        action: "button",
+    },
+    {
+        classMatches: ["AccordionContent"],
+        keySuccessful: (element, key) => {
+            // we work around the system because yes
+            let taskToClick = parseInt(key)-1;
+            let current = 0;
+
+            let buttons = []
+            for (let node of element.querySelectorAll("*")) {
+                let name = node.className;
+                if (name == null) continue;
+                if (name.includes == null) continue;
+
+                if (name.includes("TaskClickable")) {
+                    buttons.push(node);
+                }
+            }
+
+            try {
+                buttons[taskToClick].click()
+            } catch(e) {
+
+            }
+        },
+        keys: ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+        action: "none",
+    }
+]
