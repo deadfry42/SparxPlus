@@ -53,7 +53,7 @@ const settingsFrontend = [
                     type: "toggle",
                     variable: "progressiveDisclosure",
                     name: "Progressive Disclosure",
-                    description: "Hide tasks which haven't yet, to motivate you to finish. Doesn't work on revision.",
+                    description: "Hide tasks which haven't yet completed, to motivate you to finish. Doesn't work on revision.",
                 },
                 {
                     type: "toggle",
