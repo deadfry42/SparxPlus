@@ -166,7 +166,7 @@ const settingsFrontend = [
             <br>This project is fully open source! The code available <a href="${getGithubLink()}">here</a>!
             <br>(Note: The code will not be very well written lol)
             <br>
-            <br>This project is not affiliated with Sparx, or any of its subsidiaries/brands.
+            <br>This project is not affiliated with Sparx, SparxMaths and/or Sparx-learning.
             <br>
             <br><h6>[SparxPlus version ${getVersion()}, last updated ${getLastUpdated()}]</h6>`
         }

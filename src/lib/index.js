@@ -29,7 +29,7 @@ function getVersion() {
 }
 
 function getIsRelease() {
-    return true;
+    return false;
 }
 
 function getGithubLink() {
