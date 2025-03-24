@@ -25,11 +25,11 @@ function baseLog(msg) {
 // OTHERWISE BAD :(
 
 function getVersion() {
-    return "v0.2.4"+(!getIsRelease() ? "-dev" : "")
+    return "v0.2.5"+(!getIsRelease() ? "-dev" : "")
 }
 
 function getIsRelease() {
-    return false;
+    return true;
 }
 
 function getGithubLink() {
