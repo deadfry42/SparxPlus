@@ -11,6 +11,10 @@ Compatible with:
 
 This extension is not affiliated with Sparx, otherwise known as [Sparx-Learning](https://sparx-learning.com).  
   
+### How to download
+Visit https://nikodem.co.uk/ and check the "Sparx Plus" Tab.  
+> Available for Chrome & Firefox, with Safari planned.
+
 ### Discord
 Join the discord server, see some more information about it!  
 https://discord.gg/uKbdBa4M5B
