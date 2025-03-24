@@ -103,8 +103,11 @@
                                 var SettingsHeader = document.createElement("h1")
                                 SettingsHeader.textContent = "SparxPlus settings"
 
+                                var settingsWarningBox = createWarningBox("Settings will apply after refreshing the page")
+                                settingsWarningBox.style.display = "none"
+
                                 settings.append(SettingsHeader)
-                                settings.append(createWarningBox("Settings will apply after refreshing the page"))
+                                settings.append(settingsWarningBox)
 
                                 if (!getIsRelease()) {        
                                     settings.append(createWarningBox("This is not a tagged release version of Sparx Plus - some features may be unintentionally broken, or in the works!"))
@@ -151,6 +154,7 @@
                                                 let sName = setting.name == null ? validConfig = false : setting.name;
                                                 let sVar = setting.variable == null ? validConfig = false : customSettings[setting.variable];
                                                 let sDesc = setting.description == null ? "" : setting.description;
+                                                let sExperimental = setting.experimental == null ? false : setting.experimental;
 
                                                 let sWarning = setting.warning == null ? null : setting.warning;
         
@@ -167,8 +171,6 @@
         
                                                 switch (sType) {
                                                     case "toggle":
-                                                        let percentage = 90;
-
                                                         let mainDiv = document.createElement("div")
                                                         mainDiv.style.display = "flex";
 
@@ -179,17 +181,30 @@
                                                         labelDiv.ariaOrientation = "vertical"
                                                         labelDiv.setAttribute("data-orientation", "vertical")
                                                         labelDiv.style.padding = "10px"
-                                                        labelDiv.style.maxWidth = `${percentage}%`
+                                                        labelDiv.style.maxWidth = "auto"
                                                         labelDiv.style.paddingBottom = "3px"
                                                         labelDiv.style.marginBottom = "3px"
+
+                                                        let title = document.createElement("div")
+                                                        title.ariaOrientation = "horizontal"
+                                                        title.style.display = "flex";
         
-                                                        let title = document.createElement("h4")
-                                                        title.innerHTML = sName
-                                                        title.style.maxWidth = `${percentage}%`
+                                                        let titleTxt = document.createElement("h4")
+                                                        titleTxt.innerHTML = sName
+                                                        titleTxt.style.maxWidth = "auto"
+
+                                                        if (sExperimental) {
+                                                            let experimental = getSVG("experimental")
+                                                            experimental.style.width = 20
+                                                            experimental.style.height = 20;
+                                                            experimental.style.color = "white"
+                                                            title.append(experimental)
+                                                        }
+                                                        title.append(titleTxt)
                                                         
                                                         let desc = document.createElement("p")
                                                         desc.innerHTML = sDesc
-                                                        desc.style.maxWidth = `${percentage}%`
+                                                        desc.style.maxWidth = "auto"
                                                         desc.style.padding = 0
                                                         desc.style.margin = 0;
         
@@ -211,6 +226,8 @@
                                                             chrome.storage.sync.set({
                                                                 [setting.variable]: inp.checked
                                                             })
+
+                                                            settingsWarningBox.style.display = "block"
                                                             
                                                             if (sWarning != null) {
                                                                 if (!sWarning.static) {
@@ -245,18 +262,29 @@
                                                     break;
                                                     
                                                     case "input":
-                                                        let percentage2 = 90;
-
                                                         let warning2
                                                         if (sWarning != null) warning2 = createWarningBox(sWarning.text == null ? "" : sWarning.text);
         
-                                                        let title2 = document.createElement("h4")
-                                                        title2.innerHTML = sName
-                                                        title2.style.maxWidth = `${percentage2}%`
+                                                        let title2 = document.createElement("div")
+                                                        title2.ariaOrientation = "horizontal"
+                                                        title2.style.display = "flex";
+
+                                                        let title2Txt = document.createElement("h4")
+                                                        title2Txt.innerHTML = sName
+                                                        title2Txt.style.maxWidth = "auto"
+
+                                                        if (sExperimental) {
+                                                            let experimental = getSVG("experimental")
+                                                            experimental.style.width = 20
+                                                            experimental.style.height = 20;
+                                                            experimental.style.color = "white"
+                                                            title2.append(experimental)
+                                                        }
+                                                        title2.append(title2Txt)
                                                         
                                                         let desc2 = document.createElement("p")
                                                         desc2.innerHTML = sDesc
-                                                        desc2.style.maxWidth = `${percentage2}%`
+                                                        desc2.style.maxWidth = "auto"
         
                                                         let theDiv = document.createElement("div")
         
@@ -269,6 +297,8 @@
                                                             chrome.storage.sync.set({
                                                                 [setting.variable]: e.target.value
                                                             })
+
+                                                            settingsWarningBox.style.display = "block"
 
                                                             if (sWarning != null) {
                                                                 if (sWarning.static == false) {

@@ -14,7 +14,7 @@ const customSettings = { // default settings
     test: false,
 
     // TODO:
-    // keyboardShortcuts: true,
+    keyboardShortcuts: true,
     // 
 };
 
@@ -36,6 +36,7 @@ const settingsFrontend = [
                     type: "toggle",
                     variable: "darkMode",
                     name: "Dark mode (Experimental)",
+                    experimental: true,
                     description: "Enable a native dark mode for the website (doesn't support images unfortunately)",
                     warning: {
                         text: "Dark mode makes remodels the website, and the website may not appear as originally intended. Work in progress, dark mode is not complete and may be buggy.",
@@ -69,6 +70,7 @@ const settingsFrontend = [
                 {
                     type: "toggle",
                     variable: "keyboardShortcuts",
+                    experimental: true,
                     name: "Enable keyboard shortcuts",
                     description: "Enable shortcuts to make using Sparx on a keyboard easier",
                 },
