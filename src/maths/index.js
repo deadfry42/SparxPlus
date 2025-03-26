@@ -15,12 +15,12 @@ const customSettings = { // default settings
     customCSS: "",
     darkMode: false,
     audio: true,
-
     test: false,
-
-    // TODO:
     keyboardShortcuts: false,
-    // 
+
+    // goals:
+    // calculatorButton: true, // click the "Calculator Allowed" button and bring up a calculator
+    // whiteboard: true, // add a draw button, and show a whiteboard on screen (similar to video popup) and let the user draw
 };
 
 var loadedTextObject = null;
