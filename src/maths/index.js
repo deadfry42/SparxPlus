@@ -500,4 +500,9 @@ const classMapping = [
         newClass: ["SparxPlusTextField"],
         conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
     },
+    {
+        classMatches: ["InlineSlotOptions"],
+        newClass: ["SparxPlusInlineSlotOptions"],
+        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
+    },
 ]

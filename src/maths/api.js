@@ -565,10 +565,6 @@
                             //     for (var child of realnode.children) {
                             //         if (!child.classList.contains("SparxPlusIndependentLearningNoContentMessageText")) child.classList.add("SparxPlusIndependentLearningNoContentMessageText")
                             //     }
-                            } else if (name.includes("InlineSlotOptions")) {
-                                if (!realnode.classList.contains("SparxPlusInlineSlotOptions")) {
-                                    realnode.classList.add("SparxPlusInlineSlotOptions")
-                                }
                             }
 
                             doClassMapping(realnode, name, Conditions.Added);
