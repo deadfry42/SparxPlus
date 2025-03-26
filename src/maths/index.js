@@ -73,7 +73,7 @@ const settingsFrontend = [
                     experimental: true,
                     description: "Enable a native dark mode for the website (doesn't support images unfortunately)",
                     warning: {
-                        text: "Dark mode makes remodels the website, and the website may not appear as originally intended. Work in progress, dark mode is not complete and may be buggy.",
+                        text: "Dark mode is an experimental setting where it tries its best to adapt the CSS of the website. Do not expect this dark mode to be perfect - it will have issues.",
                         static: false,
                     }
                 },
@@ -108,7 +108,7 @@ const settingsFrontend = [
                     name: "Enable keyboard shortcuts",
                     description: "Enable shortcuts to make using Sparx on a keyboard easier",
                     warning: {
-                        text: "C - open Compulsary tab<br>X - open XP Boost tab<br>T - open Target tab<br>I - open Independent Learning tab<br>Q - Open the assignment at the top of the page<br>[1-9] - Open task 1-9<br>Esc - Use the back button, or press the logo if no back buttons exist.",
+                        text: "H - Open \"My Homework\" tab<br>R - Open \"Revision & Assessments\" tab<br>C - open Compulsary tab<br>X - open XP Boost tab<br>T - open Target tab<br>I - open Independent Learning tab<br>Q - Open the assignment at the top of the page<br>[1-9] - Open task 1-9<br>Esc - Use the back button, or press the logo if no back buttons exist.",
                         static: false,
                         info: true,
                     }
@@ -344,6 +344,16 @@ const keyboardMapping = [
         action: Actions.Button,
     },
     {
+        classMatches: ["SparxPlusHomeworkButton"],
+        keys: ["h"],
+        action: Actions.Click,
+    },
+    {
+        classMatches: ["SparxPlusRevisionButton"],
+        keys: ["r"],
+        action: Actions.Click,
+    },
+    {
         classMatches: ["AccordionContent"],
         keySuccessful: (element, key) => {
             // we work around the system because yes
@@ -428,6 +438,30 @@ const classMapping = [
                         child.classList.add("SparxPlusTable")
                     }
                 }
+            }
+        }
+    },
+    {
+        classMatches: ["MenuItemText"],
+        newClass: ["SparxPlusHomeworkButton"],
+        conditions: [Conditions.Added],
+        elementCheck: (element) => {
+            try {
+                return element.firstChild.data.toLowerCase() == "my homework";
+            } catch(e) {
+                return false;
+            }
+        }
+    },
+    {
+        classMatches: ["MenuItemText"],
+        newClass: ["SparxPlusRevisionButton"],
+        conditions: [Conditions.Added],
+        elementCheck: (element) => {
+            try {
+                return element.firstChild.data.toLowerCase() == "revision & assessments";
+            } catch(e) {
+                return false;
             }
         }
     },

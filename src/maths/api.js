@@ -217,7 +217,7 @@
                                     }
 
                                     switch (pType) {
-                                        case "settings":
+                                        case PanelType.Settings:
                                             if (pContent == null) validConfig = false;
                                             else
                                             for (let setting of pContent) {
@@ -242,7 +242,7 @@
                                                 // definetly not stolen from w3schools.com
         
                                                 switch (sType) {
-                                                    case "toggle":
+                                                    case SettingsType.Toggle:
                                                         let mainDiv = document.createElement("div")
                                                         mainDiv.style.display = "flex";
 
@@ -332,7 +332,7 @@
                                                         }
                                                     break;
                                                     
-                                                    case "input":
+                                                    case SettingsType.Input:
                                                         let warning2
                                                         if (sWarning != null) warning2 = createWarningBox(sWarning.text == null ? "" : sWarning.text, sWarning.info == null ? false : sWarning.info);
         
@@ -424,7 +424,7 @@
                                             
                                         break;
 
-                                        case "descriptive":
+                                        case PanelType.Descriptive:
                                             if (pText == null) validConfig = false;
                                             else
                                             var content = document.createElement("p")
@@ -433,7 +433,7 @@
                                             panel.append(content)
                                         break;
 
-                                        case "blank":
+                                        case PanelType.Blank:
 
                                         break;
 
