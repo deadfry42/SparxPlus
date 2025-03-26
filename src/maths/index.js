@@ -421,10 +421,44 @@ const classMapping = [
         classMatches: ["TextElement"],
         newClass: ["SparxPlusTextElement"],
         conditions: [Conditions.ModifiedTransitionPage],
+        ifMatched: (element, condition) => {
+            for (var child of element.children) {
+                if (child.constructor.name == document.createElement("table").constructor.name) {
+                    if (!child.classList.contains("SparxPlusTable")) {
+                        child.classList.add("SparxPlusTable")
+                    }
+                }
+            }
+        }
     },
     {
         classMatches: ["TextElement"],
         newClass: ["SparxPlusTextElement"],
         conditions: [Conditions.ModifiedTransitionPage],
+    },
+    {
+        classMatches: ["Option_"],
+        newClass: ["SparxPlusOption"],
+        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified],
+    },
+    {
+        classMatches: ["OptionSelected_"],
+        newClass: ["SparxPlusOptionSelected"],
+        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified],
+    },
+    {
+        classMatches: ["CardContent_"],
+        newClass: ["SparxPlusCardContent"],
+        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
+    },
+    {
+        classMatches: ["TextFieldComponent"],
+        newClass: ["SparxPlusTextFieldComponent"],
+        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
+    },
+    {
+        classMatches: ["TextField"],
+        newClass: ["SparxPlusTextField"],
+        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
     },
 ]

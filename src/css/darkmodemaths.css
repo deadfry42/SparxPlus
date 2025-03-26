@@ -86,9 +86,15 @@ p, h1, h2, h3, h4, h5, h6 {
     background-color: #3b3b37 !important;
 }
 
-/* .SparxPlusSecondaryButton :hover {
-    background-color: #3b3b37;
-} */
+.SparxPlusTable td,
+.SparxPlusTable tr,
+.SparxPlusTable th {
+    background-color: #3b3b37 !important;
+}
+
+.SparxPlusSecondaryButton:hover {
+    background-color: #3b3b37 !important;
+}
 
 .notificationDiv {
     background-color: #2f2f2c !important;
@@ -104,6 +110,24 @@ p, h1, h2, h3, h4, h5, h6 {
 
 .SparxPlusSupportTipsText {
     color: var(--palette-light-grey) !important;
+}
+
+.SparxPlusOption:hover{
+    background: #3b3b37 !important;
+}
+
+.SparxPlusOptionSelected:hover{
+    background: var(--button-colour) !important;
+}
+
+.SparxPlusCardContent {
+    background: #3b3b37 !important;
+}
+
+.SparxPlusTextFieldComponent,
+.SparxPlusTextField {
+    background: #3b3b37 !important;
+    color: var(--palette-light-grey);
 }
 
 .experimental {
