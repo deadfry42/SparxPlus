@@ -586,8 +586,8 @@
                     var node = target;
                     // console.log(node);
                     var nodename = node.className;
-                    doClassMapping(node, nodename, Conditions.Modified);
                     if (nodename == null || nodename.includes == null) return; 
+                    doClassMapping(node, nodename, Conditions.Modified);
                     if (nodename.includes("TaskItemLink")) {
                         if (!customSettings.progressiveDisclosure) return;
                         doProgressiveDisclosure(node.parentNode)

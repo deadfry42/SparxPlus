@@ -124,6 +124,10 @@ p, h1, h2, h3, h4, h5, h6 {
     background: #3b3b37 !important;
 }
 
+.SparxPlusCardContentSelected {
+    border-width: 5px;
+}
+
 .SparxPlusTextFieldComponent,
 .SparxPlusTextField {
     background: #3b3b37 !important;

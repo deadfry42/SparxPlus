@@ -434,7 +434,7 @@ const classMapping = [
     {
         classMatches: ["TextElement"],
         newClass: ["SparxPlusTextElement"],
-        conditions: [Conditions.ModifiedTransitionPage],
+        conditions: [Conditions.ModifiedTransitionPage, Conditions.Added],
     },
     {
         classMatches: ["Option_"],
@@ -449,6 +449,11 @@ const classMapping = [
     {
         classMatches: ["CardContent_"],
         newClass: ["SparxPlusCardContent"],
+        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
+    },
+    {
+        classMatches: ["CardContentSelected_"],
+        newClass: ["SparxPlusCardContentSelected"],
         conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
     },
     {
