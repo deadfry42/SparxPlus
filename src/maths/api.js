@@ -50,6 +50,64 @@
         }
     }
 
+    function doClassMapping(realnode, name, Condition) {
+        for (var mapping of classMapping) {
+            var valid = true;
+            var mMatches = mapping.classMatches == null ? valid = false : mapping.classMatches;
+            var mClasses = mapping.newClass == null ? valid = false : mapping.newClass;
+            var mCondition = mapping.conditions == null ? valid = false : mapping.conditions;
+            var mChildClasses = mapping.newClassesToChildren;
+            var mElementCheck = mapping.elementCheck;
+            var mIfMatched = mapping.ifMatched;
+
+            if (!valid) continue;
+            var isCondition = false;
+
+            for (var condition of mCondition) {
+                if (condition == Condition) {
+                    isCondition = true;
+                    break;
+                }
+            }
+            
+            if (!isCondition) continue;
+
+            var match = false;
+
+            for (var matches of mMatches) {
+                if (name.includes(matches)) {
+                    if (mElementCheck == null) {
+                        match = true;
+                        break;
+                    } else if (mElementCheck(realnode)) {
+                        match = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!match) continue;
+
+            for (var mClass of mClasses) {
+                if (!realnode.classList.contains(mClass)) realnode.classList.add(mClass)
+            }
+
+            if (mChildClasses != null) {
+                for (var mClass of mChildClasses) {
+                    for (var child of realnode.children) {
+                        if (!child.classList.contains(mClass)) {
+                            child.classList.add(mClass);
+                        }
+                    }
+                }
+            }
+
+            if (mIfMatched != null) {
+                mIfMatched(realnode, Condition);
+            }
+        }
+    }
+
     const loadedPage = () => {
 
         log("HTML", "Page finished loading!")
@@ -484,34 +542,36 @@
                                     log("CSS", "Changed the background gradient to the dark variant!")
                                     realnode.src = browser.runtime.getURL("assets/darkmode/gradients/maths.svg")
                                 }
-                            } else if (name.includes("ButtonSecondary")) {
-                                if (!realnode.classList.contains("SparxPlusSecondaryButton")) {
-                                    realnode.classList.add("SparxPlusSecondaryButton")
-                                }
-                            } else if (name.includes("TopicFilterLabel")) {
-                                if (!realnode.classList.contains("SparxPlusTopicFilterLabel")) {
-                                    realnode.classList.add("SparxPlusTopicFilterLabel")
-                                }
-                            } else if (name.includes("SupportTipsItem")) {
-                                if (!realnode.classList.contains("SparxPlusSupportTipsItem")) {
-                                    realnode.classList.add("SparxPlusSupportTipsItem")
+                            // } else if (name.includes("ButtonSecondary")) {
+                            //     if (!realnode.classList.contains("SparxPlusSecondaryButton")) {
+                            //         realnode.classList.add("SparxPlusSecondaryButton")
+                            //     }
+                            // } else if (name.includes("TopicFilterLabel")) {
+                            //     if (!realnode.classList.contains("SparxPlusTopicFilterLabel")) {
+                            //         realnode.classList.add("SparxPlusTopicFilterLabel")
+                            //     }
+                            // } else if (name.includes("SupportTipsItem")) {
+                            //     if (!realnode.classList.contains("SparxPlusSupportTipsItem")) {
+                            //         realnode.classList.add("SparxPlusSupportTipsItem")
 
-                                    // sparx doesn't add any variable i can easily change to this text
-                                    // hard coded fixes to the rescue!!!
+                            //         // sparx doesn't add any variable i can easily change to this text
+                            //         // hard coded fixes to the rescue!!!
 
-                                    for (var child of realnode.children) {
-                                        if (!child.classList.contains("SparxPlusSupportTipsItem")) child.classList.add("SparxPlusSupportTipsText")
-                                    }
-                                }
-                            } else if (name.includes("IndependentLearningNoContentMessage")) {
-                                for (var child of realnode.children) {
-                                    if (!child.classList.contains("SparxPlusIndependentLearningNoContentMessageText")) child.classList.add("SparxPlusIndependentLearningNoContentMessageText")
-                                }
+                            //         for (var child of realnode.children) {
+                            //             if (!child.classList.contains("SparxPlusSupportTipsItem")) child.classList.add("SparxPlusSupportTipsText")
+                            //         }
+                            //     }
+                            // } else if (name.includes("IndependentLearningNoContentMessage")) {
+                            //     for (var child of realnode.children) {
+                            //         if (!child.classList.contains("SparxPlusIndependentLearningNoContentMessageText")) child.classList.add("SparxPlusIndependentLearningNoContentMessageText")
+                            //     }
                             } else if (name.includes("InlineSlotOptions")) {
                                 if (!realnode.classList.contains("SparxPlusInlineSlotOptions")) {
                                     realnode.classList.add("SparxPlusInlineSlotOptions")
                                 }
                             }
+
+                            doClassMapping(realnode, name, Conditions.Added);
                         } catch(e) {
                             log("API", "Error parsing added object!")
                             baseLog(e)
@@ -526,6 +586,7 @@
                     var node = target;
                     // console.log(node);
                     var nodename = node.className;
+                    doClassMapping(node, nodename, Conditions.Modified);
                     if (nodename == null || nodename.includes == null) return; 
                     if (nodename.includes("TaskItemLink")) {
                         if (!customSettings.progressiveDisclosure) return;
@@ -542,28 +603,29 @@
                             var name = realnode.className;
                             if (name == null || name.includes == null) continue;
                             try {
-                                if (name.includes("TextElement")) {
-                                    if (!realnode.classList.contains("SparxPlusTextElement")) {
-                                        // give the text elements a custom class to make the text colouring work
-                                        realnode.classList.add("SparxPlusTextElement")
-                                    } 
-                                } else if (name.includes("ButtonSecondary")) {
-                                    if (!realnode.classList.contains("SparxPlusSecondaryButton")) {
-                                        realnode.classList.add("SparxPlusSecondaryButton")
-                                    }
-                                    if (!realnode.classList.contains("SparxPlusBackQuestionButton")) {
-                                        for (var children of realnode.children) {
-                                            var cname = children.className;
-                                            if (cname == null || cname.includes == null) continue;
-                                            if (cname.includes("Content")) {
-                                                if (children.firstChild.data != null) {
-                                                    if (children.firstChild.data.toLowerCase() == "back") {
-                                                        realnode.classList.add("SparxPlusBackQuestionButton")
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
+                                // if (name.includes("TextElement")) {
+                                //     if (!realnode.classList.contains("SparxPlusTextElement")) {
+                                //         // give the text elements a custom class to make the text colouring work
+                                //         realnode.classList.add("SparxPlusTextElement")
+                                //     } 
+                                //} else
+                                if (name.includes("ButtonSecondary")) {
+                                    // if (!realnode.classList.contains("SparxPlusSecondaryButton")) {
+                                    //     realnode.classList.add("SparxPlusSecondaryButton")
+                                    // }
+                                    // if (!realnode.classList.contains("SparxPlusBackQuestionButton")) {
+                                    //     for (var children of realnode.children) {
+                                    //         var cname = children.className;
+                                    //         if (cname == null || cname.includes == null) continue;
+                                    //         if (cname.includes("Content")) {
+                                    //             if (children.firstChild.data != null) {
+                                    //                 if (children.firstChild.data.toLowerCase() == "back") {
+                                    //                     realnode.classList.add("SparxPlusBackQuestionButton")
+                                    //                 }
+                                    //             }
+                                    //         }
+                                    //     }
+                                    // }
                                 } else if (name.includes("ResultFullWidth")) {
                                     if (name.includes("Incorrect")) {
                                         log("Maths", "Got question wrong!");
@@ -587,6 +649,7 @@
                                         }
                                     }
                                 }
+                                doClassMapping(realnode, name, Conditions.ModifiedTransitionPage);
                             } catch(e) {
                                 log("API", "Error parsing modified object! "+e)
                             }

@@ -1,3 +1,8 @@
+// settings which are set by the user
+// and used to determine what features should be available
+
+// note: this is not synced by default.
+// they are synced when the page loads, in index.js
 const customSettings = { // default settings
     hideVideoButton: false,
     jumpscareWhenWrong: false,
@@ -25,15 +30,44 @@ var textObjectExpanded = false;
 
 var logLength = 25;
 
+// enums (i would use ts but it doesn't play nice with browser extensions)
+const Conditions = {
+    Added: 'added',
+    Modified: 'modified',
+    ModifiedTransitionPage: 'modifiedTransitionPage'
+};
+
+const Actions = {
+    Button: "button",
+    Click: "click",
+    LeftClick: "click",
+    RightClick: "rightclick",
+    None: "none",
+};
+
+const PanelType = {
+    Settings: 'settings',
+    Blank: 'blank',
+    Descriptive: 'descriptive',
+};
+
+const SettingsType = {
+    Toggle: "toggle",
+    Input: "input",
+};
+
+// settings panels
+// this manages each panel seen in the settings page of SparxMaths
+// i'm not going to explain how it works here: it's a bit too complex to feasibly do so
 const settingsFrontend = [
     {
         header: "UI Tweaks",
         description: "Small UI tweaks to fix issues with Sparx.",
         panel: {
-            type: "settings",
+            type: PanelType.Settings,
             content: [
                 {
-                    type: "toggle",
+                    type: SettingsType.Toggle,
                     variable: "darkMode",
                     name: "Dark mode",
                     experimental: true,
@@ -44,31 +78,31 @@ const settingsFrontend = [
                     }
                 },
                 {
-                    type: "toggle",
+                    type: SettingsType.Toggle,
                     variable: "hideVideoButton",
                     name: "Disable help videos",
                     description: "Remove the video button, so that you can't see the help (basically hardcore mode)",
                 },
                 {
-                    type: "toggle",
+                    type: SettingsType.Toggle,
                     variable: "progressiveDisclosure",
                     name: "Progressive Disclosure",
                     description: "Hide tasks which haven't yet completed, to motivate you to finish. Doesn't work on revision.",
                 },
                 {
-                    type: "toggle",
+                    type: SettingsType.Toggle,
                     variable: "disableNameInTopright",
                     name: "Hide name",
                     description: "Hide the name in the top right corner of the screen.",
                 },
                 {
-                    type: "toggle",
+                    type: SettingsType.Toggle,
                     variable: "disableXPInTopRight",
                     name: "Hide XP count",
                     description: "Hide the XP in the top right corner of the screen.",
                 },
                 {
-                    type: "toggle",
+                    type: SettingsType.Toggle,
                     variable: "keyboardShortcuts",
                     experimental: true,
                     name: "Enable keyboard shortcuts",
@@ -80,7 +114,7 @@ const settingsFrontend = [
                     }
                 },
                 {
-                    type: "input",
+                    type: SettingsType.Input,
                     variable: "customCSS",
                     name: "Custom CSS",
                     description: "Input custom CSS code to style SparxMaths the way you want to.",
@@ -99,22 +133,22 @@ const settingsFrontend = [
         header: "Fun Settings",
         description: "Fun small additions to make Sparx more enjoyable to use!",
         panel: {
-            type: "settings",
+            type: PanelType.Settings,
             content: [
                 {
-                    type: "toggle",
+                    type: SettingsType.Toggle,
                     variable: "audio",
                     name: "Play extension audio",
                     description: "Allows the extension to play sound.",
                 },
                 {
-                    type: "toggle",
+                    type: SettingsType.Toggle,
                     variable: "jumpscareWhenWrong",
                     name: "Jumpscare upon incorrect answer",
                     description: "Play a funny animation whenever you get a question wrong (it's scary) (plays a sound)",
                 },
                 {
-                    type: "toggle",
+                    type: SettingsType.Toggle,
                     variable: "jumpscareWhenCorrect",
                     name: "Jumpscare upon correct answer",
                     description: "Play a funny animation whenever you get a question correct (it's scary) (plays a sound)",
@@ -126,22 +160,22 @@ const settingsFrontend = [
         header: "Extension Settings",
         description: "Settings to do with the extension itself",
         panel: {
-            type: "settings",
+            type: PanelType.Settings,
             content: [
                 {
-                    type: "toggle",
+                    type: SettingsType.Toggle,
                     variable: "enableCustomLogo",
                     name: "Enable Custom logo",
                     description: "Whether or not to use the custom SparxPlus logo in the top left.",
                 },
                 {
-                    type: "toggle",
+                    type: SettingsType.Toggle,
                     variable: "enableStartupNotification",
                     name: "Enable Startup Notification",
                     description: "Whether or not to notify you whenever SparxPlus successfully loads.",
                 },
                 {
-                    type: "toggle",
+                    type: SettingsType.Toggle,
                     variable: "test",
                     name: "Enable Development features",
                     description: "Enable features which are in development.",
@@ -157,7 +191,7 @@ const settingsFrontend = [
         header: "About",
         description: "About SparxPlus",
         panel: {
-            type: "descriptive",
+            type: PanelType.Descriptive,
             text: `
             Thanks for trying SparxPlus! Hope you enjoy it!
             <br>
@@ -175,7 +209,7 @@ const settingsFrontend = [
         header: "Logs",
         description: "Logs that SparxPlus has generated.",
         panel: {
-            type: "blank",
+            type: PanelType.Blank,
             initialise: (section, header, description, panel) => {
                 var logs = document.createElement("p")
                 panel.append(logs);
@@ -239,18 +273,22 @@ const settingsFrontend = [
     },
 ]
 
+// keyboard shortcuts
+// each key is matched to a class, or element via the elementCheck function
+// this then performs an action on that element
+// keyStarted and keySuccessful functions are ran when the key is pressed and finished respectively.
 const keyboardMapping = [
     // see https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values
-    // for key names
+    // for key names that aren't Key*
     {
         classMatches: ["SparxPlusBackQuestionButton", "BackButton", "SMLogo"],
         keys: ["Escape"],
-        action: "button",
+        action: Actions.Button,
     },
     {
         classMatches: ["SMLogo"],
         keys: ["p"],
-        action: "button",
+        action: Actions.Button,
     },
     {
         classMatches: ["NavButton"],
@@ -262,7 +300,7 @@ const keyboardMapping = [
             }
         },
         keys: ["c"],
-        action: "button",
+        action: Actions.Button,
     },
     {
         classMatches: ["NavButton"],
@@ -274,7 +312,7 @@ const keyboardMapping = [
             }
         },
         keys: ["x"],
-        action: "button",
+        action: Actions.Button,
     },
     {
         classMatches: ["NavButton"],
@@ -286,7 +324,7 @@ const keyboardMapping = [
             }
         },
         keys: ["t"],
-        action: "button",
+        action: Actions.Button,
     },
     {
         classMatches: ["NavButton"],
@@ -298,12 +336,12 @@ const keyboardMapping = [
             }
         },
         keys: ["i"],
-        action: "button",
+        action: Actions.Button,
     },
     {
         classMatches: ["PackageAccordionTrigger"],
         keys: ["q"],
-        action: "button",
+        action: Actions.Button,
     },
     {
         classMatches: ["AccordionContent"],
@@ -330,6 +368,63 @@ const keyboardMapping = [
             }
         },
         keys: ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
-        action: "none",
+        action: Actions.None,
     }
+]
+
+// whenever an element with a certain class is added/modified,
+// it is assigned a custom class. (under the conditions of elementCheck, if it exists)
+// (this is for styling / dark mode)
+const classMapping = [
+    {
+        classMatches: ["TopicFilterLabel"],
+        newClass: ["SparxPlusTopicFilterLabel"],
+        conditions: [Conditions.Added],
+    },
+    {
+        classMatches: ["SupportTipsItem"],
+        newClass: ["SparxPlusSupportTipsItem"],
+        newClassesToChildren: ["SparxPlusSupportTipsText"],
+        conditions: [Conditions.Added],
+    },
+    {
+        classMatches: ["IndependentLearningNoContentMessage"],
+        newClass: [],
+        newClassesToChildren: ["SparxPlusIndependentLearningNoContentMessageText"],
+        conditions: [Conditions.Added],
+    },
+
+    {
+        classMatches: ["ButtonSecondary"],
+        newClass: ["SparxPlusSecondaryButton"],
+        conditions: [Conditions.ModifiedTransitionPage, Conditions.Added],
+        // elementCheck: (element) => {
+        //     return true;
+        // },
+        ifMatched: (element, condition) => {
+            if (!element.classList.contains("SparxPlusBackQuestionButton")) {
+                for (var children of element.children) {
+                    var cname = children.className;
+                    if (cname == null || cname.includes == null) continue;
+                    if (cname.includes("Content")) {
+                        if (children.firstChild.data != null) {
+                            if (children.firstChild.data.toLowerCase() == "back") {
+                                element.classList.add("SparxPlusBackQuestionButton")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        classMatches: ["TextElement"],
+        newClass: ["SparxPlusTextElement"],
+        conditions: [Conditions.ModifiedTransitionPage],
+    },
+    {
+        classMatches: ["TextElement"],
+        newClass: ["SparxPlusTextElement"],
+        conditions: [Conditions.ModifiedTransitionPage],
+    },
 ]
