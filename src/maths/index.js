@@ -143,12 +143,14 @@ const settingsFrontend = [
                 },
                 {
                     type: SettingsType.Toggle,
+                    experimental: true,
                     variable: "jumpscareWhenWrong",
                     name: "Jumpscare upon incorrect answer",
                     description: "Play a funny animation whenever you get a question wrong (it's scary) (plays a sound)",
                 },
                 {
                     type: SettingsType.Toggle,
+                    experimental: true,
                     variable: "jumpscareWhenCorrect",
                     name: "Jumpscare upon correct answer",
                     description: "Play a funny animation whenever you get a question correct (it's scary) (plays a sound)",
@@ -468,7 +470,7 @@ const classMapping = [
     {
         classMatches: ["TextElement"],
         newClass: ["SparxPlusTextElement"],
-        conditions: [Conditions.ModifiedTransitionPage, Conditions.Added],
+        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
     },
     {
         classMatches: ["Option_"],
@@ -505,4 +507,49 @@ const classMapping = [
         newClass: ["SparxPlusInlineSlotOptions"],
         conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
     },
+    {
+        classMatches: ["Button"],
+        newClass: ["SparxPlusKeypadButton"],
+        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
+        elementCheck: (element, condition) => {
+            var id = element.id;
+            if (id == null || id.includes == null) return false;
+
+            if (id.includes("button-")) {
+                return true;
+            }
+        }
+    },
+    {
+        classMatches: ["AnswerPart"],
+        newClass: [], // no new classes,
+        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
+        elementCheck: (element, condition) => {
+            console.log("dfgjhidfg")
+            return true;
+        },
+        ifMatched: (element) => {
+            // answerPart changed (this is the only way i could detect the answer being inputted :p)
+            var result = document.body.querySelectorAll(`[class*="ResultFullWidth"]`)
+            for (var res of result) {
+                var name = res.className;
+                if (name == null || name.includes == null) return;
+                if (name.includes("Incorrect")) {
+                    log("Maths", "Got question wrong!");
+                    if (customSettings.jumpscareWhenWrong) jumpscare("assets/memes/wrong", customSettings.audio)
+                } else if (name.includes("Correct")) {
+                    log("Maths", "Got question wrong!")
+                    if (customSettings.jumpscareWhenCorrect) jumpscare("assets/memes/correct", customSettings.audio)
+                }
+            }
+        }
+    },
+    {
+        classMatches: [""],
+        newClass: [],
+        conditions: [Conditions.ModifiedTransitionPage],
+        ifMatched: (element) => {
+            // console.log(element)
+        }
+    }
 ]

@@ -60,7 +60,11 @@
             var mElementCheck = mapping.elementCheck;
             var mIfMatched = mapping.ifMatched;
 
-            if (!valid) continue;
+            if (!valid) {
+                log("ClassMapping", "Invalid config!")
+                baseLog(mapping)
+                continue;
+            };
             var isCondition = false;
 
             for (var condition of mCondition) {
@@ -434,7 +438,7 @@
                                         break;
 
                                         case PanelType.Blank:
-
+                                            // here so that he settings panel doesnt error out
                                         break;
 
                                         default:
@@ -584,6 +588,14 @@
                     var nodename = node.className;
                     if (nodename == null || nodename.includes == null) return; 
                     doClassMapping(node, nodename, Conditions.Modified);
+
+                    // for (var aaa of document.body.querySelectorAll("*")) {
+                    //     if (aaa == null) continue;
+                    //     var aaaname = node.className;
+                    //     if (aaaname == null || aaaname.includes == null) continue; 
+                    //     doClassMapping(aaa, aaaname, Conditions.CheckWhenModify);
+                    // }
+
                     if (nodename.includes("TaskItemLink")) {
                         if (!customSettings.progressiveDisclosure) return;
                         doProgressiveDisclosure(node.parentNode)
@@ -593,58 +605,13 @@
                         for (let cnode of getDescendants(node)) {
                             list.push(cnode)
                         }
-                        
+
                         for (let realnode of list) {
                             if (realnode == null) continue;
+                            // console.log(realnode)
                             var name = realnode.className;
                             if (name == null || name.includes == null) continue;
                             try {
-                                // if (name.includes("TextElement")) {
-                                //     if (!realnode.classList.contains("SparxPlusTextElement")) {
-                                //         // give the text elements a custom class to make the text colouring work
-                                //         realnode.classList.add("SparxPlusTextElement")
-                                //     } 
-                                //} else
-                                if (name.includes("ButtonSecondary")) {
-                                    // if (!realnode.classList.contains("SparxPlusSecondaryButton")) {
-                                    //     realnode.classList.add("SparxPlusSecondaryButton")
-                                    // }
-                                    // if (!realnode.classList.contains("SparxPlusBackQuestionButton")) {
-                                    //     for (var children of realnode.children) {
-                                    //         var cname = children.className;
-                                    //         if (cname == null || cname.includes == null) continue;
-                                    //         if (cname.includes("Content")) {
-                                    //             if (children.firstChild.data != null) {
-                                    //                 if (children.firstChild.data.toLowerCase() == "back") {
-                                    //                     realnode.classList.add("SparxPlusBackQuestionButton")
-                                    //                 }
-                                    //             }
-                                    //         }
-                                    //     }
-                                    // }
-                                } else if (name.includes("ResultFullWidth")) {
-                                    if (name.includes("Incorrect")) {
-                                        log("Maths", "Got question wrong!");
-                                        if (customSettings.jumpscareWhenWrong) jumpscare("assets/memes/wrong", customSettings.audio)
-                                    } else if (name.includes("Correct")) {
-                                        log("Maths", "Got question wrong!")
-                                        if (customSettings.jumpscareWhenCorrect) jumpscare("assets/memes/correct", customSettings.audio)
-                                    }
-                                } else if (name.includes("InlineSlotOptions")) {
-                                    if (!realnode.classList.contains("SparxPlusInlineSlotOptions")) {
-                                        realnode.classList.add("SparxPlusInlineSlotOptions")
-                                    }
-                                }
-                                if (name.includes("Button") && realnode) {
-                                    var id = realnode.id;
-                                    if (id != null && id.includes != null) {
-                                        if (id.includes("button-")) {
-                                            if (!realnode.classList.contains("SparxPlusKeypadButton")) {
-                                                realnode.classList.add("SparxPlusKeypadButton")
-                                            }
-                                        }
-                                    }
-                                }
                                 doClassMapping(realnode, name, Conditions.ModifiedTransitionPage);
                             } catch(e) {
                                 log("API", "Error parsing modified object! "+e)
@@ -664,6 +631,7 @@
                     for (let realnode of list) {
                         if (realnode == null) continue;
                         var name = realnode.className;
+                        // console.log(realnode)
                         if (name == null || name.includes == null) continue;
                         try {
                             if (name.includes("QuestionScrollableContent")) {
