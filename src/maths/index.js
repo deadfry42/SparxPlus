@@ -4,24 +4,26 @@
 // note: this is not synced by default.
 // they are synced when the page loads, in index.js
 const customSettings = { // default settings
-    hideVideoButton: false,
-    jumpscareWhenWrong: false,
-    jumpscareWhenCorrect: false,
-    enableStartupNotification: true,
-    enableCustomLogo: true,
-    progressiveDisclosure: false,
-    disableNameInTopright: false,
-    disableXPInTopRight: false,
-    customCSS: "",
-    darkMode: false,
-    audio: true,
-    test: false,
-    keyboardShortcuts: false,
-    hideColourOverlay: false,
+    hideVideoButton: false, // hide video button for extreme++ mega challenge >:)
+    jumpscareWhenWrong: false, // animation when q wrong (slighly broken)
+    jumpscareWhenCorrect: false, // animation when q correct (slighly broken)
+    enableStartupNotification: true, // show notification when sparx plus loads
+    enableCustomLogo: true, // show logo in top left
+    progressiveDisclosure: false, // hide incomplete questions
+    disableNameInTopright: false, // hide name in top right
+    disableXPInTopRight: false, // hide xp in top right
+    customCSS: "", // add custom css
+    darkMode: false, // DARK MODE!!!
+    audio: true, // extension audio
+    test: false, // test idk
+    keyboardShortcuts: false, // navigate Sparx with a keyboard
+    hideColourOverlay: false, // hide colour overlay
+
+    whiteboard: true, // add a draw button, and show a whiteboard on screen (similar to video popup) and let the user draw
 
     // goals:
     // calculatorButton: true, // click the "Calculator Allowed" button and bring up a calculator
-    // whiteboard: true, // add a draw button, and show a whiteboard on screen (similar to video popup) and let the user draw
+    // bookworkTracker: false, // track the bookwork codes in a list, so that you can write them down later
 };
 
 var loadedTextObject = null;
@@ -32,6 +34,7 @@ var textObjectExpanded = false;
 var logLength = 25;
 
 // enums (i would use typescript but it doesn't play nice with browser extensions)
+// this is good enough
 const Conditions = {
     Added: 'added',
     Modified: 'modified',
@@ -80,6 +83,54 @@ const settingsFrontend = [
                 },
                 {
                     type: SettingsType.Toggle,
+                    variable: "whiteboard",
+                    experimental: true,
+                    name: "Enable Whiteboard feature",
+                    description: "Show a whiteboard button which lets you work out your answer.",
+                },
+                // {
+                //     type: SettingsType.Toggle,
+                //     variable: "calculator",
+                //     experimental: true,
+                //     name: "Enable Calculator feature",
+                //     description: "Allow you to press on the calculator button to show a calculator to work out your answer.",
+                // },
+                {
+                    type: SettingsType.Toggle,
+                    variable: "keyboardShortcuts",
+                    experimental: true,
+                    name: "Enable keyboard shortcuts",
+                    description: "Enable shortcuts to make using Sparx on a keyboard easier",
+                    warning: {
+                        text: "H - Open \"My Homework\" tab<br>R - Open \"Revision & Assessments\" tab<br>C - open Compulsary tab<br>X - open XP Boost tab<br>T - open Target tab<br>I - open Independent Learning tab<br>Q - Open the assignment at the top of the page<br>[1-9] - Open task 1-9<br>Esc - Use the back button, or press the logo if no back buttons exist.",
+                        static: false,
+                        info: true,
+                    }
+                },
+                {
+                    type: SettingsType.Input,
+                    variable: "customCSS",
+                    name: "Custom CSS",
+                    description: "Input custom CSS code to style SparxMaths the way you want to.",
+                    typeSpecific: {
+                        placeholder: "Input custom CSS Code here.\nThis applies when you refresh the page."
+                    },
+                    warning: {
+                        text: "The website may not appear as originally intended with Custom CSS.",
+                        static: false,
+                    }
+                }
+            ]
+        }
+    },
+    {
+        header: "Hiding UI",
+        description: "Hide certain parts of the UI for whatever reason",
+        panel: {
+            type: PanelType.Settings,
+            content: [
+                {
+                    type: SettingsType.Toggle,
                     variable: "hideVideoButton",
                     name: "Disable help videos",
                     description: "Remove the video button, so that you can't see the help (basically hardcore mode)",
@@ -108,31 +159,6 @@ const settingsFrontend = [
                     name: "Hide Colour overlay",
                     description: "Disable the colour overlay and the settings panel (so that if the extension fails or isn't available, you still have the colour overlay)",
                 },
-                {
-                    type: SettingsType.Toggle,
-                    variable: "keyboardShortcuts",
-                    experimental: true,
-                    name: "Enable keyboard shortcuts",
-                    description: "Enable shortcuts to make using Sparx on a keyboard easier",
-                    warning: {
-                        text: "H - Open \"My Homework\" tab<br>R - Open \"Revision & Assessments\" tab<br>C - open Compulsary tab<br>X - open XP Boost tab<br>T - open Target tab<br>I - open Independent Learning tab<br>Q - Open the assignment at the top of the page<br>[1-9] - Open task 1-9<br>Esc - Use the back button, or press the logo if no back buttons exist.",
-                        static: false,
-                        info: true,
-                    }
-                },
-                {
-                    type: SettingsType.Input,
-                    variable: "customCSS",
-                    name: "Custom CSS",
-                    description: "Input custom CSS code to style SparxMaths the way you want to.",
-                    typeSpecific: {
-                        placeholder: "Input custom CSS Code here.\nThis applies when you refresh the page."
-                    },
-                    warning: {
-                        text: "The website may not appear as originally intended with Custom CSS.",
-                        static: false,
-                    }
-                }
             ]
         }
     },
@@ -283,7 +309,7 @@ const settingsFrontend = [
 ]
 
 // keyboard shortcuts
-// each key is matched to a class, or element via the elementCheck function
+// each key is matched to a part of a class name, or element via the elementCheck function
 // this then performs an action on that element
 // keyStarted and keySuccessful functions are ran when the key is pressed and finished respectively.
 const keyboardMapping = [
@@ -393,7 +419,7 @@ const keyboardMapping = [
 
 // whenever an element with a certain class is added/modified,
 // it is assigned a custom class. (under the conditions of elementCheck, if it exists)
-// (this is for styling / dark mode)
+// (this is for styling / functionality / dark mode)
 const classMapping = [
     {
         classMatches: ["TopicFilterLabel"],
@@ -567,26 +593,10 @@ const classMapping = [
         }
     },
     {
-        classMatches: ["BottomBar"],
-        newClass: [], // no new classes,
-        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
-        ifMatched: (element) => {
-            if (element == null) return;
-            var div = element.child[0];
-            if (div == null) {
-                
-            }
-        }
-    },
-    {
         classMatches: ["AnswerPart"],
         newClass: [], // no new classes,
         conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
-        elementCheck: (element, condition) => {
-            console.log("dfgjhidfg")
-            return true;
-        },
-        ifMatched: (element) => {
+        ifMatched: (element, condition) => {
             // answerPart changed (this is the only way i could detect the answer being inputted :p)
             var result = document.body.querySelectorAll(`[class*="ResultFullWidth"]`)
             for (var res of result) {

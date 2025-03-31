@@ -107,7 +107,12 @@
             }
 
             if (mIfMatched != null) {
-                mIfMatched(realnode, Condition);
+                try {
+                    mIfMatched(realnode, Condition);
+                } catch(e) {
+                    log("API", "Failed to run \"IfMatched\" function!")
+                    baseLog(e)
+                }
             }
         }
     }
@@ -131,11 +136,11 @@
                     jumpscare("assets/memes/wrong", customSettings.audio)
                 })
                 addOptionToDDMenuSC("SparxPlus Test 2", () => {
-                    sendNotification("Testing among us sus !", 2500)
+                    sendNotification("Testing!", 2500)
                     jumpscare("assets/memes/correct", customSettings.audio)
                 })
                 addOptionToDDMenuSC("SparxPlus Test Yes", () => {
-                    sendNotification("Testing ohio !", 2500)
+                    sendNotification("Testing!", 2500)
                     jumpscare("assets/memes/wrong2", customSettings.audio)
                 })
             }
