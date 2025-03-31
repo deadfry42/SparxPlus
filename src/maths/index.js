@@ -83,6 +83,12 @@ const settingsFrontend = [
                 },
                 {
                     type: SettingsType.Toggle,
+                    variable: "progressiveDisclosure",
+                    name: "Progressive Disclosure",
+                    description: "Hide tasks which haven't yet completed, to motivate you to finish. Doesn't work on revision.",
+                },
+                {
+                    type: SettingsType.Toggle,
                     variable: "whiteboard",
                     experimental: true,
                     name: "Enable Whiteboard feature",
@@ -134,12 +140,6 @@ const settingsFrontend = [
                     variable: "hideVideoButton",
                     name: "Disable help videos",
                     description: "Remove the video button, so that you can't see the help (basically hardcore mode)",
-                },
-                {
-                    type: SettingsType.Toggle,
-                    variable: "progressiveDisclosure",
-                    name: "Progressive Disclosure",
-                    description: "Hide tasks which haven't yet completed, to motivate you to finish. Doesn't work on revision.",
                 },
                 {
                     type: SettingsType.Toggle,
@@ -434,7 +434,6 @@ const classMapping = [
     },
     {
         classMatches: ["IndependentLearningNoContentMessage"],
-        newClass: [],
         newClassesToChildren: ["SparxPlusIndependentLearningNoContentMessageText"],
         conditions: [Conditions.Added],
     },
@@ -443,9 +442,6 @@ const classMapping = [
         classMatches: ["ButtonSecondary"],
         newClass: ["SparxPlusSecondaryButton"],
         conditions: [Conditions.ModifiedTransitionPage, Conditions.Added],
-        // elementCheck: (element) => {
-        //     return true;
-        // },
         ifMatched: (element, condition) => {
             if (!element.classList.contains("SparxPlusBackQuestionButton")) {
                 for (var children of element.children) {
@@ -542,7 +538,6 @@ const classMapping = [
     },
     {
         classMatches: ["TimesTablesButton"],
-        newClass: [],
         conditions: [Conditions.Added],
         ifMatched: (element, condition) => {
             if (customSettings.darkMode) {
@@ -563,7 +558,6 @@ const classMapping = [
     },
     {
         classMatches: ["OverlaySettingsContainer"],
-        newClass: [],
         conditions: [Conditions.Modified, Conditions.Added],
         ifMatched: (element, condition) => {
             if (customSettings.hideColourOverlay) {
@@ -594,7 +588,6 @@ const classMapping = [
     },
     {
         classMatches: ["AnswerPart"],
-        newClass: [], // no new classes,
         conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
         ifMatched: (element, condition) => {
             // answerPart changed (this is the only way i could detect the answer being inputted :p)
@@ -612,4 +605,21 @@ const classMapping = [
             }
         }
     },
+    {
+        classMatches: ["!SparxPlusQuestionInfo", "QuestionInfo"], // non match SparxPlusQuestionInfo so this only runs if it hasn't been modified
+        newClass: ["SparxPlusQuestionInfo"],
+        conditions: [Conditions.Added, Conditions.ModifiedTransitionPage],
+        ifMatched: (element, condition) => {
+            var btn = document.createElement("button")
+            btn.textContent = "Whiteboard"
+            btn.className = "SparxPlusWhiteboardButton"
+
+            btn.onmouseup = (e) => {
+                var blur = createBlur()
+                document.body.append(blur)
+                document.body.append(createBlurredMenu(blur, "Whiteboard"))
+            }
+            element.append(btn)
+        }
+    }
 ]

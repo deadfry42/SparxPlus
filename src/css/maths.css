@@ -183,3 +183,155 @@
   bottom: 0;
   left: 0
 }
+
+.SparxPlusWhiteboardButton {
+  background-color: var(--colours-selected);
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  color: var(--colours-text-body-inverted);
+  font-family: "DM Sans", sans-serif;
+  font-size: var(--spx-font-size-base);
+  cursor: pointer;
+  box-sizing: border-box;
+  padding-bottom: 8px;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 8px;
+  justify-content: center;
+  line-height: 24px;
+}
+
+.SparxPlusDialogContent {
+  background-color: var(--colours-plain-background);
+  border-radius: var(--spx-radius-sm);
+  box-shadow: var(--spx-shadow-lg);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  height: 90%;
+  width: 90%;
+  max-width: 1000px;
+  max-height: 1000px;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+  overflow-y: auto
+}
+
+.SparxPlusDialogContent[data-state=open] {
+  animation: fadeInOverlay .2s ease-out
+}
+
+.SparxPlusDialogContent[data-state=closed] {
+  animation: fadeOutOverlay .2s ease-in
+}
+
+@media (max-width: 480px) {
+  .SparxPlusDialogContent {
+      height:100%;
+      width: 100%;
+      max-height: 100%;
+      max-width: 100%;
+      border-radius: 0
+  }
+}
+
+.SparxPlusDialogContent.ContentHeight {
+  height: auto;
+  max-height: min(1000px,90%)
+}
+
+@media (max-width: 480px) {
+  .SparxPlusDialogContent.ContentHeight {
+      max-height:100%;
+      height: 100%
+  }
+}
+
+.SparxPlusDialogContent.WithZIndex {
+  z-index: 10
+}
+
+.FullScreen {
+  width: 90%
+}
+
+@media (max-width: 480px) {
+  .FullScreen {
+      width:100%
+  }
+}
+
+.FullScreen {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  border-radius: 0
+}
+
+.SparxPlusDialogContent:focus {
+  outline: none
+}
+
+.SparxPlusDialogTitle {
+  text-align: center;
+  font-size: var(--spx-font-size-2xl);
+  max-inline-size: 100%;
+  padding: var(--spx-unit-6) var(--spx-unit-2);
+  margin: 0 auto;
+  font-weight: 500;
+  flex-grow: 0
+}
+
+@media (max-height: 800px) {
+  .SparxPlusDialogTitle {
+      padding:var(--spx-unit-4) 0
+  }
+}
+
+@media (max-height: 700px) {
+  .SparxPlusDialogTitle {
+      padding:var(--spx-unit-2) 0
+  }
+}
+
+@media (max-height: 400px) {
+  .SparxPlusDialogTitle {
+      padding:var(--spx-unit-1) 0
+  }
+}
+
+.SparxPlusIconButton {
+  font-family: inherit;
+  border-radius: 100%;
+  height: 25px;
+  width: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-text-fill-color: initial;
+  color: var(--colours-text-secondary);
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer
+}
+
+.SparxPlusIconButton:hover {
+  background-color: var(--colours-regular-background);
+  box-shadow: var(--spx-shadow-sm)
+}
+
+.SparxPlusVideoCloseX {
+  display: none
+}
+
+@media (max-height: 400px) {
+  .SparxPlusVideoCloseX {
+      display:inline-flex
+  }
+}

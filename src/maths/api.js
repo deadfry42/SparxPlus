@@ -54,8 +54,8 @@
         for (var mapping of classMapping) {
             var valid = true;
             var mMatches = mapping.classMatches == null ? valid = false : mapping.classMatches;
-            var mClasses = mapping.newClass == null ? valid = false : mapping.newClass;
             var mCondition = mapping.conditions == null ? valid = false : mapping.conditions;
+            var mClasses = mapping.newClass;
             var mChildClasses = mapping.newClassesToChildren;
             var mElementCheck = mapping.elementCheck;
             var mIfMatched = mapping.ifMatched;
@@ -77,25 +77,36 @@
             if (!isCondition) continue;
 
             var match = false;
+            var opposed = false;
 
             for (var matches of mMatches) {
+                if (matches.startsWith("!")) {
+                    if (name.includes(matches.substring(1))) {
+                        opposed = true;
+                        break;
+                    }
+                }
                 if (name.includes(matches)) {
-                    if (mElementCheck == null) {
-                        match = true;
-                        break;
-                    } else if (mElementCheck(realnode)) {
-                        match = true;
-                        break;
+                    // keep looping even if there is a match
+                    // to find a non match
+                    if (!match) {
+                        if (mElementCheck == null) {
+                            match = true;
+                        } else if (mElementCheck(realnode)) {
+                            match = true;
+                        }
                     }
                 }
             }
 
-            if (!match) continue;
+            if (!match || opposed) continue;
 
-            for (var mClass of mClasses) {
-                if (!realnode.classList.contains(mClass)) realnode.classList.add(mClass)
+            if (mClasses != null) {
+                for (var mClass of mClasses) {
+                    if (!realnode.classList.contains(mClass)) realnode.classList.add(mClass)
+                }
             }
-
+            
             if (mChildClasses != null) {
                 for (var mClass of mChildClasses) {
                     for (var child of realnode.children) {
