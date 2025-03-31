@@ -142,3 +142,28 @@ p, h1, h2, h3, h4, h5, h6 {
 body {
     background-color: #2a2a28;
 }
+
+* {
+    --scrollbar-color-thumb: #3b3b37;
+    --scrollbar-color-track: #2f2f2c;
+}
+
+@supports (scrollbar-width: auto) {
+    * {
+        scrollbar-color: var(--scrollbar-color-thumb) var(--scrollbar-color-track);
+        scrollbar-width: var(--scrollbar-width);
+    }
+}
+
+@supports selector(::-webkit-scrollbar) {
+    *::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-color-thumb);
+    }
+    *::-webkit-scrollbar-track {
+        background: var(--scrollbar-color-track);
+    }
+    *::-webkit-scrollbar {
+        max-width: var(--scrollbar-width-legacy);
+        max-height: var(--scrollbar-width-legacy);
+    }
+}

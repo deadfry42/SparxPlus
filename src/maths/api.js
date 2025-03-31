@@ -546,29 +546,6 @@
                                     log("CSS", "Changed the background gradient to the dark variant!")
                                     realnode.src = browser.runtime.getURL("assets/darkmode/gradients/maths.svg")
                                 }
-                            // } else if (name.includes("ButtonSecondary")) {
-                            //     if (!realnode.classList.contains("SparxPlusSecondaryButton")) {
-                            //         realnode.classList.add("SparxPlusSecondaryButton")
-                            //     }
-                            // } else if (name.includes("TopicFilterLabel")) {
-                            //     if (!realnode.classList.contains("SparxPlusTopicFilterLabel")) {
-                            //         realnode.classList.add("SparxPlusTopicFilterLabel")
-                            //     }
-                            // } else if (name.includes("SupportTipsItem")) {
-                            //     if (!realnode.classList.contains("SparxPlusSupportTipsItem")) {
-                            //         realnode.classList.add("SparxPlusSupportTipsItem")
-
-                            //         // sparx doesn't add any variable i can easily change to this text
-                            //         // hard coded fixes to the rescue!!!
-
-                            //         for (var child of realnode.children) {
-                            //             if (!child.classList.contains("SparxPlusSupportTipsItem")) child.classList.add("SparxPlusSupportTipsText")
-                            //         }
-                            //     }
-                            // } else if (name.includes("IndependentLearningNoContentMessage")) {
-                            //     for (var child of realnode.children) {
-                            //         if (!child.classList.contains("SparxPlusIndependentLearningNoContentMessageText")) child.classList.add("SparxPlusIndependentLearningNoContentMessageText")
-                            //     }
                             }
 
                             doClassMapping(realnode, name, Conditions.Added);

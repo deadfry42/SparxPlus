@@ -515,6 +515,17 @@ const classMapping = [
         conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
     },
     {
+        classMatches: ["TimesTablesButton"],
+        newClass: [],
+        conditions: [Conditions.Added],
+        ifMatched: (element, condition) => {
+            if (customSettings.darkMode) {
+                console.log(element)
+                element.style.backgroundImage = `url(${browser.runtime.getURL("assets/darkmode/images/TimesTableCard.png")})`
+            }
+        }
+    },
+    {
         classMatches: ["ColourOverlay"],
         newClass: ["SparxPlusColourOverlay"],
         conditions: [Conditions.Modified, Conditions.Added],
