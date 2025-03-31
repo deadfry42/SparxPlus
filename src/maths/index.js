@@ -17,6 +17,7 @@ const customSettings = { // default settings
     audio: true,
     test: false,
     keyboardShortcuts: false,
+    hideColourOverlay: false,
 
     // goals:
     // calculatorButton: true, // click the "Calculator Allowed" button and bring up a calculator
@@ -30,7 +31,7 @@ var textObjectExpanded = false;
 
 var logLength = 25;
 
-// enums (i would use ts but it doesn't play nice with browser extensions)
+// enums (i would use typescript but it doesn't play nice with browser extensions)
 const Conditions = {
     Added: 'added',
     Modified: 'modified',
@@ -100,6 +101,12 @@ const settingsFrontend = [
                     variable: "disableXPInTopRight",
                     name: "Hide XP count",
                     description: "Hide the XP in the top right corner of the screen.",
+                },
+                {
+                    type: SettingsType.Toggle,
+                    variable: "hideColourOverlay",
+                    name: "Hide Colour overlay",
+                    description: "Disable the colour overlay and the settings panel (so that if the extension fails or isn't available, you still have the colour overlay)",
                 },
                 {
                     type: SettingsType.Toggle,
@@ -506,6 +513,34 @@ const classMapping = [
         classMatches: ["InlineSlotOptions"],
         newClass: ["SparxPlusInlineSlotOptions"],
         conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
+    },
+    {
+        classMatches: ["ColourOverlay"],
+        newClass: ["SparxPlusColourOverlay"],
+        conditions: [Conditions.Modified, Conditions.Added],
+        ifMatched: (element, condition) => {
+            if (customSettings.hideColourOverlay) {
+                element.style.display = "none";
+            }
+        }
+    },
+    {
+        classMatches: ["OverlaySettingsContainer"],
+        newClass: [],
+        conditions: [Conditions.Modified, Conditions.Added],
+        ifMatched: (element, condition) => {
+            if (customSettings.hideColourOverlay) {
+                var p = element.parentNode;
+                // this might just be the hackiest fix possible
+                if (p != null) {
+                    var p2 = p.parentNode;
+                    if (p2 != null) {
+                        // display section
+                        p2.style.display = "none"
+                    }
+                }
+            }
+        }
     },
     {
         classMatches: ["Button"],
