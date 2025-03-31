@@ -11,6 +11,10 @@ Compatible with:
 >  
 > I did not spend time to make this code readable; proceed with caution.  
 
+> [!NOTE]
+> This extension is not meant to be used to breeze through your homework. It is simply to help/motivate you.  
+> This means that stuff like an autosolver, is not going to be availble in this extension.
+
 This extension is not affiliated with Sparx, otherwise known as [Sparx-Learning](https://sparx-learning.com).  
   
 ### How to download
