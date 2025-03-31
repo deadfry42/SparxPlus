@@ -521,6 +521,18 @@ const classMapping = [
         }
     },
     {
+        classMatches: ["BottomBar"],
+        newClass: [], // no new classes,
+        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
+        ifMatched: (element) => {
+            if (element == null) return;
+            var div = element.child[0];
+            if (div == null) {
+                
+            }
+        }
+    },
+    {
         classMatches: ["AnswerPart"],
         newClass: [], // no new classes,
         conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
@@ -544,12 +556,4 @@ const classMapping = [
             }
         }
     },
-    {
-        classMatches: [""],
-        newClass: [],
-        conditions: [Conditions.ModifiedTransitionPage],
-        ifMatched: (element) => {
-            // console.log(element)
-        }
-    }
 ]

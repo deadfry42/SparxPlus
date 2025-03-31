@@ -221,3 +221,15 @@ function createWarningBox(warningTxt, isInformational) {
 
     return warning;
 }
+
+function createBlur() {
+    var blur = document.createElement("div")
+    blur.classList.add("SparxPlusDialogOverlay")
+    blur.style.pointerEvents = "auto";
+
+    blur.setAttribute("data-state", "open")
+    blur.setAttribute("data-aria-hidden", "true")
+    blur.setAttribute("aria-hidden", "true")
+
+    return blur;
+}
