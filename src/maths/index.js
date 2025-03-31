@@ -20,6 +20,7 @@ const customSettings = { // default settings
     hideColourOverlay: false, // hide colour overlay
 
     whiteboard: true, // add a draw button, and show a whiteboard on screen (similar to video popup) and let the user draw
+    whiteboardDarkModeOverride: false, // if is dark mode, pretend is light mode anyway.
 
     // goals:
     // calculatorButton: true, // click the "Calculator Allowed" button and bring up a calculator
@@ -87,13 +88,6 @@ const settingsFrontend = [
                     name: "Progressive Disclosure",
                     description: "Hide tasks which haven't yet completed, to motivate you to finish. Doesn't work on revision.",
                 },
-                {
-                    type: SettingsType.Toggle,
-                    variable: "whiteboard",
-                    experimental: true,
-                    name: "Enable Whiteboard feature",
-                    description: "Show a whiteboard button which lets you work out your answer.",
-                },
                 // {
                 //     type: SettingsType.Toggle,
                 //     variable: "calculator",
@@ -158,6 +152,29 @@ const settingsFrontend = [
                     variable: "hideColourOverlay",
                     name: "Hide Colour overlay",
                     description: "Disable the colour overlay and the settings panel (so that if the extension fails or isn't available, you still have the colour overlay)",
+                },
+            ]
+        }
+    },
+    {
+        header: "Whiteboard",
+        description: "Settings for the Whiteboard feature in questions",
+        panel: {
+            type: PanelType.Settings,
+            content: [
+                {
+                    type: SettingsType.Toggle,
+                    variable: "whiteboard",
+                    experimental: true,
+                    name: "Enable Whiteboard feature",
+                    description: "Show a whiteboard button which lets you work out your answer.",
+                },
+                {
+                    type: SettingsType.Toggle,
+                    variable: "whiteboardDarkModeOverride",
+                    experimental: false,
+                    name: "Dark mode override",
+                    description: "Use the light mode whiteboard even if in dark mode.",
                 },
             ]
         }
@@ -616,8 +633,101 @@ const classMapping = [
 
             btn.onmouseup = (e) => {
                 var blur = createBlur()
+                var menu = createBlurredMenu(blur, "Whiteboard")
+
+                var whiteboardContainer = document.createElement("div") 
+                whiteboardContainer.className = "SparxPlusVideoContainer SparxPlusWhiteboard"
+                menu.append(whiteboardContainer)
+
+                const canvas = document.createElement("canvas")
+                canvas.className = "SparxPlusWhiteboard"
+                canvas.style.width = "100%"
+                canvas.style.height = "100%"
+                if (!customSettings.darkMode || customSettings.whiteboardDarkModeOverride) {
+                    canvas.style.backgroundColor = "white"
+                }
+                const ctx = canvas.getContext("2d")
+
+                whiteboardContainer.append(canvas)
+
+                let painting = false;
+                let brushColor = customSettings.darkMode ? (customSettings.whiteboardDarkModeOverride ? "#000000" : "#FFFFFF") : "#000000";
+                let brushSize = 5;
+
+                const redraw = () => {
+
+                }
+
+                const start = (e) => {
+                    painting = true;
+                    draw(e)
+                }
+
+                const end = () => {
+                    painting = false;
+                    ctx.beginPath();
+                }
+
+                const draw = (e) => {
+                    if (!painting) return;
+                
+                    ctx.lineWidth = brushSize;
+                    ctx.lineCap = 'round';
+                    ctx.strokeStyle = brushColor;
+                
+                    const rect = canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                }
+
+                canvas.addEventListener('mousedown', start);
+                canvas.addEventListener('mouseup', end);
+                canvas.addEventListener('mousemove', draw);
+
+                canvas.addEventListener('touchstart', (e) => {
+                    const touch = e.touches[0];
+                    const mouseEvent = new MouseEvent('mousedown', {
+                        clientX: touch.clientX,
+                        clientY: touch.clientY
+                    });
+                    canvas.dispatchEvent(mouseEvent);
+                });
+                canvas.addEventListener('touchend', () => {
+                    const mouseEvent = new MouseEvent('mouseup', {});
+                    canvas.dispatchEvent(mouseEvent);
+                });
+                
+                canvas.addEventListener('touchmove', (e) => {
+                    const touch = e.touches[0];
+                    const mouseEvent = new MouseEvent('mousemove', {
+                        clientX: touch.clientX,
+                        clientY: touch.clientY
+                    });
+                    canvas.dispatchEvent(mouseEvent);
+                });
+
+                redraw()
+
+                setTimeout(() => {
+                    // lazy fix cuz im lazy
+                    canvas.width = canvas.getBoundingClientRect().width
+                    canvas.height = canvas.getBoundingClientRect().height
+                }, 200);
+
+                window.addEventListener("resize", (e) => {
+                    canvas.width = canvas.getBoundingClientRect().width
+                    canvas.height = canvas.getBoundingClientRect().height
+
+                    redraw();
+                })
+
                 document.body.append(blur)
-                document.body.append(createBlurredMenu(blur, "Whiteboard"))
+                document.body.append(menu)
             }
             element.append(btn)
         }

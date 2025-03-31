@@ -335,3 +335,11 @@
       display:inline-flex
   }
 }
+
+.SparxPlusVideoContainer {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  overflow: hidden;
+  background: var(--colours-plain-background-inverted)
+}

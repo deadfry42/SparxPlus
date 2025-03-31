@@ -17,7 +17,7 @@
     ],
     "web_accessible_resources": [
         {
-        "resources": ["assets/*", "src/css/*"],
+        "resources": ["src/lib/*", "assets/*", "src/css/*"],
         "matches": ["*://www.sparxmaths.uk/*",
         "*://app.sparxscience.com/*",
         "*://maths.sparx-learning.com/*",
