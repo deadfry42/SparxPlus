@@ -2,7 +2,7 @@
 // and used to determine what features should be available
 
 // note: this is not synced by default.
-// they are synced when the page loads, in index.js
+// they are synced when the page loads, in api.js
 const customSettings = { // default settings
     hideVideoButton: false, // hide video button for extreme++ mega challenge >:)
     jumpscareWhenWrong: false, // animation when q wrong (slighly broken)
@@ -242,7 +242,7 @@ const settingsFrontend = [
     },
     {
         header: "Logs",
-        description: "Logs that SparxPlus has generated.",
+        description: "Logs that SparxPlus has generated. (If you see any errors, please let the developer know!)",
         panel: {
             type: PanelType.Blank,
             initialise: (section, header, description, panel) => {
@@ -316,7 +316,7 @@ const keyboardMapping = [
     // see https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values
     // for key names that aren't Key*
     {
-        classMatches: ["SparxPlusBackQuestionButton", "BackButton", "SMLogo"],
+        classMatches: ["SparxPlusBackQuestionButton", "BackButton", "SMLogo"], // happens in order
         keys: ["Escape"],
         action: Actions.Button,
     },

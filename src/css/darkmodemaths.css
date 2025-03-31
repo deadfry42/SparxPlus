@@ -60,6 +60,16 @@ p, h1, h2, h3, h4, h5, h6 {
   color: var(--palette-light-grey) !important;
 }
 
+a {
+    text-decoration-color: white;
+    color: white;
+}
+
+a:active {
+    text-decoration-color: #3b3b37;
+    color: #3b3b37;
+}
+
 /* changing colour of question text */
 /* this class is set by api.js */
 .SparxPlusTextElement {
