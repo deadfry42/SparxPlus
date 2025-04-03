@@ -690,6 +690,7 @@ const classMapping = [
                 canvas.addEventListener('mousemove', draw);
 
                 canvas.addEventListener('touchstart', (e) => {
+                    e.preventDefault()
                     const touch = e.touches[0];
                     const mouseEvent = new MouseEvent('mousedown', {
                         clientX: touch.clientX,
@@ -698,11 +699,13 @@ const classMapping = [
                     canvas.dispatchEvent(mouseEvent);
                 });
                 canvas.addEventListener('touchend', () => {
+                    e.preventDefault()
                     const mouseEvent = new MouseEvent('mouseup', {});
                     canvas.dispatchEvent(mouseEvent);
                 });
                 
                 canvas.addEventListener('touchmove', (e) => {
+                    e.preventDefault()
                     const touch = e.touches[0];
                     const mouseEvent = new MouseEvent('mousemove', {
                         clientX: touch.clientX,
