@@ -639,6 +639,8 @@ const classMapping = [
                 whiteboardContainer.className = "SparxPlusVideoContainer SparxPlusWhiteboard"
                 menu.append(whiteboardContainer)
 
+                var whiteboardData = [];
+
                 const canvas = document.createElement("canvas")
                 canvas.className = "SparxPlusWhiteboard"
                 canvas.style.width = "100%"
@@ -655,7 +657,35 @@ const classMapping = [
                 let brushSize = 5;
 
                 const redraw = () => {
+                    painting = false;
+                    for (data of whiteboardData) {
+                        if (!data.stop) {
+                            var x = data.x;
+                            var y = data.y;
+                            ctx.lineWidth = brushSize;
+                            ctx.lineCap = 'round';
+                            ctx.strokeStyle = brushColor;
+                            ctx.lineTo(x, y);
+                            ctx.stroke();
+                            ctx.beginPath();
+                            ctx.moveTo(x, y);
+                        } else {
+                            ctx.beginPath();
+                        }
+                    }
+                }
 
+                const storeStroke = (x, y) => {
+                    data = {}
+                    data.x = x;
+                    data.y = y;
+                    data.stop = false;
+
+                    whiteboardData.push(data);
+                }
+
+                const storeStop = () => {
+                    whiteboardData.push({stop: true, x: 0, y: 0})
                 }
 
                 const start = (e) => {
@@ -666,6 +696,7 @@ const classMapping = [
                 const end = () => {
                     painting = false;
                     ctx.beginPath();
+                    storeStop();
                 }
 
                 const draw = (e) => {
@@ -683,6 +714,8 @@ const classMapping = [
                     ctx.stroke();
                     ctx.beginPath();
                     ctx.moveTo(x, y);
+
+                    storeStroke(x, y)
                 }
 
                 canvas.addEventListener('mousedown', start);
