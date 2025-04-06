@@ -230,8 +230,12 @@ const settingsFrontend = [
             <br>
             <br>SparxPlus is a browser extension which modifies Sparx homework platforms, for quality of life, or just for fun. (because let's be honest: doing homework is boring)
             <br>
+            <br>Interested in the development of this plugin?
             <br>This project is fully open source! The code available <a href="${getGithubLink()}">here</a>!
             <br>(Note: The code will not be very well written lol)
+            <br>
+            <br>Want to join the discord, to see new updates and general Sparx(Plus) help?
+            <br>Join the discord <a href="${getDiscordLink()}">here</a>!
             <br>
             <br>This project is not affiliated with Sparx, SparxMaths and/or Sparx-learning.
             <br>

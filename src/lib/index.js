@@ -36,8 +36,12 @@ function getGithubLink() {
     return "https://github.com/deadfry42/SparxPlus"
 }
 
+function getDiscordLink() {
+    return "https://discord.gg/uKbdBa4M5B"
+}
+
 function getLastUpdated() {
-    return "26th of March, 2025"
+    return "6th of April, 2025"
 }
 
 function getLogs() {

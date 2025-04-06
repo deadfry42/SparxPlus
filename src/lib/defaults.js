@@ -1,7 +1,6 @@
 const browser = chrome == null ? browser : chrome;
 
 function convertNumberToLetter(num) {
-    // return (num + 9).toString(36).toUpperCase()
     return String.fromCharCode(parseInt(num-1) + 'A'.charCodeAt(0))
 }
 
