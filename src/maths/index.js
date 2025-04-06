@@ -611,25 +611,40 @@ const classMapping = [
             btn.textContent = "Whiteboard"
             btn.className = "SparxPlusWhiteboardButton"
 
-            btn.onmouseup = (e) => {
-                const getWhiteboardData = (questionID) => {
-                    browser.storage.local.get([questionID.getID()]) .then((res) => {
-                        return res.value;
-                    })
-                }
+            btn.onmouseup = async (e) => {
+                // const getWhiteboardData = async (questionID) => {
+                //     browser.storage.local.get([questionID.getID()]) .then((res) => {
+                //         const value = res[questionID.getID()]
+                //         return res[value];
+                //     })
+                // }
 
                 const setWhiteboardData = (questionID, data) => {
                     browser.storage.local.set({ [questionID.getID()]: data });
                 }
 
+                const questionID = getQuestionID(PlatformID.SparxMaths);
+
                 var blur = createBlur()
-                var menu = createBlurredMenu(blur, "Whiteboard")
+                var menu = createBlurredMenu(blur, "Whiteboard", (menu) => {
+                    // when closed
+                    setWhiteboardData(questionID, whiteboardData)
+                })
 
                 var whiteboardContainer = document.createElement("div") 
                 whiteboardContainer.className = "SparxPlusVideoContainer SparxPlusWhiteboard"
                 menu.append(whiteboardContainer)
 
-                var whiteboardData = [];
+                var whiteboardData = []
+                browser.storage.local.get([questionID.getID()]) .then((res) => {
+                    const val = res[questionID.getID()]
+                    whiteboardData = val == null ? [] : val;
+
+                    redraw()
+                }) .catch((e) => {
+                    log("Whiteboard", "Failed to load whiteboard!")
+                    baseLog(e)
+                })
 
                 const canvas = document.createElement("canvas")
                 canvas.className = "SparxPlusWhiteboard"
@@ -736,8 +751,6 @@ const classMapping = [
                     });
                     canvas.dispatchEvent(mouseEvent);
                 });
-
-                redraw()
 
                 setTimeout(() => {
                     // lazy fix cuz im lazy

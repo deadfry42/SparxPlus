@@ -240,7 +240,7 @@ function createBlur() {
     return blur;
 }
 
-function createBlurredMenu(blur, titleText) {
+function createBlurredMenu(blur, titleText, onClose) {
     var div = document.createElement("div")
     div.setAttribute("role", "dialog")
     div.setAttribute("data-state", "open")
@@ -249,6 +249,9 @@ function createBlurredMenu(blur, titleText) {
     div.className = "SparxPlusDialogContent FullWidth WithZIndex"
 
     const close = () => {
+        if (onClose != null) {
+            onClose(div);
+        }
         blur.setAttribute("data-state", "closed")
         div.setAttribute("data-state", "closed")
         setTimeout(() => {
@@ -278,7 +281,6 @@ function createBlurredMenu(blur, titleText) {
 
 function getQuestionID(platformID) {
     if (platformID == PlatformID.SparxMaths) {
-        console.log(chrome)
         const url = window.location.href;
 
         var tokens = url.split("/");
