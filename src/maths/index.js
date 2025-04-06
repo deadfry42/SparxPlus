@@ -421,7 +421,8 @@ const classMapping = [
                 currentQuestionID = getQuestionID(PlatformID.SparxMaths).getID();
                 updateDebugMenu()
             } catch(e) {
-
+                currentQuestionID = ""
+                updateDebugMenu()
             }
         },
     },
