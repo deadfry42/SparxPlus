@@ -19,6 +19,8 @@ const customSettings = { // default settings
     keyboardShortcuts: false, // navigate Sparx with a keyboard
     hideColourOverlay: false, // hide colour overlay
 
+    enableDebugByDefault: false,
+
     whiteboard: true, // add a draw button, and show a whiteboard on screen (similar to video popup) and let the user draw
     whiteboardDarkModeOverride: false, // if is dark mode, pretend is light mode anyway.
 
@@ -200,6 +202,12 @@ const settingsFrontend = [
                     variable: "enableStartupNotification",
                     name: "Enable Startup Notification",
                     description: "Whether or not to notify you whenever SparxPlus successfully loads.",
+                },
+                {
+                    type: SettingsType.Toggle,
+                    variable: "enableDebugByDefault",
+                    name: "Show debug menu by default",
+                    description: "Whether or not to enable the debug menu in the top left corner by default. Use \"Home\" to toggle.",
                 },
                 {
                     type: SettingsType.Toggle,

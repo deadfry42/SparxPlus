@@ -161,7 +161,6 @@ var toggleDebugMenu;
 
         debugMenu.append(title)
         debugMenu.append(qIDTag)
-        debugMenu.append(whiteboardTag)
 
         document.body.append(debugMenu)
 
@@ -205,6 +204,9 @@ var toggleDebugMenu;
                 addEventListener("keydown", (event) => {
                     doKeyboardInput(event)
                 });
+            }
+            if (res.enableDebugByDefault) {
+                toggleDebugMenu();
             }
 
             log("Settings", "Successfully synced settings!")
