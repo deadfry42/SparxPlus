@@ -34,33 +34,6 @@ var textObjectExpanded = false;
 
 var logLength = 25;
 
-// enums (i would use typescript but it doesn't play nice with browser extensions)
-// this is good enough
-const Conditions = {
-    Added: 'added',
-    Modified: 'modified',
-    ModifiedTransitionPage: 'modifiedTransitionPage'
-};
-
-const Actions = {
-    Button: "button",
-    Click: "click",
-    LeftClick: "click",
-    RightClick: "rightclick",
-    None: "none",
-};
-
-const PanelType = {
-    Settings: 'settings',
-    Blank: 'blank',
-    Descriptive: 'descriptive',
-};
-
-const SettingsType = {
-    Toggle: "toggle",
-    Input: "input",
-};
-
 // settings panels
 // this manages each panel seen in the settings page of SparxMaths
 // i'm not going to explain how it works here: it's a bit too complex to feasibly do so
@@ -439,6 +412,13 @@ const keyboardMapping = [
 // (this is for styling / functionality / dark mode)
 const classMapping = [
     {
+        classMatches: ["QuestionScrollableContent"],
+        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added, Conditions.Removed],
+        ifMatched: (element, condition) => {
+            log("Maths", "QuestionID: "+getQuestionID(PlatformID.SparxMaths).getID())
+        },
+    },
+    {
         classMatches: ["TopicFilterLabel"],
         newClass: ["SparxPlusTopicFilterLabel"],
         conditions: [Conditions.Added],
@@ -632,6 +612,16 @@ const classMapping = [
             btn.className = "SparxPlusWhiteboardButton"
 
             btn.onmouseup = (e) => {
+                const getWhiteboardData = (questionID) => {
+                    browser.storage.local.get([questionID.getID()]) .then((res) => {
+                        return res.value;
+                    })
+                }
+
+                const setWhiteboardData = (questionID, data) => {
+                    browser.storage.local.set({ [questionID.getID()]: data });
+                }
+
                 var blur = createBlur()
                 var menu = createBlurredMenu(blur, "Whiteboard")
 

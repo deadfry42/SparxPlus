@@ -101,10 +101,14 @@
 
             if (!match || opposed) continue;
 
-            if (mClasses != null) {
-                for (var mClass of mClasses) {
-                    if (!realnode.classList.contains(mClass)) realnode.classList.add(mClass)
+            try {
+                if (mClasses != null) {
+                    for (var mClass of mClasses) {
+                        if (!realnode.classList.contains(mClass)) realnode.classList.add(mClass)
+                    }
                 }
+            } catch(e) {
+
             }
             
             if (mChildClasses != null) {
@@ -508,10 +512,6 @@
                                 } catch {
 
                                 }
-                            } else if (name.includes("QuestionScrollableContent")) {
-                                log("Maths", "Question Changed! (Added)")
-
-                                // console.log(getDescendants(realnode))
                             } else if (name.includes("SMLogo")) {
                                 for (var n of realnode.children) {
                                     if (n.constructor.name == document.createElement("img").constructor.name) {
@@ -624,12 +624,9 @@
                     for (let realnode of list) {
                         if (realnode == null) continue;
                         var name = realnode.className;
-                        // console.log(realnode)
                         if (name == null || name.includes == null) continue;
                         try {
-                            if (name.includes("QuestionScrollableContent")) {
-                                log("Maths", "Question Changed! (Removed)")
-                            }
+                            doClassMapping(realnode, name, Conditions.Removed)
                         } catch(e) {
                             log("API", "Error parsing removed object! "+e)
                         }

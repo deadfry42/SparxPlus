@@ -275,3 +275,124 @@ function createBlurredMenu(blur, titleText) {
 
     return div;
 }
+
+function getQuestionID(platformID) {
+    if (platformID == PlatformID.SparxMaths) {
+        console.log(chrome)
+        const url = window.location.href;
+
+        var tokens = url.split("/");
+        var packageIndex = -1;
+
+        for (var i = 0; i < tokens.length; i++) {
+            var token = tokens[i];
+            if (token.toLowerCase() == "package") {
+                // just before the uri ID
+                packageIndex = i;
+                break;
+            }
+        }
+
+        var uri = "";
+        var taskID = 0;
+        var question = 0;
+        var questionID = null
+
+        try {
+            // this is rudimentary
+            // TODO: improve
+            if (packageIndex < tokens.length) {
+                // there is atleast 1 more token
+                uri = tokens[packageIndex+1]
+                // task = tokens[packageIndex+2]
+                taskID = tokens[packageIndex+3]
+                // item = tokens[packageIndex+3]
+                question = tokens[packageIndex+5]
+            }
+
+            questionID = new QuestionID(uri, taskID, question, PlatformID.SparxMaths)
+        } catch(e) {
+            log("QuestionID", "Failed to get questionID!")
+        }
+
+        return questionID;
+    }
+}
+
+// enums (i would use typescript but it doesn't play nice with browser extensions)
+// this is good enough
+const Conditions = {
+    Added: 'added',
+    Modified: 'modified',
+    ModifiedTransitionPage: 'modifiedTransitionPage',
+    Removed: 'removed'
+};
+
+const Actions = {
+    Button: "button",
+    Click: "click",
+    LeftClick: "click",
+    RightClick: "rightclick",
+    None: "none",
+};
+
+const PanelType = {
+    Settings: 'settings',
+    Blank: 'blank',
+    Descriptive: 'descriptive',
+};
+
+const SettingsType = {
+    Toggle: "toggle",
+    Input: "input",
+};
+
+const PlatformID = {
+    SparxMaths: 0,
+    SparxScience: 1,
+    Unknown: -1,
+}
+
+// classes
+
+class QuestionID {
+    uri;
+    task;
+    question;
+    platformID;
+    constructor(uri, task, question, platformID) {
+        if (uri == null || task == null || question == null) return;
+        this.uri = uri;
+        this.task = task;
+        this.question = question;
+        this.platformID = platformID == null ? Unknown : platformID;
+    }
+
+    isSimilar(otherQuestionID) {
+        if (otherQuestionID.constructor.name != this.constructor.name) return false;
+        return this.getURI() == otherQuestionID.getURI()
+        && this.getTask() == otherQuestionID.getTask()
+        && this.getQuestion() == otherQuestionID.getQuestion()
+        && this.getPlatformID() == otherQuestionID.getPlatformID();
+    }
+
+    getPlatformID() {
+        return this.platformID;
+    }
+
+    getTask() {
+        return this.task;
+    }
+
+    getQuestion() {
+        return this.question;
+    }
+
+    getURI() {
+        return this.uri;
+    }
+
+    getID() {
+        return `SparxPlusQuestionID:${this.getPlatformID()}:${this.getURI()}/${this.getTask()}/${this.getQuestion()}`
+    }
+}
