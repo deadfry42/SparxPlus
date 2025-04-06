@@ -140,7 +140,13 @@ var toggleDebugMenu;
     (async () => {
 
         updateDebugMenu = () => {
-            qIDTag.innerText = currentQuestionID;
+            
+            try {
+                var questionID = getQuestionID(PlatformID.SparxMaths);
+                qIDTag.innerText = `QuestionID: ${questionID.getID()}\nAlphabeticID: ${questionID.getAlphabeticID()}`
+            } catch(e) {
+                qIDTag.innerText = ""
+            }
         }
 
         toggleDebugMenu = () => {

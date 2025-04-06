@@ -36,8 +36,6 @@ var textObjectExpanded = false;
 
 var logLength = 25;
 
-var currentQuestionID = "";
-
 // settings panels
 // this manages each panel seen in the settings page of SparxMaths
 // i'm not going to explain how it works here: it's a bit too complex to feasibly do so
@@ -425,13 +423,7 @@ const classMapping = [
         classMatches: ["QuestionScrollableContent"],
         conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added, Conditions.Removed],
         ifMatched: (element, condition) => {
-            try {
-                currentQuestionID = getQuestionID(PlatformID.SparxMaths).getID();
-                updateDebugMenu()
-            } catch(e) {
-                currentQuestionID = ""
-                updateDebugMenu()
-            }
+            updateDebugMenu()
         },
     },
     {

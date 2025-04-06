@@ -1,5 +1,10 @@
 const browser = chrome == null ? browser : chrome;
 
+function convertNumberToLetter(num) {
+    // return (num + 9).toString(36).toUpperCase()
+    return String.fromCharCode(parseInt(num-1) + 'A'.charCodeAt(0))
+}
+
 function replaceElement(matchClassString, element) {
     var x = document.getElementsByTagName('*');
     for (var i = 0; i < x.length; i++) {
@@ -398,7 +403,12 @@ class QuestionID {
         return this.uri;
     }
 
+    getAlphabeticID() {
+        console.log(convertNumberToLetter(this.question))
+        return `${this.task}${convertNumberToLetter(this.question)}`
+    }
+
     getID() {
-        return `SparxPlusQuestionID:${this.getPlatformID()}:${this.getURI()}/${this.getTask()}/${this.getQuestion()}`
+        return `Question/${this.getPlatformID()}/${this.getURI()}:${this.getTask()}:${this.getQuestion()}`
     }
 }
