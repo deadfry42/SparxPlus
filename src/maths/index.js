@@ -417,8 +417,12 @@ const classMapping = [
         classMatches: ["QuestionScrollableContent"],
         conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added, Conditions.Removed],
         ifMatched: (element, condition) => {
-            currentQuestionID = getQuestionID(PlatformID.SparxMaths).getID();
-            updateDebugMenu()
+            try {
+                currentQuestionID = getQuestionID(PlatformID.SparxMaths).getID();
+                updateDebugMenu()
+            } catch(e) {
+
+            }
         },
     },
     {
