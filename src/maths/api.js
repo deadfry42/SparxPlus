@@ -183,7 +183,6 @@ var toggleDebugMenu;
             }
 
             if (res.darkMode) {
-                log("CSS", "Injecting darkMode css file!")
                 appendStyleSheet("darkmodeSP", browser.runtime.getURL("src/css/darkmodemaths.css"));
             }
             if (res.test) {
@@ -201,12 +200,10 @@ var toggleDebugMenu;
                 })
             }
             if (res.customCSS != null && res.customCSS != "") {
-                log("CSS", "Injecting custom CSS!")
                 baseLog(res.customCSS)
                 appendStyleContent("customCSS", res.customCSS)
             }
             if (res.keyboardShortcuts) {
-                log("Settings", "Enabling keyboard shortcuts")
                 addEventListener("keydown", (event) => {
                     doKeyboardInput(event)
                 });
@@ -535,8 +532,6 @@ var toggleDebugMenu;
                                         }
                                     }
                                 }
-
-                                log("Settings", "Added settings page successfully!")
                             } else if (name.includes("DropdownMenuContent")) {
                                 var menu = realnode;
 
@@ -603,11 +598,12 @@ var toggleDebugMenu;
                                 }
                             } else if (name.includes("LQDContainer")) {
                                 if (customSettings.darkMode) {
-                                    log("CSS", "Changed the question background gradient to the dark variant!")
+                                    // i forgot what this was for but im keeping it incase i accidentally fuck something up
+                                    // log("CSS", "Changed the question background gradient to the dark variant!")
                                 }
                             } else if (name.includes("PageBackgroundImage")) {
                                 if (customSettings.darkMode) {
-                                    log("CSS", "Changed the background gradient to the dark variant!")
+                                    // log("CSS", "Changed the background gradient to the dark variant!")
                                     realnode.src = browser.runtime.getURL("assets/darkmode/gradients/maths.svg")
                                 }
                             }

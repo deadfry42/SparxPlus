@@ -53,4 +53,4 @@ function addChangedEvent(event) {
     changedEvents.push(event);
 }
 
-log("SparxPlus", "SparxPlus initiated, running version "+getVersion()+"!")
+log("SparxPlus", `SparxPlus library file initiated, running version ${getVersion()}`)
