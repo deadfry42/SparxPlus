@@ -255,56 +255,63 @@ const settingsFrontend = [
                 textObjectExpanded = false;
                 loadedShowObject = null;
 
+                const updateLogs = () => {
+                    console.log("sigma")
+                    if (loadedTextObject != null) {
+                        if (textObjectExpanded) {
+                            var fullTxt = "";
+                            for (var log of getLogs()) {
+                                fullTxt += log+"<br>";
+                            }
+                            fullTxt+="-- End of logs --"
+
+                            loadedTextObject.innerHTML = fullTxt;
+                        } else {
+                            var truncatedTxt = "";
+                            var i = 0;
+                            var isTruncated = false;
+                            for (var log of getLogs()) {
+                                i++;
+                                if (i <= logLength) truncatedTxt += log+"<br>";
+                                else isTruncated = true;
+                            }
+                            if (isTruncated && !textObjectExpanded && loadedShowObject == null) {
+                                loadedShowObject = document.createElement("a");
+                                loadedShowObject.textContent = "Click to show more"
+                                loadedShowObject.style.textDecoration = "underline"
+                                loadedShowObject.style.color = "blue";
+                                loadedShowObject.style.cursor = "pointer";
+                                loadedShowObject.onclick = (e) => {
+                                    textObjectExpanded = true;
+                                    loadedShowObject.remove()
+                                    loadedShowObject = null;
+
+                                    var fullTxt = "";
+                                    for (var log of getLogs()) {
+                                        fullTxt += log+"<br>";
+                                    }
+                                    fullTxt+="-- End of logs --"
+
+                                    loadedTextObject.innerHTML = fullTxt;
+                                }
+                                loadedPanel.append(loadedShowObject)
+                            } else {
+                                truncatedTxt+="-- End of logs --"
+                            }
+                            loadedTextObject.innerHTML = truncatedTxt;
+                        }
+                    }
+                }
+
                 if (loadedTextObject == null) {
                     addChangedEvent(() => {
-                        if (loadedTextObject != null) {
-                            if (textObjectExpanded) {
-                                var fullTxt = "";
-                                for (var log of getLogs()) {
-                                    fullTxt += log+"<br>";
-                                }
-                                fullTxt+="-- End of logs --"
-
-                                loadedTextObject.innerHTML = fullTxt;
-                            } else {
-                                var truncatedTxt = "";
-                                var i = 0;
-                                var isTruncated = false;
-                                for (var log of getLogs()) {
-                                    i++;
-                                    if (i <= logLength) truncatedTxt += log+"<br>";
-                                    else isTruncated = true;
-                                }
-                                if (isTruncated && !textObjectExpanded && loadedShowObject == null) {
-                                    loadedShowObject = document.createElement("a");
-                                    loadedShowObject.textContent = "Click to show more"
-                                    loadedShowObject.style.textDecoration = "underline"
-                                    loadedShowObject.style.color = "blue";
-                                    loadedShowObject.style.cursor = "pointer";
-                                    loadedShowObject.onclick = (e) => {
-                                        textObjectExpanded = true;
-                                        loadedShowObject.remove()
-                                        loadedShowObject = null;
-
-                                        var fullTxt = "";
-                                        for (var log of getLogs()) {
-                                            fullTxt += log+"<br>";
-                                        }
-                                        fullTxt+="-- End of logs --"
-
-                                        loadedTextObject.innerHTML = fullTxt;
-                                    }
-                                    loadedPanel.append(loadedShowObject)
-                                } else {
-                                    truncatedTxt+="-- End of logs --"
-                                }
-                                loadedTextObject.innerHTML = truncatedTxt;
-                            }
-                        }
+                        updateLogs()
                     })
                 }
 
                 loadedTextObject = logs;
+
+                updateLogs()
             }
         }
     },

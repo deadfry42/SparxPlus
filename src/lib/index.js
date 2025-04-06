@@ -20,10 +20,6 @@ function baseLog(msg) {
     }
 }
 
-// VERY IMPORTANT
-// CHANGE VERSION TO MATCH manifest.json, AND RELEASE TO MATCH RELEASE
-// OTHERWISE BAD :(
-
 function getVersion() {
     // putting chrome / browser checking here instead of a browser variable cuz it'd fuck up the rest of the code
     return "v"+(chrome == null ? browser : chrome).runtime.getManifest().version+""+(!getIsRelease() ? "-dev" : "")
