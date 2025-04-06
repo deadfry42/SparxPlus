@@ -631,13 +631,11 @@ const classMapping = [
             btn.className = "SparxPlusWhiteboardButton"
 
             btn.onmouseup = async (e) => {
-                // const getWhiteboardData = async (questionID) => {
-                //     browser.storage.local.get([questionID.getID()]) .then((res) => {
-                //         const value = res[questionID.getID()]
-                //         return res[value];
-                //     })
-                // }
-
+                // TODO:
+                // Make a Question data class or something
+                // Put an expiration date on that data
+                // So that it doesn't clog up your Local extension storage
+                // (we have a 10MB limit)
                 const setWhiteboardData = (questionID, data) => {
                     browser.storage.local.set({ [questionID.getID()]: data });
                 }
@@ -646,7 +644,6 @@ const classMapping = [
 
                 var blur = createBlur()
                 var menu = createBlurredMenu(blur, "Whiteboard", (menu) => {
-                    // when closed
                     setWhiteboardData(questionID, whiteboardData)
                 })
 
@@ -659,6 +656,8 @@ const classMapping = [
                     const val = res[questionID.getID()]
                     whiteboardData = val == null ? [] : val;
 
+                    canvas.width = canvas.getBoundingClientRect().width
+                    canvas.height = canvas.getBoundingClientRect().height
                     redraw()
                 }) .catch((e) => {
                     log("Whiteboard", "Failed to load whiteboard!")
@@ -770,12 +769,6 @@ const classMapping = [
                     });
                     canvas.dispatchEvent(mouseEvent);
                 });
-
-                setTimeout(() => {
-                    // lazy fix cuz im lazy
-                    canvas.width = canvas.getBoundingClientRect().width
-                    canvas.height = canvas.getBoundingClientRect().height
-                }, 200);
 
                 window.addEventListener("resize", (e) => {
                     canvas.width = canvas.getBoundingClientRect().width
