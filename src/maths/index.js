@@ -226,13 +226,14 @@ const settingsFrontend = [
         panel: {
             type: PanelType.Descriptive,
             text: `
-            Thanks for trying SparxPlus! Hope you enjoy it!
+            Thanks for trying SparxPlus!
+            <br>If you have anything to say about the extension, please leave a review at the <a href="${getGoogleLink()}">Chrome Web Store</a> page for this extension, or alternatively just join my discord, linked below! (This is so I can hear your feedback, and I can improve!)
             <br>
-            <br>SparxPlus is a browser extension which modifies Sparx homework platforms, for quality of life, or just for fun. (because let's be honest: doing homework is boring)
+            <br>SparxPlus is a browser extension which modifies Sparx homework platforms, for quality of life, or just for fun.
             <br>
             <br>Interested in the development of this plugin?
-            <br>This project is fully open source! The code available <a href="${getGithubLink()}">here</a>!
-            <br>(Note: The code will not be very well written lol)
+            <br>This project is fully open source! Available <a href="${getGithubLink()}">here</a>!
+            <br>(I hope the code is at the very least readable)
             <br>
             <br>Want to join the discord, to see new updates and general Sparx(Plus) help?
             <br>Join the discord <a href="${getDiscordLink()}">here</a>!
@@ -303,6 +304,7 @@ const settingsFrontend = [
                 }
 
                 if (loadedTextObject == null) {
+                    // avoid memory leaks ;)
                     addChangedEvent(() => {
                         updateLogs()
                     })

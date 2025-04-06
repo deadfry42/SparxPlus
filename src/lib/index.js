@@ -37,6 +37,10 @@ function getDiscordLink() {
     return "https://discord.gg/uKbdBa4M5B"
 }
 
+function getGoogleLink() {
+    return "https://chromewebstore.google.com/detail/sparx-plus/mlkhfcljmcjcnemaajbgmojapbkhoaik"
+}
+
 function getLastUpdated() {
     return "6th of April, 2025"
 }
