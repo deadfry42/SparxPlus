@@ -343,3 +343,16 @@
   overflow: hidden;
   background: var(--colours-plain-background-inverted)
 }
+
+.SparxPlusDebugMenu {
+  margin: 10px;
+  padding: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: grey;
+}
+
+.SparxPlusDebugMenuHidden {
+  display: none;
+}

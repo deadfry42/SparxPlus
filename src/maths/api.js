@@ -1,3 +1,6 @@
+var updateDebugMenu;
+var toggleDebugMenu;
+
 (async () => {
     log("Maths", "Sparx Plus started with SparxMaths!")
 
@@ -132,6 +135,33 @@
         }
     }
 
+    // put it in this wrapeper thingy to visually distinguish from the rest
+    // and also async
+    (async () => {
+
+        updateDebugMenu = () => {
+            qIDTag.innerText = currentQuestionID;
+        }
+
+        toggleDebugMenu = () => {
+            if (debugMenu.classList.contains("SparxPlusDebugMenuHidden")) {
+                debugMenu.classList.remove("SparxPlusDebugMenuHidden")
+            } else {
+                debugMenu.classList.add("SparxPlusDebugMenuHidden")
+            }
+        }
+
+        const debugMenu = document.createElement("div")
+        debugMenu.className = "SparxPlusDebugMenu SparxPlusDebugMenuHidden"
+
+        const qIDTag = document.createElement("p")
+        debugMenu.append(qIDTag)
+
+        document.body.append(debugMenu)
+
+
+    })()
+
     const loadedPage = () => {
 
         log("HTML", "Page finished loading!")
@@ -173,6 +203,10 @@
 
             log("Settings", "Successfully synced settings!")
         })
+
+        addEventListener("keydown", (event) => {
+            doDebugMenuInput(event)
+        });
 
         const config = { attributes: true, childList: true, subtree: true };
 
@@ -649,6 +683,16 @@
     addEventListener("pageshow", (event) => {
         loadedPage();
     });
+
+    const doDebugMenuInput = (event) => {
+        // hardcode debug menu:
+        // because it has to work when keyboard shortcuts are disabled
+        if (event.key == "Home") {
+            if (toggleDebugMenu != null) {
+                toggleDebugMenu()
+            }
+        }
+    }
 
     const doKeyboardInput = (event) => {
         // i have to implement keyboard shortcuts in this way

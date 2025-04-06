@@ -303,16 +303,20 @@ function getQuestionID(platformID) {
         try {
             // this is rudimentary
             // TODO: improve
+            var task = "";
+            var item = "";
             if (packageIndex < tokens.length) {
                 // there is atleast 1 more token
                 uri = tokens[packageIndex+1]
-                // task = tokens[packageIndex+2]
+                task = tokens[packageIndex+2] == null ? "" : tokens[packageIndex+2]
                 taskID = tokens[packageIndex+3]
-                // item = tokens[packageIndex+3]
+                item = tokens[packageIndex+4] == null ? "" : tokens[packageIndex+4]
                 question = tokens[packageIndex+5]
             }
 
-            questionID = new QuestionID(uri, taskID, question, PlatformID.SparxMaths)
+            if (task.toLowerCase() == "task" && item.toLowerCase() == "item") {
+                questionID = new QuestionID(uri, taskID, question, PlatformID.SparxMaths)
+            }
         } catch(e) {
             log("QuestionID", "Failed to get questionID!")
         }
