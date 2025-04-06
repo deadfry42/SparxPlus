@@ -25,7 +25,8 @@ function baseLog(msg) {
 // OTHERWISE BAD :(
 
 function getVersion() {
-    return "v0.2.6"+(!getIsRelease() ? "-dev" : "")
+    // putting chrome / browser checking here instead of a browser variable cuz it'd fuck up the rest of the code
+    return "v"+(chrome == null ? browser : chrome).runtime.getManifest().version+""+(!getIsRelease() ? "-dev" : "")
 }
 
 function getIsRelease() {
@@ -51,3 +52,5 @@ function getLogs() {
 function addChangedEvent(event) {
     changedEvents.push(event);
 }
+
+log("SparxPlus", "SparxPlus initiated, running version "+getVersion()+"!")
