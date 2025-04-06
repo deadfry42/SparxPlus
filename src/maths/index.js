@@ -256,7 +256,6 @@ const settingsFrontend = [
                 loadedShowObject = null;
 
                 const updateLogs = () => {
-                    console.log("sigma")
                     if (loadedTextObject != null) {
                         if (textObjectExpanded) {
                             var fullTxt = "";
