@@ -290,8 +290,13 @@ function getQuestionID(platformID) {
         var tokens = url.split("/");
         var packageIndex = -1;
 
+        var revisionIndex = -1;
+
         for (var i = 0; i < tokens.length; i++) {
             var token = tokens[i];
+            if (token.toLowerCase() == "assessments") {
+                revisionIndex = i;
+            }
             if (token.toLowerCase() == "package") {
                 // just before the uri ID
                 packageIndex = i;
@@ -319,7 +324,7 @@ function getQuestionID(platformID) {
             }
 
             if (task.toLowerCase() == "task" && item.toLowerCase() == "item") {
-                questionID = new QuestionID(uri, taskID, question, PlatformID.SparxMaths)
+                questionID = new QuestionID(uri, taskID, question, PlatformID.SparxMaths, (revisionIndex > 0))
             }
         } catch(e) {
             log("QuestionID", "Failed to get questionID!")
@@ -370,12 +375,14 @@ class QuestionID {
     task;
     question;
     platformID;
-    constructor(uri, task, question, platformID) {
+    revision;
+    constructor(uri, task, question, platformID, revision) {
         if (uri == null || task == null || question == null) return;
         this.uri = uri;
         this.task = task;
         this.question = question;
         this.platformID = platformID == null ? Unknown : platformID;
+        this.revision = revision == null ? false : revision;
     }
 
     isSimilar(otherQuestionID) {
@@ -402,12 +409,25 @@ class QuestionID {
         return this.uri;
     }
 
-    getAlphabeticID() {
-        console.log(convertNumberToLetter(this.question))
+    isRevisionQuestion() {
+        return this.revision;
+    }
+
+    // for normal questions
+    getStandardAlphabeticID() {
         return `${this.task}${convertNumberToLetter(this.question)}`
     }
 
+    // for revision platform
+    getRevisionAlphabeticID() {
+        return `Q${this.question}`
+    }
+
+    getAlphabeticID() {
+        return this.revision ? this.getRevisionAlphabeticID() : this.getStandardAlphabeticID()
+    }
+
     getID() {
-        return `Question/${this.getPlatformID()}/${this.getURI()}:${this.getTask()}:${this.getQuestion()}`
+        return `QuestionID/${this.getPlatformID()}/${this.revision ? "Rev" : "Std"}/${this.getURI()}:${this.getTask()}:${this.getQuestion()}`
     }
 }

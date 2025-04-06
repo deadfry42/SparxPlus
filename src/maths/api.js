@@ -161,7 +161,7 @@ var toggleDebugMenu;
         debugMenu.className = "SparxPlusDebugMenu SparxPlusDebugMenuHidden"
 
         const title = document.createElement("p")
-        title.innerText = "Debug Menu:"
+        title.innerText = "SparxPlus Debug Menu:"
 
         const qIDTag = document.createElement("p")
 
