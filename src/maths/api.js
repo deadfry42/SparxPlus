@@ -154,8 +154,14 @@ var toggleDebugMenu;
         const debugMenu = document.createElement("div")
         debugMenu.className = "SparxPlusDebugMenu SparxPlusDebugMenuHidden"
 
+        const title = document.createElement("p")
+        title.innerText = "Debug Menu:"
+
         const qIDTag = document.createElement("p")
+
+        debugMenu.append(title)
         debugMenu.append(qIDTag)
+        debugMenu.append(whiteboardTag)
 
         document.body.append(debugMenu)
 
