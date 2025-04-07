@@ -334,6 +334,13 @@ function getQuestionID(platformID) {
     }
 }
 
+function getQuestion(platformID) {
+    var questionID = getQuestionID(platformID);
+    if (questionID == null) return null;
+
+    return new Question(questionID);
+}
+
 // enums (i would use typescript but it doesn't play nice with browser extensions)
 // this is good enough
 const Conditions = {
@@ -369,6 +376,101 @@ const PlatformID = {
 }
 
 // classes
+
+class Question {
+    questionID;
+    questionData;
+
+    constructor(questionID) {
+        this.questionID = questionID;
+        if (questionID == null) return null;
+
+        this.questionData = new QuestionData(questionID);
+        this.questionData.syncData();
+    }
+
+    getID() {
+        return this.questionID;
+    }
+}
+
+class QuestionData {
+    data;
+    questionID;
+
+    constructor(questionID) {
+        this.questionID = questionID;
+    }
+
+    getData() {
+        return this.data; // js promise, be careful
+    }
+
+    syncData() {
+        this.data = new Promise((resolve, reject) => {
+            browser.storage.local.get([this.questionID.getID()]) .then((res) => {
+                console.log(res)
+                for (var key in res){
+                    resolve(res[key])
+                    return;
+                }
+                resolve(null);
+            }) .catch((e) => {
+                resolve(null)
+            })
+        })
+    }
+
+    setKey(key, value) {
+        this.getData() .then((res) => {
+            if (res == null) {
+                res = {}
+                res[key] = value;
+                this.updateData(res);
+                return;
+            }
+            res[key] = value;
+            this.updateData(res);
+        })
+    }
+
+    getKey(key) {
+        return new Promise((resolve, reject) => {
+            this.getData() .then((res) => {
+                try {
+                    resolve(res[key]);
+                } catch(e) {
+                    resolve(null);
+                }
+            })
+        })
+    }
+
+    updateUseDate() {
+        this.setKey("lastUsed", Date.now())
+    }
+
+    getUseDate() {
+        return this.getKey("lastUsed");
+    }
+
+    removeKey(key) {
+        this.getData() .then((res) => {
+            if (res == null) {
+                res = {}
+                res[key] = null;
+                this.updateData(res);
+                return;
+            }
+            res[key] = null;
+            this.updateData(res);
+        })
+    }
+
+    updateData(data) {
+        browser.storage.local.set({[this.questionID.getID()]: data})
+    }
+}
 
 class QuestionID {
     uri;

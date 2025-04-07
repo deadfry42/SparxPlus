@@ -230,7 +230,7 @@ const settingsFrontend = [
             type: PanelType.Settings,
             content: [
                 {
-                    // rework this into a button
+                    // TODO: rework this into a button
                     type: SettingsType.Toggle,
                     variable: "resetSyncNextRefresh",
                     name: "Reset Extension settings upon next refresh",
@@ -241,7 +241,7 @@ const settingsFrontend = [
                     }
                 },
                 {
-                    // rework this into a button
+                    // TODO: rework this into a button
                     type: SettingsType.Toggle,
                     variable: "resetLocalNextRefresh",
                     name: "Reset Extension data upon next refresh",
@@ -665,20 +665,14 @@ const classMapping = [
             btn.className = "SparxPlusWhiteboardButton"
 
             btn.onmouseup = async (e) => {
-                // TODO:
-                // Make a Question data class or something
-                // Put an expiration date on that data
-                // So that it doesn't clog up your Local extension storage
-                // (we have a 10MB limit)
-                const setWhiteboardData = (questionID, data) => {
-                    browser.storage.local.set({ [questionID.getID()]: data });
-                }
+                const question = getQuestion(PlatformID.SparxMaths);
 
-                const questionID = getQuestionID(PlatformID.SparxMaths);
+                question.questionData.updateUseDate(); // update the expiration date
+                // so that the data doesn't expire lol
 
                 var blur = createBlur()
                 var menu = createBlurredMenu(blur, "Whiteboard", (menu) => {
-                    setWhiteboardData(questionID, whiteboardData)
+                    setWhiteboardData()
                 })
 
                 var whiteboardContainer = document.createElement("div") 
@@ -686,17 +680,32 @@ const classMapping = [
                 menu.append(whiteboardContainer)
 
                 var whiteboardData = []
-                browser.storage.local.get([questionID.getID()]) .then((res) => {
-                    const val = res[questionID.getID()]
+
+                const setWhiteboardData = () => {
+                    question.questionData.setKey("Whiteboard", whiteboardData)
+                }
+
+                question.questionData.getKey("Whiteboard") .then((val) => {
+                    console.log("sigma")
                     whiteboardData = val == null ? [] : val;
 
                     canvas.width = canvas.getBoundingClientRect().width
                     canvas.height = canvas.getBoundingClientRect().height
                     redraw()
-                }) .catch((e) => {
-                    log("Whiteboard", "Failed to load whiteboard!")
-                    baseLog(e)
                 })
+
+                
+                // browser.storage.local.get([questionID.getID()]) .then((res) => {
+                //     const val = res[questionID.getID()]
+                //     whiteboardData = val == null ? [] : val;
+
+                //     canvas.width = canvas.getBoundingClientRect().width
+                //     canvas.height = canvas.getBoundingClientRect().height
+                //     redraw()
+                // }) .catch((e) => {
+                //     log("Whiteboard", "Failed to load whiteboard!")
+                //     baseLog(e)
+                // })
 
                 const canvas = document.createElement("canvas")
                 canvas.className = "SparxPlusWhiteboard"
