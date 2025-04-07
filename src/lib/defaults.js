@@ -403,7 +403,7 @@ class QuestionData {
     }
 
     getData() {
-        return this.data; // js promise, be careful
+        return this.data == null ? this.syncData() : this.data; // js promise, be careful
     }
 
     syncData() {
