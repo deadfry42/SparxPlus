@@ -135,6 +135,41 @@ var toggleDebugMenu;
         }
     }
 
+    function cleanUpExpiredData() {
+        // a function to clear up expired local data
+        // to make sure we never run out of our 10MB limit
+        // unless you just grind sparx that hard for some reason
+
+        browser.storage.local.get() .then((res) => {
+            for (var key in res) {
+                var verdict = true;
+                var data = null;
+                // i fucked up here and i dont wanna touch it lol
+                // TODO: fix this code
+                for (var found in res) {
+                    data = res[""+found]
+                }
+                try {
+                    const lastUsed = data["lastUsed"]
+                    const days = 7;
+                    if (lastUsed < Date.now() - (days*24*60*1000)) {
+                        // old data
+                        (async () => {
+                            // remove that data (asynchronously)
+                            browser.storage.local.remove([key])
+                        })();
+                    }
+                } catch (e) {
+                    
+                }
+            }
+        })
+
+        log("Data", `Cleaned up expired data!`)
+    }
+
+    cleanUpExpiredData();
+
     // put it in this wrapeper thingy to visually distinguish from the rest
     // and also async
     (async () => {

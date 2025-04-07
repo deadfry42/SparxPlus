@@ -667,9 +667,6 @@ const classMapping = [
             btn.onmouseup = async (e) => {
                 const question = getQuestion(PlatformID.SparxMaths);
 
-                question.questionData.updateUseDate(); // update the expiration date
-                // so that the data doesn't expire lol
-
                 var blur = createBlur()
                 var menu = createBlurredMenu(blur, "Whiteboard", (menu) => {
                     setWhiteboardData()
@@ -683,6 +680,16 @@ const classMapping = [
 
                 const setWhiteboardData = () => {
                     question.questionData.setKey("Whiteboard", whiteboardData)
+                    question.questionData.updateUseDate();
+                    question.questionData.getData() .then((data) => {
+                        console.log(data)
+                        question.questionData.updateData(data);
+                    })
+                    
+                    //  .then((data) => {
+                    //      // update the expiration date
+                    //     // so that the data doesn't expire lol
+                    // })
                 }
 
                 question.questionData.getKey("Whiteboard") .then((val) => {

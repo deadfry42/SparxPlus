@@ -414,23 +414,26 @@ class QuestionData {
                     resolve(res[key])
                     return;
                 }
-                resolve(null);
+                resolve({}); // fresh data
             }) .catch((e) => {
-                resolve(null)
+                resolve({}) // fresh data
             })
         })
     }
 
     setKey(key, value) {
-        this.getData() .then((res) => {
-            if (res == null) {
-                res = {}
+        return new Promise((resolve, reject) => {
+            this.getData() .then((res) => {
+                if (res == null) {
+                    var newData = {}
+                    newData[key] = value;
+                    Object.assign(res, newData)
+                    resolve(newData);
+                    return;
+                }
                 res[key] = value;
-                this.updateData(res);
-                return;
-            }
-            res[key] = value;
-            this.updateData(res);
+                resolve(res);
+            })
         })
     }
 
@@ -455,20 +458,16 @@ class QuestionData {
     }
 
     removeKey(key) {
-        this.getData() .then((res) => {
-            if (res == null) {
-                res = {}
-                res[key] = null;
-                this.updateData(res);
-                return;
-            }
-            res[key] = null;
-            this.updateData(res);
-        })
+        return this.setKey(key, null)
     }
 
     updateData(data) {
-        browser.storage.local.set({[this.questionID.getID()]: data})
+        if (data == null) return null;
+        return new Promise((resolve, reject) => {
+            browser.storage.local.set({[this.questionID.getID()]: data}) .then((res) => {
+                resolve(res)
+            })
+        })
     }
 }
 
