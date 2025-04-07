@@ -253,7 +253,6 @@ var toggleDebugMenu;
                         if (realnode == null) continue;
                         var name = realnode.className;
                         if (name == null || name.includes == null) continue;
-                        // console.log(realnode)
                         try {
                             if (name.includes("SectionContainer") && !name.includes("PreviewSectionContainer") && !name.includes("SPARXPLUS")) {
                                 // 99% settings
@@ -325,7 +324,6 @@ var toggleDebugMenu;
                                                 }
         
                                                 let settingDiv = document.createElement("div")
-                                                // settingDiv.style.display = "flex"
         
                                                 // definetly not stolen from w3schools.com
         
@@ -640,18 +638,9 @@ var toggleDebugMenu;
 
                 try {
                     var node = target;
-                    // console.log(node);
                     var nodename = node.className;
                     if (nodename == null || nodename.includes == null) return; 
                     doClassMapping(node, nodename, Conditions.Modified);
-
-                    // for (var aaa of document.body.querySelectorAll("*")) {
-                    //     if (aaa == null) continue;
-                    //     var aaaname = node.className;
-                    //     if (aaaname == null || aaaname.includes == null) continue; 
-                    //     doClassMapping(aaa, aaaname, Conditions.CheckWhenModify);
-                    // }
-
                     if (nodename.includes("TaskItemLink")) {
                         if (!customSettings.progressiveDisclosure) return;
                         doProgressiveDisclosure(node.parentNode)
@@ -664,7 +653,6 @@ var toggleDebugMenu;
 
                         for (let realnode of list) {
                             if (realnode == null) continue;
-                            // console.log(realnode)
                             var name = realnode.className;
                             if (name == null || name.includes == null) continue;
                             try {

@@ -686,7 +686,6 @@ const classMapping = [
                 }
 
                 question.questionData.getKey("Whiteboard") .then((val) => {
-                    console.log("sigma")
                     whiteboardData = val == null ? [] : val;
 
                     canvas.width = canvas.getBoundingClientRect().width
