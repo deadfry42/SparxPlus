@@ -19,6 +19,9 @@ const customSettings = { // default settings
     keyboardShortcuts: false, // navigate Sparx with a keyboard
     hideColourOverlay: false, // hide colour overlay
 
+    resetSyncNextRefresh: false,
+    resetLocalNextRefresh: false,
+
     enableDebugByDefault: false,
 
     whiteboard: true, // add a draw button, and show a whiteboard on screen (similar to video popup) and let the user draw
@@ -216,7 +219,38 @@ const settingsFrontend = [
                         text: "Development features are work in progress, and could cause issues with the website.",
                         static: false,
                     }
-                }
+                },
+            ]
+        }
+    },
+    {
+        header: "Data management",
+        description: "Manage extension data",
+        panel: {
+            type: PanelType.Settings,
+            content: [
+                {
+                    // rework this into a button
+                    type: SettingsType.Toggle,
+                    variable: "resetSyncNextRefresh",
+                    name: "Reset Extension settings upon next refresh",
+                    description: "Reset the settings that the Extension currently has when the page is refreshed.",
+                    warning: {
+                        text: "This setting will reset the extension's settings back to the defaults. Are you sure you want to continue?",
+                        static: false,
+                    }
+                },
+                {
+                    // rework this into a button
+                    type: SettingsType.Toggle,
+                    variable: "resetLocalNextRefresh",
+                    name: "Reset Extension data upon next refresh",
+                    description: "Reset the data that the extension holds in regard to questions (eg. whiteboard data)",
+                    warning: {
+                        text: "This setting will reset everything that the extension holds about Questions, eg. whiteboard data. Are you sure you want to continue?",
+                        static: false,
+                    }
+                },
             ]
         }
     },

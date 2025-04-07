@@ -177,11 +177,7 @@ var toggleDebugMenu;
 
         log("HTML", "Page finished loading!")
 
-        browser.storage.sync.get().then((res) => {
-            for (let object of Object.entries(res)) {
-                customSettings[object[0]] = object[1]
-            }
-
+        const settingsLoaded = (res) => {
             if (res.darkMode) {
                 appendStyleSheet("darkmodeSP", browser.runtime.getURL("src/css/darkmodemaths.css"));
             }
@@ -210,6 +206,29 @@ var toggleDebugMenu;
             }
             if (res.enableDebugByDefault) {
                 toggleDebugMenu();
+            }
+        }
+
+        browser.storage.sync.get().then((res) => {
+            if (res.resetLocalNextRefresh) {
+                res.resetLocalNextRefresh = false;
+                chrome.storage.sync.set({resetLocalNextRefresh: false})
+                chrome.storage.local.clear();
+                log("Data", "Successfully cleared extension question data!")
+            }
+            if (!res.resetSyncNextRefresh) {
+                for (let object of Object.entries(res)) {
+                    customSettings[object[0]] = object[1]
+                }
+
+                settingsLoaded(res)
+            } else {
+                (async () => {
+                    chrome.storage.sync.clear();
+                    log("Data", "Successfully cleared extension settings!")
+                })();
+                
+                settingsLoaded(customSettings)
             }
 
             log("Settings", "Successfully synced settings!")
