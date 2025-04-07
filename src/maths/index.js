@@ -694,19 +694,6 @@ const classMapping = [
                     redraw()
                 })
 
-                
-                // browser.storage.local.get([questionID.getID()]) .then((res) => {
-                //     const val = res[questionID.getID()]
-                //     whiteboardData = val == null ? [] : val;
-
-                //     canvas.width = canvas.getBoundingClientRect().width
-                //     canvas.height = canvas.getBoundingClientRect().height
-                //     redraw()
-                // }) .catch((e) => {
-                //     log("Whiteboard", "Failed to load whiteboard!")
-                //     baseLog(e)
-                // })
-
                 const canvas = document.createElement("canvas")
                 canvas.className = "SparxPlusWhiteboard"
                 canvas.style.width = "100%"
