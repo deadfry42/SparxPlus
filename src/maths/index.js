@@ -682,7 +682,6 @@ const classMapping = [
                     question.questionData.setKey("Whiteboard", whiteboardData)
                     question.questionData.updateUseDate();
                     question.questionData.getData() .then((data) => {
-                        console.log(data)
                         question.questionData.updateData(data);
                     })
                     

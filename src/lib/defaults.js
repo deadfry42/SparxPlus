@@ -409,7 +409,6 @@ class QuestionData {
     syncData() {
         this.data = new Promise((resolve, reject) => {
             browser.storage.local.get([this.questionID.getID()]) .then((res) => {
-                console.log(res)
                 for (var key in res){
                     resolve(res[key])
                     return;
