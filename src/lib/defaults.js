@@ -341,6 +341,35 @@ function getQuestion(platformID) {
     return new Question(questionID);
 }
 
+function deserialiseQuestionID(questionID) {
+    const tokens = questionID.split("/")
+
+    var questionidtext;
+    var platformid;
+    var questiontype;
+    var encodedQuestionID;
+
+    try {
+        questionidtext = tokens[0];
+        platformid = tokens[1];
+        questiontype = tokens[2];
+        encodedQuestionID = tokens[3];
+
+        if (questionidtext != "QuestionID") return null;
+        platformid = parseInt(platformid);
+        questiontype = questiontype == "Rev" ? true : false;
+        
+        const idTokens = encodedQuestionID.split(":")
+        var uri = idTokens[0]
+        var task = parseInt(idTokens[1]);
+        var question = parseInt(idTokens[2]);
+
+        return new QuestionID(uri, task, question, platformid, questiontype)
+    } catch (e) {
+        return null;
+    }
+}
+
 // enums (i would use typescript but it doesn't play nice with browser extensions)
 // this is good enough
 const Conditions = {
@@ -418,6 +447,7 @@ class QuestionData {
                 resolve({}) // fresh data
             })
         })
+        return this.data;
     }
 
     setKey(key, value) {
@@ -484,7 +514,6 @@ class QuestionID {
         this.platformID = platformID == null ? Unknown : platformID;
         this.revision = revision == null ? false : revision;
     }
-
     isSimilar(otherQuestionID) {
         if (otherQuestionID.constructor.name != this.constructor.name) return false;
         return this.getURI() == otherQuestionID.getURI()

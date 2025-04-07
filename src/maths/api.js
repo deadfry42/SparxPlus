@@ -142,26 +142,22 @@ var toggleDebugMenu;
 
         browser.storage.local.get() .then((res) => {
             for (var key in res) {
-                var verdict = true;
-                var data = null;
-                // i fucked up here and i dont wanna touch it lol
-                // TODO: fix this code
-                for (var found in res) {
-                    data = res[""+found]
-                }
-                try {
-                    const lastUsed = data["lastUsed"]
-                    const days = 7;
-                    if (lastUsed < Date.now() - (days*24*60*1000)) {
-                        // old data
-                        (async () => {
-                            // remove that data (asynchronously)
+                var data = res[""+key]
+
+                questionID = deserialiseQuestionID(key);
+                if (questionID == null) continue;
+
+                questionData = new QuestionData(questionID);
+                if (questionData == null) continue;
+                questionData.syncData() .then(() => {
+                    (async () => {
+                        const lastUsed = await questionData.getUseDate();
+                        const days = 7;
+                        if (lastUsed < Date.now() - (days*24*60*1000)) {
                             browser.storage.local.remove([key])
-                        })();
-                    }
-                } catch (e) {
-                    
-                }
+                        }
+                    })()
+                })
             }
         })
 
