@@ -370,6 +370,26 @@ function deserialiseQuestionID(questionID) {
     }
 }
 
+function deserialiseWhiteboardStroke(data) {
+    try {
+        const type = data.type;
+        if (type == null) return null;
+
+        switch (type) {
+            case "terminator":
+                return new TerminatedWhiteboardStroke()
+
+            case "stroke":
+                const x = data.x;
+                const y = data.y;
+                const colour = data.colour;
+                return new WhiteboardStroke(x, y, colour)
+        }
+    } catch(e) {
+        return null;
+    }
+}
+
 // enums (i would use typescript but it doesn't play nice with browser extensions)
 // this is good enough
 const Conditions = {
@@ -420,6 +440,67 @@ class Question {
 
     getID() {
         return this.questionID;
+    }
+}
+
+class WhiteboardStroke {
+    x = null;
+    y = null;
+    customColour = null;
+
+    constructor(x, y, colour) {
+        this.x = x;
+        this.y = y;
+        this.customColour = colour;
+    }
+
+    getX() {
+        return this.x == null ? 0: this.x;
+    }
+
+    getY() {
+        return this.y == null ? 0: this.y;
+    }
+
+    getColour() {
+        return this.customColour == null ?
+        customSettings.darkMode ? (customSettings.whiteboardDarkModeOverride ? "#000000" : "#FFFFFF") : "#000000"
+        : this.customColour;
+    }
+
+    serialise() {
+        var data = {}
+        data.type = "stroke"
+        data.x = this.getX();
+        data.y = this.getY();
+        data.colour = this.getColour();
+
+        return data;
+    }
+}
+
+class TerminatedWhiteboardStroke extends WhiteboardStroke {
+    constructor() {
+        // completely empty lol   
+    }
+
+    serialise() {
+        var data = {}
+        data.type = "terminator"
+
+        return data;
+    }
+}
+
+class DefaultPenWhiteboardStroke extends WhiteboardStroke {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    serialise() {
+        var data = {}
+        data.type = "stroke"
     }
 }
 

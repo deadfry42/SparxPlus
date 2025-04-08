@@ -717,33 +717,31 @@ const classMapping = [
                 const redraw = () => {
                     painting = false;
                     for (data of whiteboardData) {
-                        if (!data.stop) {
-                            var x = data.x;
-                            var y = data.y;
+                        const stroke = deserialiseWhiteboardStroke(data);
+                        if (stroke == null) continue;
+                        if (stroke instanceof TerminatedWhiteboardStroke) {
+                            ctx.beginPath();
+                        } else {
+                            var x = stroke.getX();
+                            var y = stroke.getY();
                             ctx.lineWidth = brushSize;
                             ctx.lineCap = 'round';
-                            ctx.strokeStyle = brushColor;
+                            ctx.strokeStyle = stroke.getColour();
+
                             ctx.lineTo(x, y);
                             ctx.stroke();
                             ctx.beginPath();
                             ctx.moveTo(x, y);
-                        } else {
-                            ctx.beginPath();
                         }
                     }
                 }
 
-                const storeStroke = (x, y) => {
-                    data = {}
-                    data.x = x;
-                    data.y = y;
-                    data.stop = false;
-
-                    whiteboardData.push(data);
+                const storeStop = () => {
+                    storeStroke(new TerminatedWhiteboardStroke())
                 }
 
-                const storeStop = () => {
-                    whiteboardData.push({stop: true, x: 0, y: 0})
+                const storeStroke = (stroke) => {
+                    whiteboard.push(stroke.serialise())
                 }
 
                 const start = (e) => {
@@ -759,7 +757,7 @@ const classMapping = [
 
                 const draw = (e) => {
                     if (!painting) return;
-                
+
                     ctx.lineWidth = brushSize;
                     ctx.lineCap = 'round';
                     ctx.strokeStyle = brushColor;
@@ -767,13 +765,15 @@ const classMapping = [
                     const rect = canvas.getBoundingClientRect();
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
+
+                    var newStroke = new DefaultPenWhiteboardStroke(x, y, brushColor);
                 
                     ctx.lineTo(x, y);
                     ctx.stroke();
                     ctx.beginPath();
                     ctx.moveTo(x, y);
 
-                    storeStroke(x, y)
+                    storeStroke(newStroke)
                 }
 
                 canvas.addEventListener('mousedown', start);
