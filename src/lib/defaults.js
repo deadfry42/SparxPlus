@@ -498,11 +498,6 @@ class DefaultPenWhiteboardStroke extends WhiteboardStroke {
         this.x = x;
         this.y = y;
     }
-
-    serialise() {
-        var data = {}
-        data.type = "stroke"
-    }
 }
 
 class QuestionData {
