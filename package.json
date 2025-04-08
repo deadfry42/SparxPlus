@@ -1,0 +1,34 @@
+{
+  "name": "SparxPlus",
+  "version": "0.3.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "license": "GPL-version-3.0",
+  "private": false,
+  "engines": {
+    "node": ">= 14.0.0",
+    "npm": ">= 6.0.0"
+  },
+  "homepage": "https://github.com/deadfry42/SparxPlus",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deadfry42/SparxPlus.git"
+  },
+  "bugs": "https://github.com/deadfry42/SparxPlus/issues",
+  "keywords": [],
+  "author": {
+    "name": "deadfry42",
+    "email": "nk.personal.work@gmail.com",
+    "url": "https://nikodem.co.uk"
+  },
+  "contributors": [],
+  "scripts": {
+    "dev": "",
+    "test": ""
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.313",
+    "typescript": "^5.8.3"
+  }
+}
