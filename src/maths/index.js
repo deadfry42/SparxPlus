@@ -672,11 +672,110 @@ const classMapping = [
                     setWhiteboardData()
                 })
 
+                var whiteboardData = []
+                var removedData = []
+
+                var startIndex = 0;
+
+                var controlDiv = document.createElement("div")
+                controlDiv.className = "WhiteboardControlDiv"
+                controlDiv.style.marginLeft = "30px"
+
+                var undoButton = document.createElement("button")
+                undoButton.setAttribute("aria-label", "Close")
+                undoButton.className = "SparxPlusIconButton"
+                undoButton.style.minWidth = "25px"
+                undoButton.style.marginRight = "5px"
+                undoButton.append(getSVG("undo"))
+                undoButton.onclick = () => {
+                    var reachedATerminator = false;
+                    while (true) {
+                        const i = whiteboardData.length;
+                        const data = whiteboardData[i-1];
+                        const stroke = deserialiseWhiteboardStroke(data);
+
+                        if (stroke == null) {
+                            break;
+                        };
+
+                        if (stroke instanceof TerminatedWhiteboardStroke) {
+                            if (reachedATerminator) {
+                                break;
+                            }
+                            reachedATerminator = true;
+                        };
+
+                        var removal = whiteboardData.pop();
+                        if (removal != null) removedData.push(removal);
+                    }
+                    clear()
+                    redraw()
+                }
+
+                var redoButton = document.createElement("button")
+                redoButton.setAttribute("aria-label", "Close")
+                redoButton.className = "SparxPlusIconButton"
+                redoButton.style.minWidth = "25px"
+                redoButton.style.marginRight = "5px"
+                redoButton.append(getSVG("redo"))
+                redoButton.onclick = () => {
+                    if (removedData == null || removedData.length == 0) return;
+
+                    var end = false;
+                    var hasTerminator = false;
+                    var count = 0;
+
+                    console.log(removedData)
+
+                    for (let i = 0; i < removedData.length; i++) {
+                        if (end == true) break;
+                        const data = removedData[i];
+                        const stroke = deserialiseWhiteboardStroke(data);
+                        if (stroke == null) return;
+                        if (stroke instanceof TerminatedWhiteboardStroke) {
+                            if (hasTerminator) end = true;
+                            hasTerminator = true;
+                        }
+                        whiteboardData.push(data);
+                        count++;
+                    }
+
+                    var newRemoved = removedData.reverse();
+                    for (var i = 0; i < count; i++) {
+                        newRemoved.pop();
+                    }
+                    removedData = newRemoved.reverse()
+
+                    console.log(removedData)
+
+                    storeStop();
+                    clear();
+                    redraw();
+                }
+
+                var clearButton = document.createElement("button")
+                clearButton.setAttribute("aria-label", "Close")
+                clearButton.className = "SparxPlusIconButton"
+                clearButton.style.minWidth = "25px"
+                clearButton.style.marginRight = "5px"
+                clearButton.append(getSVG("bin"))
+                clearButton.onclick = () => {
+                    if (confirm("Are you sure you want to clear the whiteboard?")) {
+                        whiteboardData = [];
+                        startIndex = 0;
+                        painting = false;
+                        clear();
+                        redraw();
+                    }
+                }
+
+                controlDiv.append(undoButton, redoButton, clearButton)
+
+                menu.append(controlDiv)
+
                 var whiteboardContainer = document.createElement("div") 
                 whiteboardContainer.className = "SparxPlusVideoContainer SparxPlusWhiteboard"
                 menu.append(whiteboardContainer)
-
-                var whiteboardData = []
 
                 const setWhiteboardData = () => {
                     question.questionData.setKey("Whiteboard", whiteboardData)
@@ -684,11 +783,6 @@ const classMapping = [
                     question.questionData.getData() .then((data) => {
                         question.questionData.updateData(data);
                     })
-                    
-                    //  .then((data) => {
-                    //      // update the expiration date
-                    //     // so that the data doesn't expire lol
-                    // })
                 }
 
                 question.questionData.getKey("Whiteboard") .then((val) => {
@@ -714,6 +808,10 @@ const classMapping = [
                 let brushColor = customSettings.darkMode ? (customSettings.whiteboardDarkModeOverride ? "#000000" : "#FFFFFF") : "#000000";
                 let brushSize = 5;
 
+                const clear = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+
                 const redraw = () => {
                     painting = false;
                     for (data of whiteboardData) {
@@ -734,6 +832,7 @@ const classMapping = [
                             ctx.moveTo(x, y);
                         }
                     }
+                    ctx.beginPath();
                 }
 
                 const storeStop = () => {
