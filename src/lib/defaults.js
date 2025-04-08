@@ -372,7 +372,7 @@ function deserialiseQuestionID(questionID) {
 
 function deserialiseWhiteboardStroke(data) {
     try {
-        const tokens = data.split(".")
+        const tokens = data.split(" ")
         const type = parseInt(tokens[0])
         
         switch (type) {
@@ -476,9 +476,9 @@ class WhiteboardStroke {
 
     serialise() {
         var data = ""+StrokeType.Stroke;
-        data+="."+this.getX();
-        data+="."+this.getY();
-        data+="."+this.getColour();
+        data+=" "+this.getX();
+        data+=" "+this.getY();
+        data+=" "+this.getColour();
         return data;
     }
 }
