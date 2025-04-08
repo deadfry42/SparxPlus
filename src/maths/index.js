@@ -24,7 +24,7 @@ const customSettings = { // default settings
 
     enableDebugByDefault: false,
 
-    whiteboard: true, // add a draw button, and show a whiteboard on screen (similar to video popup) and let the user draw
+    whiteboard: false, // add a draw button, and show a whiteboard on screen (similar to video popup) and let the user draw
     whiteboardDarkModeOverride: false, // if is dark mode, pretend is light mode anyway.
 
     // goals:
