@@ -387,9 +387,9 @@ function deserialiseWhiteboardStroke(data) {
             case StrokeType.Stroke:
                 switch (version) {
                     case 0:
-                        const x = tokens[1]
-                        const y = tokens[2]
-                        const colour = tokens[3]
+                        const x = tokens[2]
+                        const y = tokens[3]
+                        const colour = tokens[4]
                         return new WhiteboardStroke(x, y, colour)
                 }
                 return null;
