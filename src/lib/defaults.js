@@ -390,7 +390,12 @@ function deserialiseWhiteboardStroke(data) {
                         const x = tokens[2]
                         const y = tokens[3]
                         const colour = tokens[4]
-                        return new WhiteboardStroke(x, y, colour)
+                        if (colour == "!") {
+                            return new DefaultPenWhiteboardStroke(x, y)
+                        } else {
+                            return new WhiteboardStroke(x, y, colour)
+                        }
+                        
                 }
                 return null;
         }
@@ -648,5 +653,16 @@ class DefaultPenWhiteboardStroke extends WhiteboardStroke {
         super()
         this.x = x;
         this.y = y;
+        this.customColour = null;
+    }
+
+    serialise() {
+        const version = 0;
+        var data = version+""
+        data+=" "+StrokeType.Stroke;
+        data+=" "+this.getX();
+        data+=" "+this.getY();
+        data+=" !"
+        return data;
     }
 }
