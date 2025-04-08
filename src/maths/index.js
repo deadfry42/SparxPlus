@@ -741,7 +741,7 @@ const classMapping = [
                 }
 
                 const storeStroke = (stroke) => {
-                    whiteboard.push(stroke.serialise())
+                    whiteboardData.push(stroke.serialise())
                 }
 
                 const start = (e) => {
