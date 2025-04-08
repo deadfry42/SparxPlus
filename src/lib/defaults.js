@@ -373,17 +373,26 @@ function deserialiseQuestionID(questionID) {
 function deserialiseWhiteboardStroke(data) {
     try {
         const tokens = data.split(" ")
-        const type = parseInt(tokens[0])
+        const type = parseInt(tokens[1])
+        const version = parseInt(tokens[0])
         
         switch (type) {
             case StrokeType.Terminator:
-                return new TerminatedWhiteboardStroke()
+                switch (version) {
+                    case 0:
+                        return new TerminatedWhiteboardStroke()
+                }
+                return null;
 
             case StrokeType.Stroke:
-                const x = tokens[1]
-                const y = tokens[2]
-                const colour = tokens[3]
-                return new WhiteboardStroke(x, y, colour)
+                switch (version) {
+                    case 0:
+                        const x = tokens[1]
+                        const y = tokens[2]
+                        const colour = tokens[3]
+                        return new WhiteboardStroke(x, y, colour)
+                }
+                return null;
         }
     } catch(e) {
         return null;
@@ -475,7 +484,9 @@ class WhiteboardStroke {
     }
 
     serialise() {
-        var data = ""+StrokeType.Stroke;
+        const version = 0;
+        var data = version+""
+        data+=" "+StrokeType.Stroke;
         data+=" "+this.getX();
         data+=" "+this.getY();
         data+=" "+this.getColour();
@@ -489,7 +500,8 @@ class TerminatedWhiteboardStroke extends WhiteboardStroke {
     }
 
     serialise() {
-        return ""+StrokeType.Terminator;
+        const version = 0;
+        return version+" "+StrokeType.Terminator;
     }
 }
 
