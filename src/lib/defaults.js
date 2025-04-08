@@ -372,17 +372,17 @@ function deserialiseQuestionID(questionID) {
 
 function deserialiseWhiteboardStroke(data) {
     try {
-        const type = data.type;
-        if (type == null) return null;
-
+        const tokens = data.split(".")
+        const type = parseInt(tokens[0])
+        
         switch (type) {
-            case "terminator":
+            case StrokeType.Terminator:
                 return new TerminatedWhiteboardStroke()
 
-            case "stroke":
-                const x = data.x;
-                const y = data.y;
-                const colour = data.colour;
+            case StrokeType.Stroke:
+                const x = tokens[1]
+                const y = tokens[2]
+                const colour = tokens[3]
                 return new WhiteboardStroke(x, y, colour)
         }
     } catch(e) {
@@ -421,6 +421,12 @@ const SettingsType = {
 const PlatformID = {
     SparxMaths: 0,
     SparxScience: 1,
+    Unknown: -1,
+}
+
+const StrokeType = {
+    Stroke: 0,
+    Terminator: 1,
     Unknown: -1,
 }
 
@@ -469,12 +475,10 @@ class WhiteboardStroke {
     }
 
     serialise() {
-        var data = {}
-        data.type = "stroke"
-        data.x = this.getX();
-        data.y = this.getY();
-        data.colour = this.getColour();
-
+        var data = ""+StrokeType.Stroke;
+        data+="."+this.getX();
+        data+="."+this.getY();
+        data+="."+this.getColour();
         return data;
     }
 }
@@ -485,10 +489,7 @@ class TerminatedWhiteboardStroke extends WhiteboardStroke {
     }
 
     serialise() {
-        var data = {}
-        data.type = "terminator"
-
-        return data;
+        return ""+StrokeType.Terminator;
     }
 }
 
