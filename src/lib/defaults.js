@@ -481,7 +481,7 @@ class WhiteboardStroke {
 
 class TerminatedWhiteboardStroke extends WhiteboardStroke {
     constructor() {
-        // completely empty lol   
+        super()
     }
 
     serialise() {
@@ -494,6 +494,7 @@ class TerminatedWhiteboardStroke extends WhiteboardStroke {
 
 class DefaultPenWhiteboardStroke extends WhiteboardStroke {
     constructor(x, y) {
+        super()
         this.x = x;
         this.y = y;
     }
