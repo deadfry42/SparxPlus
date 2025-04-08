@@ -752,6 +752,17 @@ const classMapping = [
                     }
                     removedData = newRemoved.reverse()
 
+                    var addStop = true;
+                    const data = whiteboardData[whiteboardData.length-1]
+                    if (data != null) {
+                        const stroke = deserialiseWhiteboardStroke(data);
+                        if (stroke != null) {
+                            if (stroke instanceof TerminatedWhiteboardStroke) {
+                                var addStop = false;
+                            }
+                        } 
+                    }
+                    if (addStop) storeStop();
                     clear();
                     redraw();
                 }
