@@ -725,8 +725,6 @@ const classMapping = [
                     var hasTerminator = false;
                     var count = 0;
 
-                    var dataToAdd = []
-
                     for (let i = 0; i < removedData.length; i++) {
                         if (end == true) break;
                         const data = removedData[i];
@@ -737,13 +735,8 @@ const classMapping = [
                             hasTerminator = true;
                         }
                         console.log(stroke.serialise())
-                        dataToAdd.push(stroke.serialise());
+                        whiteboardData.push(stroke.serialise());
                         count++;
-                    }
-
-                    for (var x in dataToAdd) {
-                        console.log(dataToAdd[x])
-                        whiteboardData.push(dataToAdd[x])
                     }
 
                     var newRemoved = removedData.reverse();
