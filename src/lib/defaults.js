@@ -458,61 +458,6 @@ class Question {
     }
 }
 
-class WhiteboardStroke {
-    x = null;
-    y = null;
-    customColour = null;
-
-    constructor(x, y, colour) {
-        this.x = x;
-        this.y = y;
-        this.customColour = colour;
-    }
-
-    getX() {
-        return this.x == null ? 0: this.x;
-    }
-
-    getY() {
-        return this.y == null ? 0: this.y;
-    }
-
-    getColour() {
-        return this.customColour == null ?
-        customSettings.darkMode ? (customSettings.whiteboardDarkModeOverride ? "#000000" : "#FFFFFF") : "#000000"
-        : this.customColour;
-    }
-
-    serialise() {
-        const version = 0;
-        var data = version+""
-        data+=" "+StrokeType.Stroke;
-        data+=" "+this.getX();
-        data+=" "+this.getY();
-        data+=" "+this.getColour();
-        return data;
-    }
-}
-
-class TerminatedWhiteboardStroke extends WhiteboardStroke {
-    constructor() {
-        super()
-    }
-
-    serialise() {
-        const version = 0;
-        return version+" "+StrokeType.Terminator;
-    }
-}
-
-class DefaultPenWhiteboardStroke extends WhiteboardStroke {
-    constructor(x, y) {
-        super()
-        this.x = x;
-        this.y = y;
-    }
-}
-
 class QuestionData {
     data;
     questionID;
@@ -648,5 +593,60 @@ class QuestionID {
 
     getID() {
         return `QuestionID/${this.getPlatformID()}/${this.revision ? "Rev" : "Std"}/${this.getURI()}:${this.getTask()}:${this.getQuestion()}`
+    }
+}
+
+class WhiteboardStroke {
+    x = null;
+    y = null;
+    customColour = null;
+
+    constructor(x, y, colour) {
+        this.x = x;
+        this.y = y;
+        this.customColour = colour;
+    }
+
+    getX() {
+        return this.x == null ? 0: this.x;
+    }
+
+    getY() {
+        return this.y == null ? 0: this.y;
+    }
+
+    getColour() {
+        return this.customColour == null ?
+        customSettings.darkMode ? (customSettings.whiteboardDarkModeOverride ? "#000000" : "#FFFFFF") : "#000000"
+        : this.customColour;
+    }
+
+    serialise() {
+        const version = 0;
+        var data = version+""
+        data+=" "+StrokeType.Stroke;
+        data+=" "+this.getX();
+        data+=" "+this.getY();
+        data+=" "+this.getColour();
+        return data;
+    }
+}
+
+class TerminatedWhiteboardStroke extends WhiteboardStroke {
+    constructor() {
+        super()
+    }
+
+    serialise() {
+        const version = 0;
+        return version+" "+StrokeType.Terminator;
+    }
+}
+
+class DefaultPenWhiteboardStroke extends WhiteboardStroke {
+    constructor(x, y) {
+        super()
+        this.x = x;
+        this.y = y;
     }
 }
