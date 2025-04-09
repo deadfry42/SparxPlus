@@ -1,10 +1,11 @@
+import { customSettings } from "../maths/index.js";
 import { log, baseLog } from "./index.js";
 
-function convertNumberToLetter(num : number) {
+export function convertNumberToLetter(num : number) {
     return String.fromCharCode((num-1) + 'A'.charCodeAt(0))
 }
 
-function replaceElement(matchClassString : string, element : Element) {
+export function replaceElement(matchClassString : string, element : Element) {
     var x = document.getElementsByTagName('*');
     for (var i = 0; i < x.length; i++) {
         var e = x.item(i)
@@ -31,7 +32,7 @@ function replaceElement(matchClassString : string, element : Element) {
     }
 }
 
-function createNewOptionInDDM(classNameA : string, classNameDiv : string, icon : Element, string : string) {
+export function createNewOptionInDDM(classNameA : string, classNameDiv : string, icon : Element, string : string) {
     var option = document.createElement("a")
     option.className = classNameA;
     
@@ -49,13 +50,13 @@ function createNewOptionInDDM(classNameA : string, classNameDiv : string, icon :
     return option;
 }
 
-function createNewSettingsPanel(classNameContainer : string) {
+export function createNewSettingsPanel(classNameContainer : string) {
     var panel = document.createElement("div")
     panel.className = classNameContainer+" SPARXPLUS";
     return panel;
 }
 
-function sendNotification(text : string, time : number) {
+export function sendNotification(text : string, time : number) {
     var notif = document.createElement("div")
     notif.className = "notificationDiv";
 
@@ -90,21 +91,21 @@ function sendNotification(text : string, time : number) {
     }, time);
 }
 
-function appendStyleContent(id : string, content : string) {
+export function appendStyleContent(id : string, content : string) {
     if (!document.querySelector("#" + id)) {
         var head = document.head || document.getElementsByTagName("head")[0];
         head.appendChild(createStyleElementFromContent(id, content));
     }
 }
 
-function appendStyleSheet(id : string, url : string) {
+export function appendStyleSheet(id : string, url : string) {
     if (!document.querySelector("#" + id)) {
         var head = document.head || document.getElementsByTagName("head")[0];
         head.appendChild(createStyleElementFromFile(id, url));
     }
 }
 
-function createStyleElementFromFile(id : string, url : string) {
+export function createStyleElementFromFile(id : string, url : string) {
     var style = document.createElement("link");
     style.rel = "stylesheet"
     style.href = url
@@ -112,19 +113,19 @@ function createStyleElementFromFile(id : string, url : string) {
     return style;
 }
 
-function createStyleElementFromContent(id : string, content : string) {
+export function createStyleElementFromContent(id : string, content : string) {
     var style = document.createElement("style");
     style.id = id;
 
     if (style.sheet) {
-        style.sheet.cssText = content;
+        style.textContent = content;
     } else {
         style.appendChild(document.createTextNode(content));
     }
     return style;
 }
 
-function getDescendants(node : Node, accum : ChildNode[]) {
+export function getDescendants(node : Node, accum? : ChildNode[]) {
     var i;
     accum = accum || [];
     for (i = 0; i < node.childNodes.length; i++) {
@@ -134,7 +135,7 @@ function getDescendants(node : Node, accum : ChildNode[]) {
     return accum;
 }
 
-function jumpscare(url : string, permitAudio? : boolean) {
+export function jumpscare(url : string, permitAudio? : boolean) {
     var canAudio = true;
     if (permitAudio != null) {
         if (permitAudio == false) canAudio = false;
@@ -174,7 +175,7 @@ function jumpscare(url : string, permitAudio? : boolean) {
     if (canAudio) audio.play();
 }
 
-function getSVG(which : string, className? : string | null) : HTMLElement {
+export function getSVG(which : string, className? : string | null) : HTMLElement {
     switch(which) {
         case "triangle-exclamation":
             var svg = document.createElement("svg")
@@ -223,7 +224,7 @@ function getSVG(which : string, className? : string | null) : HTMLElement {
     }
 }
 
-function createWarningBox(warningTxt : string, isInformational? : boolean) {
+export function createWarningBox(warningTxt : string, isInformational? : boolean) {
     var warning = document.createElement("div")
     warning.style.paddingBottom = "10px"
     warning.style.paddingTop = "0px"
@@ -252,7 +253,7 @@ function createWarningBox(warningTxt : string, isInformational? : boolean) {
     return warning;
 }
 
-function createBlur() {
+export function createBlur() {
     var blur = document.createElement("div")
     blur.classList.add("SparxPlusDialogOverlay")
     blur.style.pointerEvents = "auto";
@@ -264,12 +265,12 @@ function createBlur() {
     return blur;
 }
 
-function createBlurredMenu(blur : HTMLDivElement, titleText : string, onClose? : Function) {
+export function createBlurredMenu(blur : HTMLDivElement, titleText : string, onClose? : Function) {
     var div = document.createElement("div")
     div.setAttribute("role", "dialog")
     div.setAttribute("data-state", "open")
     div.style.pointerEvents = "auto";
-    div.style.tabIndex = -1;
+    div.tabIndex = -1;
     div.className = "SparxPlusDialogContent FullWidth WithZIndex"
 
     const close = () => {
@@ -303,7 +304,7 @@ function createBlurredMenu(blur : HTMLDivElement, titleText : string, onClose? :
     return div;
 }
 
-function getQuestionID(platformID : PlatformID) {
+export function getQuestionID(platformID : PlatformID) {
     if (platformID == PlatformID.SparxMaths) {
         const url = window.location.href;
 
@@ -352,16 +353,18 @@ function getQuestionID(platformID : PlatformID) {
 
         return questionID;
     }
+
+    return null;
 }
 
-function getQuestion(platformID : PlatformID) {
+export function getQuestion(platformID : PlatformID) {
     var questionID = getQuestionID(platformID);
     if (questionID == null) return null;
 
     return new Question(questionID);
 }
 
-function deserialiseQuestionID(questionID : string) {
+export function deserialiseQuestionID(questionID : string) {
     const tokens = questionID.split("/")
 
     var questionidtext;
@@ -390,7 +393,7 @@ function deserialiseQuestionID(questionID : string) {
     }
 }
 
-function deserialiseWhiteboardStroke(data : string) {
+export function deserialiseWhiteboardStroke(data : string) {
     try {
         const tokens = data.split(" ")
         const type = parseInt(tokens[1])
@@ -426,14 +429,14 @@ function deserialiseWhiteboardStroke(data : string) {
 
 // enums (i would use typescript but it doesn't play nice with browser extensions)
 // this is good enough
-const enum Conditions {
+export const enum Conditions {
     Added,
     Modified,
     ModifiedTransitionPage,
     Removed,
 };
 
-const enum Actions {
+export const enum Actions {
     Button,
     Click,
     LeftClick,
@@ -441,30 +444,24 @@ const enum Actions {
     None,
 };
 
-const enum PanelType {
+export const enum PanelType {
     Settings,
     Blank,
     Descriptive,
 };
 
-const enum SettingsType {
+export const enum SettingsType {
     Toggle,
     Input,
 };
 
-const enum PlatformID {
+export const enum PlatformID {
     SparxMaths,
     SparxScience,
     Unknown
 }
 
-// const PlatformID = {
-//     SparxMaths: 0,
-//     SparxScience: 1,
-//     Unknown: -1,
-// }
-
-const StrokeType = {
+export const StrokeType = {
     Stroke: 0,
     Terminator: 1,
     Unknown: -1,
@@ -472,7 +469,7 @@ const StrokeType = {
 
 // classes
 
-class Question {
+export class Question {
     questionID : QuestionID;
     questionData : QuestionData;
 
@@ -487,7 +484,7 @@ class Question {
     }
 }
 
-class QuestionData {
+export class QuestionData {
     data : any;
     questionID : QuestionID;
 
@@ -564,7 +561,7 @@ class QuestionData {
     }
 }
 
-class QuestionID {
+export class QuestionID {
     uri : string;
     task : number;
     question : number;
@@ -624,7 +621,7 @@ class QuestionID {
     }
 }
 
-class WhiteboardStroke {
+export class WhiteboardStroke {
     x : number | null = null;
     y : number | null = null;
     customColour : string | null = null;
@@ -660,7 +657,7 @@ class WhiteboardStroke {
     }
 }
 
-class TerminatedWhiteboardStroke extends WhiteboardStroke {
+export class TerminatedWhiteboardStroke extends WhiteboardStroke {
     constructor() {
         super(null, null, null)
     }
@@ -671,7 +668,7 @@ class TerminatedWhiteboardStroke extends WhiteboardStroke {
     }
 }
 
-class DefaultPenWhiteboardStroke extends WhiteboardStroke {
+export class DefaultPenWhiteboardStroke extends WhiteboardStroke {
     constructor(x : number, y : number) {
         super(x, y, null)
     }

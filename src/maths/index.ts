@@ -1,9 +1,13 @@
+import {PanelType, SettingsType, Actions, Conditions, jumpscare, getQuestion, createBlur, createBlurredMenu, TerminatedWhiteboardStroke, DefaultPenWhiteboardStroke, PlatformID, getSVG, deserialiseWhiteboardStroke, WhiteboardStroke} from "../lib/defaults.js"
+import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent, log, baseLog } from "../lib/index.js";
+import { updateDebugMenu } from "./api.js";
+
 // settings which are set by the user
 // and used to determine what features should be available
 
 // note: this is not synced by default.
 // they are synced when the page loads, in api.js
-const customSettings = { // default settings
+export const customSettings = { // default settings
     hideVideoButton: false, // hide video button for extreme++ mega challenge >:)
     jumpscareWhenWrong: false, // animation when q wrong (slighly broken)
     jumpscareWhenCorrect: false, // animation when q correct (slighly broken)
@@ -32,9 +36,9 @@ const customSettings = { // default settings
     // bookworkTracker: false, // track the bookwork codes in a list, so that you can write them down later
 };
 
-var loadedTextObject = null;
-var loadedShowObject = null;
-var loadedPanel = null;
+var loadedTextObject : HTMLElement | null = null;
+var loadedShowObject : HTMLElement | null = null;
+var loadedPanel : HTMLElement | null = null;
 var textObjectExpanded = false;
 
 var logLength = 25;
@@ -42,7 +46,7 @@ var logLength = 25;
 // settings panels
 // this manages each panel seen in the settings page of SparxMaths
 // i'm not going to explain how it works here: it's a bit too complex to feasibly do so
-const settingsFrontend = [
+export const settingsFrontend = [
     {
         header: "UI Tweaks",
         description: "Small UI tweaks to fix issues with Sparx.",
@@ -282,7 +286,7 @@ const settingsFrontend = [
         description: "Logs that SparxPlus has generated. (If you see any errors, please let the developer know!)",
         panel: {
             type: PanelType.Blank,
-            initialise: (section, header, description, panel) => {
+            initialise: (section : any, header : any, description : any, panel : HTMLElement) => {
                 var logs = document.createElement("p")
                 panel.append(logs);
 
@@ -317,7 +321,7 @@ const settingsFrontend = [
                                 loadedShowObject.style.cursor = "pointer";
                                 loadedShowObject.onclick = (e) => {
                                     textObjectExpanded = true;
-                                    loadedShowObject.remove()
+                                    if (loadedShowObject != null) loadedShowObject.remove()
                                     loadedShowObject = null;
 
                                     var fullTxt = "";
@@ -326,9 +330,9 @@ const settingsFrontend = [
                                     }
                                     fullTxt+="-- End of logs --"
 
-                                    loadedTextObject.innerHTML = fullTxt;
+                                    if (loadedTextObject != null) loadedTextObject.innerHTML = fullTxt;
                                 }
-                                loadedPanel.append(loadedShowObject)
+                                if (loadedPanel != null) loadedPanel.append(loadedShowObject)
                             } else {
                                 truncatedTxt+="-- End of logs --"
                             }
@@ -356,7 +360,7 @@ const settingsFrontend = [
 // each key is matched to a part of a class name, or element via the elementCheck function
 // this then performs an action on that element
 // keyStarted and keySuccessful functions are ran when the key is pressed and finished respectively.
-const keyboardMapping = [
+export const keyboardMapping = [
     // see https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values
     // for key names that aren't Key*
     {
@@ -371,9 +375,15 @@ const keyboardMapping = [
     },
     {
         classMatches: ["NavButton"],
-        elementCheck: (element) => {
+        elementCheck: (element : HTMLElement) => {
             try {
-                return element.children[1].firstChild.data.toLowerCase() == "compulsory"
+                var name : string = "compulsory"
+                var children = element.children;
+                var child = children[1];
+                if (child == null) return false; 
+                var firstChild = child.firstChild;
+                if (firstChild == null) return false;
+                return (<any>firstChild).data.toLowerCase() == name
             } catch(e) {
                 return false;
             }
@@ -383,9 +393,15 @@ const keyboardMapping = [
     },
     {
         classMatches: ["NavButton"],
-        elementCheck: (element) => {
+        elementCheck: (element : HTMLElement) => {
             try {
-                return element.children[1].firstChild.data.toLowerCase() == "xp boost"
+                var name : string = "xp boost"
+                var children = element.children;
+                var child = children[1];
+                if (child == null) return false; 
+                var firstChild = child.firstChild;
+                if (firstChild == null) return false;
+                return (<any>firstChild).data.toLowerCase() == name
             } catch(e) {
                 return false;
             }
@@ -395,9 +411,15 @@ const keyboardMapping = [
     },
     {
         classMatches: ["NavButton"],
-        elementCheck: (element) => {
+        elementCheck: (element : HTMLElement) => {
             try {
-                return element.children[1].firstChild.data.toLowerCase() == "target"
+                var name : string = "target"
+                var children = element.children;
+                var child = children[1];
+                if (child == null) return false; 
+                var firstChild = child.firstChild;
+                if (firstChild == null) return false;
+                return (<any>firstChild).data.toLowerCase() == name
             } catch(e) {
                 return false;
             }
@@ -407,9 +429,15 @@ const keyboardMapping = [
     },
     {
         classMatches: ["NavButton"],
-        elementCheck: (element) => {
+        elementCheck: (element : HTMLElement) => {
             try {
-                return element.children[1].firstChild.data.toLowerCase() == "independent learning"
+                var name : string = "independent learning"
+                var children = element.children;
+                var child = children[1];
+                if (child == null) return false; 
+                var firstChild = child.firstChild;
+                if (firstChild == null) return false;
+                return (<any>firstChild).data.toLowerCase() == name
             } catch(e) {
                 return false;
             }
@@ -434,7 +462,7 @@ const keyboardMapping = [
     },
     {
         classMatches: ["AccordionContent"],
-        keySuccessful: (element, key) => {
+        keySuccessful: (element : HTMLElement, key : KeyType) => {
             // we work around the system because yes
             let taskToClick = parseInt(key)-1;
             let current = 0;
@@ -451,7 +479,7 @@ const keyboardMapping = [
             }
 
             try {
-                buttons[taskToClick].click()
+                (<HTMLButtonElement>buttons[taskToClick]).click()
             } catch(e) {
 
             }
@@ -464,11 +492,11 @@ const keyboardMapping = [
 // whenever an element with a certain class is added/modified,
 // it is assigned a custom class. (under the conditions of elementCheck, if it exists)
 // (this is for styling / functionality / dark mode)
-const classMapping = [
+export const classMapping = [
     {
         classMatches: ["QuestionScrollableContent"],
         conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added, Conditions.Removed],
-        ifMatched: (element, condition) => {
+        ifMatched: () => {
             updateDebugMenu()
         },
     },
@@ -493,14 +521,16 @@ const classMapping = [
         classMatches: ["ButtonSecondary"],
         newClass: ["SparxPlusSecondaryButton"],
         conditions: [Conditions.ModifiedTransitionPage, Conditions.Added],
-        ifMatched: (element, condition) => {
+        ifMatched: (element : HTMLElement, condition : Conditions) => {
             if (!element.classList.contains("SparxPlusBackQuestionButton")) {
                 for (var children of element.children) {
                     var cname = children.className;
                     if (cname == null || cname.includes == null) continue;
                     if (cname.includes("Content")) {
-                        if (children.firstChild.data != null) {
-                            if (children.firstChild.data.toLowerCase() == "back") {
+                        var firstChild = <any>children.firstChild;
+                        if (firstChild == null) return;
+                        if (firstChild.data != null) {
+                            if (firstChild.data.toLowerCase() == "back") {
                                 element.classList.add("SparxPlusBackQuestionButton")
                             }
                         }
@@ -513,7 +543,7 @@ const classMapping = [
         classMatches: ["TextElement"],
         newClass: ["SparxPlusTextElement"],
         conditions: [Conditions.ModifiedTransitionPage],
-        ifMatched: (element, condition) => {
+        ifMatched: (element : HTMLElement, condition : Conditions) => {
             for (var child of element.children) {
                 if (child.constructor.name == document.createElement("table").constructor.name) {
                     if (!child.classList.contains("SparxPlusTable")) {
@@ -527,9 +557,9 @@ const classMapping = [
         classMatches: ["MenuItemText"],
         newClass: ["SparxPlusHomeworkButton"],
         conditions: [Conditions.Added],
-        elementCheck: (element) => {
+        elementCheck: (element : HTMLElement, condition : Conditions) => {
             try {
-                return element.firstChild.data.toLowerCase() == "my homework";
+                return (<any>element.firstChild).data.toLowerCase() == "my homework";
             } catch(e) {
                 return false;
             }
@@ -539,9 +569,9 @@ const classMapping = [
         classMatches: ["MenuItemText"],
         newClass: ["SparxPlusRevisionButton"],
         conditions: [Conditions.Added],
-        elementCheck: (element) => {
+        elementCheck: (element : HTMLElement, condition : Conditions) => {
             try {
-                return element.firstChild.data.toLowerCase() == "revision & assessments";
+                return (<any>element.firstChild).toLowerCase() == "revision & assessments";
             } catch(e) {
                 return false;
             }
@@ -590,9 +620,9 @@ const classMapping = [
     {
         classMatches: ["TimesTablesButton"],
         conditions: [Conditions.Added],
-        ifMatched: (element, condition) => {
+        ifMatched: (element : HTMLElement, condition : Conditions) => {
             if (customSettings.darkMode) {
-                element.style.backgroundImage = `url(${browser.runtime.getURL("assets/darkmode/images/TimesTableCard.png")})`
+                element.style.backgroundImage = `url(${chrome.runtime.getURL("assets/darkmode/images/TimesTableCard.png")})`
             }
         }
     },
@@ -600,7 +630,7 @@ const classMapping = [
         classMatches: ["ColourOverlay"],
         newClass: ["SparxPlusColourOverlay"],
         conditions: [Conditions.Modified, Conditions.Added],
-        ifMatched: (element, condition) => {
+        ifMatched: (element : HTMLElement, condition : Conditions) => {
             if (customSettings.hideColourOverlay) {
                 element.style.display = "none";
             }
@@ -609,7 +639,7 @@ const classMapping = [
     {
         classMatches: ["OverlaySettingsContainer"],
         conditions: [Conditions.Modified, Conditions.Added],
-        ifMatched: (element, condition) => {
+        ifMatched: (element : HTMLElement, condition : Conditions) => {
             if (customSettings.hideColourOverlay) {
                 var p = element.parentNode;
                 // this might just be the hackiest fix possible
@@ -617,7 +647,7 @@ const classMapping = [
                     var p2 = p.parentNode;
                     if (p2 != null) {
                         // display section
-                        p2.style.display = "none"
+                        (<HTMLElement>p2).style.display = "none"
                     }
                 }
             }
@@ -627,7 +657,7 @@ const classMapping = [
         classMatches: ["Button"],
         newClass: ["SparxPlusKeypadButton"],
         conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
-        elementCheck: (element, condition) => {
+        elementCheck: (element : HTMLElement, condition : Conditions) => {
             var id = element.id;
             if (id == null || id.includes == null) return false;
 
@@ -639,7 +669,7 @@ const classMapping = [
     {
         classMatches: ["AnswerPart"],
         conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
-        ifMatched: (element, condition) => {
+        ifMatched: (element : HTMLElement, condition : Conditions) => {
             // answerPart changed (this is the only way i could detect the answer being inputted :p)
             var result = document.body.querySelectorAll(`[class*="ResultFullWidth"]`)
             for (var res of result) {
@@ -659,21 +689,22 @@ const classMapping = [
         classMatches: ["!SparxPlusQuestionInfo", "QuestionInfo"], // non match SparxPlusQuestionInfo so this only runs if it hasn't been modified
         newClass: ["SparxPlusQuestionInfo"],
         conditions: [Conditions.Added, Conditions.ModifiedTransitionPage],
-        ifMatched: (element, condition) => {
+        ifMatched: (element : HTMLElement, condition : Conditions) => {
             var btn = document.createElement("button")
             btn.textContent = "Whiteboard"
             btn.className = "SparxPlusWhiteboardButton"
 
             btn.onmouseup = async (e) => {
                 const question = getQuestion(PlatformID.SparxMaths);
+                if (question == null) return;
 
                 var blur = createBlur()
-                var menu = createBlurredMenu(blur, "Whiteboard", (menu) => {
+                var menu = createBlurredMenu(blur, "Whiteboard", () => {
                     setWhiteboardData()
                 })
 
-                var whiteboardData = []
-                var removedData = []
+                var whiteboardData : string[] = []
+                var removedData : string[] = []
 
                 var startIndex = 0;
 
@@ -787,13 +818,13 @@ const classMapping = [
                 const setWhiteboardData = () => {
                     question.questionData.setKey("Whiteboard", whiteboardData)
                     question.questionData.updateUseDate();
-                    question.questionData.getData() .then((data) => {
+                    question.questionData.getData() .then((data : any) => {
                         question.questionData.updateData(data);
                     })
                 }
 
                 question.questionData.getKey("Whiteboard") .then((val) => {
-                    whiteboardData = val == null ? [] : val;
+                    whiteboardData = val == null ? [] : <string[]>val;
 
                     canvas.width = canvas.getBoundingClientRect().width
                     canvas.height = canvas.getBoundingClientRect().height
@@ -807,7 +838,9 @@ const classMapping = [
                 if (!customSettings.darkMode || customSettings.whiteboardDarkModeOverride) {
                     canvas.style.backgroundColor = "white"
                 }
+
                 const ctx = canvas.getContext("2d")
+                if (ctx == null) return;
 
                 whiteboardContainer.append(canvas)
 
@@ -821,7 +854,7 @@ const classMapping = [
 
                 const redraw = () => {
                     painting = false;
-                    for (data of whiteboardData) {
+                    for (var data of whiteboardData) {
                         const stroke = deserialiseWhiteboardStroke(data);
                         if (stroke == null) continue;
                         if (stroke instanceof TerminatedWhiteboardStroke) {
@@ -846,11 +879,11 @@ const classMapping = [
                     storeStroke(new TerminatedWhiteboardStroke())
                 }
 
-                const storeStroke = (stroke) => {
+                const storeStroke = (stroke : WhiteboardStroke) => {
                     whiteboardData.push(stroke.serialise())
                 }
 
-                const start = (e) => {
+                const start = (e : MouseEvent) => {
                     painting = true;
                     draw(e)
                 }
@@ -861,7 +894,7 @@ const classMapping = [
                     storeStop();
                 }
 
-                const draw = (e) => {
+                const draw = (e : MouseEvent) => {
                     if (!painting) return;
 
                     ctx.lineWidth = brushSize;
@@ -872,7 +905,7 @@ const classMapping = [
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
 
-                    var newStroke = new DefaultPenWhiteboardStroke(x, y, brushColor);
+                    var newStroke = new DefaultPenWhiteboardStroke(x, y);
                 
                     ctx.lineTo(x, y);
                     ctx.stroke();

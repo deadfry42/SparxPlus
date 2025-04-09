@@ -11,7 +11,7 @@ export function log(department : string, msg : string) {
     }
 }
 
-export function baseLog(msg : string) {
+export function baseLog(msg : any) {
     console.log(msg)
     logs.push(msg)
 

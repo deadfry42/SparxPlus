@@ -1,40 +1,28 @@
-var updateDebugMenu;
-var toggleDebugMenu;
+import { appendStyleContent, appendStyleSheet, Conditions, createNewOptionInDDM, createNewSettingsPanel, createWarningBox, deserialiseQuestionID, getDescendants, getQuestionID, getSVG, jumpscare, PanelType, PlatformID, QuestionData, QuestionID, sendNotification, SettingsType } from "../lib/defaults.js";
+import { baseLog, getIsRelease, log } from "../lib/index.js";
+import { classMapping, customSettings, keyboardMapping, settingsFrontend } from "./index.js";
+
+export var updateDebugMenu : Function;
+export var toggleDebugMenu : Function;
 
 (async () => {
     log("Maths", "Sparx Plus started with SparxMaths!")
 
     var replacedLogo = false;
-    var customDropDownOptions = [];
+    var customDropDownOptions : {}[] = [];
 
-    function addOptionToDDMenuISC(icon, string, callback) {
-        var option = {}
-        option.string = string;
-        option.callback = callback;
-        option.icon = icon
-        customDropDownOptions.push(option)
+    function addOptionToDDMenu(icon : HTMLElement | null, string : string | null, callback : Function | null) {
+        customDropDownOptions.push({
+            string: string,
+            callback: callback,
+            icon: icon
+        })
     }
 
-    function addOptionToDDMenuSC(string, callback) {
-        var option = {}
-        option.string = string;
-        option.callback = callback;
-        option.icon = null;
-        customDropDownOptions.push(option)
-    }
-
-    function addOptionToDDMenuS(string) {
-        var option = {}
-        option.string = string;
-        option.callback = () => {};
-        option.icon = null;
-        customDropDownOptions.push(option)
-    }
-
-    function doProgressiveDisclosure(realnode) {
+    function doProgressiveDisclosure(realnode : HTMLElement) {
         let tasks = realnode.childNodes;
         for (let task of tasks) {
-            let clist = task.classList;
+            let clist = (<HTMLElement>task).classList;
             let allowed = false;
             for (let name of clist) {
                 if (name.includes("Selected")) {
@@ -46,22 +34,24 @@ var toggleDebugMenu;
                 }
             }
             if (allowed == false) {
-                task.style.display = "none"
+                (<HTMLElement>task).style.display = "none"
             } else {
-                task.style.display = "flex"
+                (<HTMLElement>task).style.display = "flex"
             }
         }
     }
 
-    function doClassMapping(realnode, name, Condition) {
+    function doClassMapping(realnode : HTMLElement, name : string, Condition : Conditions) {
         for (var mapping of classMapping) {
             var valid = true;
-            var mMatches = mapping.classMatches == null ? valid = false : mapping.classMatches;
-            var mCondition = mapping.conditions == null ? valid = false : mapping.conditions;
+            var mMatches : string[] = mapping.classMatches;
+            var mCondition : Conditions[] = mapping.conditions;
             var mClasses = mapping.newClass;
             var mChildClasses = mapping.newClassesToChildren;
             var mElementCheck = mapping.elementCheck;
             var mIfMatched = mapping.ifMatched;
+
+            if (mMatches == null || mCondition == null) continue;
 
             if (!valid) {
                 log("ClassMapping", "Invalid config!")
@@ -95,7 +85,7 @@ var toggleDebugMenu;
                     if (!match) {
                         if (mElementCheck == null) {
                             match = true;
-                        } else if (mElementCheck(realnode)) {
+                        } else if (mElementCheck(realnode, Condition)) {
                             match = true;
                         }
                     }
@@ -140,21 +130,21 @@ var toggleDebugMenu;
         // to make sure we never run out of our 10MB limit
         // unless you just grind sparx that hard for some reason
 
-        browser.storage.local.get() .then((res) => {
+        chrome.storage.local.get() .then((res) => {
             for (var key in res) {
                 var data = res[""+key]
 
-                questionID = deserialiseQuestionID(key);
+                var questionID = deserialiseQuestionID(key);
                 if (questionID == null) continue;
 
-                questionData = new QuestionData(questionID);
+                var questionData = new QuestionData(questionID);
                 if (questionData == null) continue;
                 questionData.syncData() .then(() => {
                     (async () => {
-                        const lastUsed = await questionData.getUseDate();
+                        const lastUsed : number = (<number>await questionData.getUseDate());
                         const days = 7;
                         if (lastUsed < Date.now() - (days*24*60*1000)) {
-                            browser.storage.local.remove([key])
+                            chrome.storage.local.remove([key])
                         }
                     })()
                 })
@@ -173,8 +163,9 @@ var toggleDebugMenu;
         updateDebugMenu = () => {
             
             try {
-                var questionID = getQuestionID(PlatformID.SparxMaths);
-                qIDTag.innerText = `QuestionID: ${questionID.getID()}\nAlphabeticID: ${questionID.getAlphabeticID()}`
+                var questionID : QuestionID | null = getQuestionID(PlatformID.SparxMaths);
+                if (questionID != null) qIDTag.innerText = `QuestionID: ${questionID.getID()}\nAlphabeticID: ${questionID.getAlphabeticID()}`
+                else qIDTag.innerText = ""
             } catch(e) {
                 qIDTag.innerText = ""
             }
@@ -208,20 +199,20 @@ var toggleDebugMenu;
 
         log("HTML", "Page finished loading!")
 
-        const settingsLoaded = (res) => {
+        const settingsLoaded = (res : any) => {
             if (res.darkMode) {
-                appendStyleSheet("darkmodeSP", browser.runtime.getURL("src/css/darkmodemaths.css"));
+                appendStyleSheet("darkmodeSP", chrome.runtime.getURL("src/css/darkmodemaths.css"));
             }
             if (res.test) {
-                addOptionToDDMenuSC("SparxPlus Test", () => {
+                addOptionToDDMenu(null, "SparxPlus Test", () => {
                     sendNotification("Testing!", 2500)
                     jumpscare("assets/memes/wrong", customSettings.audio)
                 })
-                addOptionToDDMenuSC("SparxPlus Test 2", () => {
+                addOptionToDDMenu(null, "SparxPlus Test 2", () => {
                     sendNotification("Testing!", 2500)
                     jumpscare("assets/memes/correct", customSettings.audio)
                 })
-                addOptionToDDMenuSC("SparxPlus Test Yes", () => {
+                addOptionToDDMenu(null, "SparxPlus Test Yes", () => {
                     sendNotification("Testing!", 2500)
                     jumpscare("assets/memes/wrong2", customSettings.audio)
                 })
@@ -240,7 +231,7 @@ var toggleDebugMenu;
             }
         }
 
-        browser.storage.sync.get().then((res) => {
+        chrome.storage.sync.get().then((res) => {
             if (res.resetLocalNextRefresh) {
                 res.resetLocalNextRefresh = false;
                 chrome.storage.sync.set({resetLocalNextRefresh: false})
@@ -271,7 +262,7 @@ var toggleDebugMenu;
 
         const config = { attributes: true, childList: true, subtree: true };
 
-        const callback = (mutationRecord, observer) => {
+        const callback = (mutationRecord : any, observer : any) => {
             
             for (let record of mutationRecord) {
                 for (let node of record.addedNodes) {
@@ -363,7 +354,7 @@ var toggleDebugMenu;
                                                         let mainDiv = document.createElement("div")
                                                         mainDiv.style.display = "flex";
 
-                                                        let warning;
+                                                        let warning : HTMLDivElement | null = null;
                                                         if (sWarning != null) warning = createWarningBox(sWarning.text == null ? "" : sWarning.text, sWarning.info == null ? false : sWarning.info);
 
                                                         let labelDiv = document.createElement("div")
@@ -384,8 +375,8 @@ var toggleDebugMenu;
 
                                                         if (sExperimental) {
                                                             let experimental = getSVG("experimental", "experimental")
-                                                            experimental.style.maxWidth = 20
-                                                            experimental.style.maxHeight = 20;
+                                                            experimental.style.maxWidth = "20"
+                                                            experimental.style.maxHeight = "20";
                                                             title.append(experimental)
                                                         }
                                                         title.append(titleTxt)
@@ -393,8 +384,8 @@ var toggleDebugMenu;
                                                         let desc = document.createElement("p")
                                                         desc.innerHTML = sDesc
                                                         desc.style.maxWidth = "auto"
-                                                        desc.style.padding = 0
-                                                        desc.style.margin = 0;
+                                                        desc.style.padding = "0"
+                                                        desc.style.margin = "0";
         
                                                         labelDiv.append(title)
                                                         labelDiv.append(desc)
@@ -418,7 +409,7 @@ var toggleDebugMenu;
                                                             settingsWarningBox.style.display = "block"
                                                             
                                                             if (sWarning != null) {
-                                                                if (!sWarning.static) {
+                                                                if (!sWarning.static && warning != null) {
                                                                     if (!inp.checked) {
                                                                         warning.style.display = "none"
                                                                     } else {
@@ -435,7 +426,7 @@ var toggleDebugMenu;
                                                         mainDiv.append(labelDiv)
                                                         settingDiv.append(mainDiv)
                                                         
-                                                        if (sWarning != null) {
+                                                        if (sWarning != null && warning != null) {
                                                             if (sWarning.static) warning.style.display = "block"
                                                             else {
                                                                 if (!inp.checked) {
@@ -450,7 +441,7 @@ var toggleDebugMenu;
                                                     break;
                                                     
                                                     case SettingsType.Input:
-                                                        let warning2
+                                                        let warning2 : HTMLDivElement | null = null;
                                                         if (sWarning != null) warning2 = createWarningBox(sWarning.text == null ? "" : sWarning.text, sWarning.info == null ? false : sWarning.info);
         
                                                         let title2 = document.createElement("div")
@@ -463,8 +454,8 @@ var toggleDebugMenu;
 
                                                         if (sExperimental) {
                                                             let experimental = getSVG("experimental", "experimental")
-                                                            experimental.style.maxWidth = 20
-                                                            experimental.style.maxHeight = 20;
+                                                            experimental.style.maxWidth = "20"
+                                                            experimental.style.maxHeight = "20";
                                                             title2.append(experimental)
                                                         }
                                                         title2.append(title2Txt)
@@ -480,16 +471,17 @@ var toggleDebugMenu;
             
                                                         inp2.value = sVar
             
-                                                        inp2.addEventListener('change', (e) => {
+                                                        inp2.addEventListener('change', (e : Event) => {
+                                                            const value = ((<HTMLInputElement>e.target).value)
                                                             chrome.storage.sync.set({
-                                                                [setting.variable]: e.target.value
+                                                                [setting.variable]: value
                                                             })
 
                                                             settingsWarningBox.style.display = "block"
 
                                                             if (sWarning != null) {
-                                                                if (sWarning.static == false) {
-                                                                    if (e.target.value == "" || e.target.value == null) {
+                                                                if (!sWarning.static && warning2 != null) {
+                                                                    if (value == "" || value == null) {
                                                                         warning2.style.display = "none"
                                                                     } else {
                                                                         warning2.style.display = "block"
@@ -518,7 +510,7 @@ var toggleDebugMenu;
                                                         theDiv.append(desc2)
                                                         theDiv.append(switchlabel2)
 
-                                                        if (sWarning != null) {
+                                                        if (sWarning != null && warning2 != null) {
                                                             if (sWarning.static) {
                                                                 warning2.style.display = "block"
                                                             } else {
@@ -594,7 +586,7 @@ var toggleDebugMenu;
                                         if (o.icon != null) Icon = o.icon;
                                         var newOption = createNewOptionInDDM(cNameA, cNameDiv, Icon.cloneNode(true), o.string)
 
-                                        newOption.onclick = (event) => {
+                                        newOption.onclick = (event : any) => {
                                             o.callback();
                                         };
 
@@ -610,7 +602,7 @@ var toggleDebugMenu;
                                         if (customSettings.enableCustomLogo) {
                                             var newImg = document.createElement("img");
                                             newImg.alt = "Sparx Maths"
-                                            newImg.src = browser.runtime.getURL("./assets/titles/sparxmaths.png")
+                                            newImg.src = chrome.runtime.getURL("./assets/titles/sparxmaths.png")
                                             newImg.style.width = "150px";
                                             
                                             n.className = n.className
@@ -652,7 +644,7 @@ var toggleDebugMenu;
                             } else if (name.includes("PageBackgroundImage")) {
                                 if (customSettings.darkMode) {
                                     // log("CSS", "Changed the background gradient to the dark variant!")
-                                    realnode.src = browser.runtime.getURL("assets/darkmode/gradients/maths.svg")
+                                    realnode.src = chrome.runtime.getURL("assets/darkmode/gradients/maths.svg")
                                 }
                             }
 
@@ -732,7 +724,7 @@ var toggleDebugMenu;
         loadedPage();
     });
 
-    const doDebugMenuInput = (event) => {
+    const doDebugMenuInput = (event : KeyboardEvent) => {
         // hardcode debug menu:
         // because it has to work when keyboard shortcuts are disabled
         if (event.key == "Home") {
@@ -742,7 +734,7 @@ var toggleDebugMenu;
         }
     }
 
-    const doKeyboardInput = (event) => {
+    const doKeyboardInput = (event : KeyboardEvent) => {
         // i have to implement keyboard shortcuts in this way
         // because some elements are created then deleted
         // so we have to parse them when the key is pressed
@@ -752,13 +744,15 @@ var toggleDebugMenu;
         for (let mapping of keyboardMapping) {
             if (matched) break;
             var viable = true;
-            var matches = mapping.classMatches == null ? viable = false : mapping.classMatches;
-            var keys = mapping.keys == null ? viable = false : mapping.keys;
-            var action = mapping.action == null ? viable = false : mapping.action;
+            var matches = mapping.classMatches;
+            var keys = mapping.keys;
+            var action : string = mapping.action;
 
-            var elementCheck = mapping.elementCheck;
-            var keyStarted = mapping.keyStarted;
-            var keySuccessful = mapping.keySuccessful;
+            if (matches == null || keys == null || action == null) continue;
+
+            var elementCheck : Function | undefined = mapping.elementCheck;
+            var keyStarted : Function | undefined = mapping.keyStarted;
+            var keySuccessful : Function | undefined = mapping.keySuccessful;
 
             if (!viable) continue;
 
@@ -805,10 +799,11 @@ var toggleDebugMenu;
             }
 
             if (!matched) break;
+            if (element == null) break;
 
             // match, key pressed
 
-            switch(action.toLowerCase()) {
+            switch((<string>action).toLowerCase()) {
                 case "click":
                     element.dispatchEvent(new MouseEvent("click", {
                         view: window,
@@ -832,7 +827,7 @@ var toggleDebugMenu;
                 break;
 
                 case "button":
-                    element.click();
+                    if (element instanceof HTMLButtonElement) element.click();
                     if (keySuccessful != null) keySuccessful(element, foundKey)
                 break;
 
