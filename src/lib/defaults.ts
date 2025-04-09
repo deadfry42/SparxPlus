@@ -32,7 +32,7 @@ export function replaceElement(matchClassString : string, element : Element) {
     }
 }
 
-export function createNewOptionInDDM(classNameA : string, classNameDiv : string, icon : Element, string : string) {
+export function createNewOptionInDDM(classNameA : string, classNameDiv : string, icon : Node, string : string) {
     var option = document.createElement("a")
     option.className = classNameA;
     
@@ -224,7 +224,7 @@ export function getSVG(which : string, className? : string | null) : HTMLElement
     }
 }
 
-export function createWarningBox(warningTxt : string, isInformational? : boolean) {
+export function createWarningBox(warningTxt : string, isInformational? : boolean | null) {
     var warning = document.createElement("div")
     warning.style.paddingBottom = "10px"
     warning.style.paddingTop = "0px"
@@ -328,7 +328,7 @@ export function getQuestionID(platformID : PlatformID) {
         var uri = "";
         var taskID : any = 0;
         var question : any = 0;
-        var questionID = null
+        var questionID : QuestionID | null = null
 
         try {
             // this is rudimentary
@@ -833,7 +833,6 @@ export class SettingsPanel extends Panel {
 export class Setting {
     #warning: SettingWarning | null = null;
     #variableName: string;
-    #type: SettingsType | null = null;
     #name: string | null = null;
     #description: string | null = null;
     #experimental: boolean = false;
@@ -871,15 +870,6 @@ export class Setting {
 
     getName() : string | null {
         return this.#name;
-    }
-
-    setType(type : SettingsType) : Setting {
-        this.#type = type;
-        return this;
-    }
-
-    getType() : SettingsType | null {
-        return this.#type;
     }
 
     setDescription(text : string) : Setting {

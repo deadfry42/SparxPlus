@@ -1,4 +1,4 @@
-import { Actions, appendStyleContent, appendStyleSheet, Conditions, createNewOptionInDDM, createNewSettingsPanel, createWarningBox, deserialiseQuestionID, getDescendants, getQuestionID, getSVG, jumpscare, PanelType, PlatformID, QuestionData, QuestionID, sendNotification, SettingsType } from "../lib/defaults.js";
+import { Actions, appendStyleContent, appendStyleSheet, BlankPanel, Conditions, createNewOptionInDDM, createNewSettingsPanel, createWarningBox, DescriptivePanel, deserialiseQuestionID, getDescendants, getQuestionID, getSVG, InputSetting, jumpscare, PanelType, PlatformID, QuestionData, QuestionID, sendNotification, Setting, SettingsPanel, SettingsType, ToggleSetting } from "../lib/defaults.js";
 import { baseLog, getIsRelease, getLastUpdated, log } from "../lib/index.js";
 import { classMapping, customSettings, keyboardMapping, settingsFrontend } from "./index.js";
 
@@ -9,7 +9,7 @@ export var toggleDebugMenu : Function;
     log("Maths", "Sparx Plus started with SparxMaths!")
 
     var replacedLogo = false;
-    var customDropDownOptions : {}[] = [];
+    var customDropDownOptions : any[] = [];
 
     function addOptionToDDMenu(icon : HTMLElement | null, string : string | null, callback : Function | null) {
         customDropDownOptions.push({
@@ -239,8 +239,9 @@ export var toggleDebugMenu : Function;
                 log("Data", "Successfully cleared extension question data!")
             }
             if (!res.resetSyncNextRefresh) {
-                for (let object of Object.entries(res)) {
-                    customSettings[object[0]] = object[1]
+                for (let object of Object.keys(res)) {
+                    //TODO: i probably broke this
+                    customSettings[object] = res[object]
                 }
 
                 settingsLoaded(res)
@@ -266,10 +267,10 @@ export var toggleDebugMenu : Function;
             
             for (let record of mutationRecord) {
                 for (let node of record.addedNodes) {
-                    let list = []
+                    let list : HTMLElement[] = []
                     list.push(node)
                     for (let cnode of getDescendants(node)) {
-                        list.push(cnode)
+                        list.push(<HTMLElement>cnode)
                     }
                     for (let realnode of list) {
                         if (realnode == null) continue;
@@ -279,7 +280,11 @@ export var toggleDebugMenu : Function;
                             if (name.includes("SectionContainer") && !name.includes("PreviewSectionContainer") && !name.includes("SPARXPLUS")) {
                                 // 99% settings
 
-                                var settings = realnode.parentNode.parentNode;
+                                var settings : HTMLElement | null = null;
+                                var parent = realnode.parentNode;
+                                if (parent != null) settings = <HTMLElement>parent.parentNode;
+
+                                if (settings == null) return;
 
                                 var SettingsHeader = document.createElement("h1")
                                 SettingsHeader.textContent = "SparxPlus settings"
@@ -294,267 +299,200 @@ export var toggleDebugMenu : Function;
                                     settings.append(createWarningBox("This is not a tagged release version of Sparx Plus - some features may be unintentionally broken, or in the works!"))
                                 }
 
-                                for (var settingsSection of settingsFrontend) {
+                                for (var panelConfig of settingsFrontend) {
                                     var header = document.createElement("h2")
-                                    header.textContent = settingsSection.header == null ? "Unknown" : settingsSection.header
+                                    header.textContent = panelConfig.getTitle()
 
                                     var section = document.createElement("section")
                                     
                                     var description = document.createElement("p")
-                                    description.innerHTML = settingsSection.description == null ? "" : settingsSection.description
+                                    var descText = panelConfig.getDescription()
+                                    if (descText != null) description.innerHTML = descText;
 
                                     var panel = createNewSettingsPanel(name)
-                                    let validConfig = true;
 
-                                    var psetting = settingsSection.panel == null ? validConfig = false : settingsSection.panel;
+                                    if (panelConfig instanceof SettingsPanel) {
 
-                                    if (!validConfig) {
-                                        log("Settings", "Invalid panel configuration error!")
-                                        baseLog(psetting);
-                                        continue;
-                                    }
-                                    
-                                    var pType = psetting.type == null ? validConfig = false : psetting.type;
-                                    var pText = psetting.text;
-                                    var pContent = psetting.content;
-                                    var pInitialise = psetting.initialise;
+                                        // settings panel
+                                        
+                                        const settingsList = <Setting[]>panelConfig.getSettings()
+                                        for (const setting of settingsList) {
+                                            var settingVariableName = setting.getVariableName();
+                                            var settingName : string = <string>setting.getName() == null ? "Unknown" : <string>setting.getName();
+                                            var settingDesc : string = <string>setting.getDescription() == null ? "Unknown" : <string>setting.getDescription();
+                                            var settingWarning = setting.getWarning();
+                                            var isExperimental : boolean = <boolean>setting.getExperimental() == null ? false : <boolean>setting.getExperimental();
 
-                                    if (!validConfig) {
-                                        log("Settings", "Invalid panel configuration error!")
-                                        baseLog(psetting);
-                                        continue;
-                                    }
+                                            var settingVariable : any = customSettings[settingVariableName];
 
-                                    switch (pType) {
-                                        case PanelType.Settings:
-                                            if (pContent == null) validConfig = false;
-                                            else
-                                            for (let setting of pContent) {
-                                                let validConfig = true;
-                                                let sType = setting.type == null ? validConfig = false : setting.type;
-                                                let sName = setting.name == null ? validConfig = false : setting.name;
-                                                let sVar = setting.variable == null ? validConfig = false : customSettings[setting.variable];
-                                                let sDesc = setting.description == null ? "" : setting.description;
-                                                let sExperimental = setting.experimental == null ? false : setting.experimental;
+                                            let settingDiv = document.createElement("div")
 
-                                                let sWarning = setting.warning == null ? null : setting.warning;
-        
-                                                if (!validConfig || sVar == null) {
-                                                    log("Settings", "Invalid setting configuration error!")
-                                                    baseLog(setting)
-                                                    continue;
-                                                }
-        
-                                                let settingDiv = document.createElement("div")
-        
-                                                // definetly not stolen from w3schools.com
-        
-                                                switch (sType) {
-                                                    case SettingsType.Toggle:
-                                                        let mainDiv = document.createElement("div")
-                                                        mainDiv.style.display = "flex";
+                                            let settingContentDiv = document.createElement("div")
+                                            settingContentDiv.style.display = "flex";
 
-                                                        let warning : HTMLDivElement | null = null;
-                                                        if (sWarning != null) warning = createWarningBox(sWarning.text == null ? "" : sWarning.text, sWarning.info == null ? false : sWarning.info);
-
-                                                        let labelDiv = document.createElement("div")
-                                                        labelDiv.ariaOrientation = "vertical"
-                                                        labelDiv.setAttribute("data-orientation", "vertical")
-                                                        labelDiv.style.padding = "10px"
-                                                        labelDiv.style.maxWidth = "auto"
-                                                        labelDiv.style.paddingBottom = "3px"
-                                                        labelDiv.style.marginBottom = "3px"
-
-                                                        let title = document.createElement("div")
-                                                        title.ariaOrientation = "horizontal"
-                                                        title.style.display = "flex";
-        
-                                                        let titleTxt = document.createElement("h4")
-                                                        titleTxt.innerHTML = sName
-                                                        titleTxt.style.maxWidth = "auto"
-
-                                                        if (sExperimental) {
-                                                            let experimental = getSVG("experimental", "experimental")
-                                                            experimental.style.maxWidth = "20"
-                                                            experimental.style.maxHeight = "20";
-                                                            title.append(experimental)
-                                                        }
-                                                        title.append(titleTxt)
-                                                        
-                                                        let desc = document.createElement("p")
-                                                        desc.innerHTML = sDesc
-                                                        desc.style.maxWidth = "auto"
-                                                        desc.style.padding = "0"
-                                                        desc.style.margin = "0";
-        
-                                                        labelDiv.append(title)
-                                                        labelDiv.append(desc)
-        
-                                                        let switchlabel = document.createElement("label")
-                                                        let inp = document.createElement("input")
-                                                        let slider = document.createElement("span")
-        
-                                                        switchlabel.className = "switch"
-                                                        switchlabel.style.marginTop = "10px"
-                                                        slider.className = "slider round"
-                                                        inp.type = "checkbox"
-            
-                                                        inp.checked = sVar
-            
-                                                        inp.addEventListener('change', e => {
-                                                            chrome.storage.sync.set({
-                                                                [setting.variable]: inp.checked
-                                                            })
-
-                                                            settingsWarningBox.style.display = "block"
-                                                            
-                                                            if (sWarning != null) {
-                                                                if (!sWarning.static && warning != null) {
-                                                                    if (!inp.checked) {
-                                                                        warning.style.display = "none"
-                                                                    } else {
-                                                                        warning.style.display = "block"
-                                                                    }
-                                                                }
-                                                            }
-                                                        });
-
-                                                        switchlabel.append(inp)
-                                                        switchlabel.append(slider)
-            
-                                                        mainDiv.append(switchlabel)
-                                                        mainDiv.append(labelDiv)
-                                                        settingDiv.append(mainDiv)
-                                                        
-                                                        if (sWarning != null && warning != null) {
-                                                            if (sWarning.static) warning.style.display = "block"
-                                                            else {
-                                                                if (!inp.checked) {
-                                                                    warning.style.display = "none"
-                                                                } else {
-                                                                    warning.style.display = "block"
-                                                                }
-                                                            }
-
-                                                            settingDiv.append(warning)
-                                                        }
-                                                    break;
-                                                    
-                                                    case SettingsType.Input:
-                                                        let warning2 : HTMLDivElement | null = null;
-                                                        if (sWarning != null) warning2 = createWarningBox(sWarning.text == null ? "" : sWarning.text, sWarning.info == null ? false : sWarning.info);
-        
-                                                        let title2 = document.createElement("div")
-                                                        title2.ariaOrientation = "horizontal"
-                                                        title2.style.display = "flex";
-
-                                                        let title2Txt = document.createElement("h4")
-                                                        title2Txt.innerHTML = sName
-                                                        title2Txt.style.maxWidth = "auto"
-
-                                                        if (sExperimental) {
-                                                            let experimental = getSVG("experimental", "experimental")
-                                                            experimental.style.maxWidth = "20"
-                                                            experimental.style.maxHeight = "20";
-                                                            title2.append(experimental)
-                                                        }
-                                                        title2.append(title2Txt)
-                                                        
-                                                        let desc2 = document.createElement("p")
-                                                        desc2.innerHTML = sDesc
-                                                        desc2.style.maxWidth = "auto"
-        
-                                                        let theDiv = document.createElement("div")
-        
-                                                        let switchlabel2 = document.createElement("label")
-                                                        let inp2 = document.createElement("textarea")
-            
-                                                        inp2.value = sVar
-            
-                                                        inp2.addEventListener('change', (e : Event) => {
-                                                            const value = ((<HTMLInputElement>e.target).value)
-                                                            chrome.storage.sync.set({
-                                                                [setting.variable]: value
-                                                            })
-
-                                                            settingsWarningBox.style.display = "block"
-
-                                                            if (sWarning != null) {
-                                                                if (!sWarning.static && warning2 != null) {
-                                                                    if (value == "" || value == null) {
-                                                                        warning2.style.display = "none"
-                                                                    } else {
-                                                                        warning2.style.display = "block"
-                                                                    }
-                                                                }
-                                                            }
-                                                            
-                                                        });
-        
-                                                        if (setting.typeSpecific != null) {
-                                                            var placeholder = setting.typeSpecific.placeholder;
-                                                            if (placeholder != null) {
-                                                                inp2.placeholder = placeholder
-                                                            }
-                                                        }
-        
-                                                        inp2.style.minWidth = `${100}%`
-                                                        inp2.style.resize = "both"
-        
-                                                        settingDiv.ariaOrientation = "vertical"
-                                                        settingDiv.setAttribute("data-orientation", "vertical")
-            
-                                                        switchlabel2.append(inp2)
-        
-                                                        theDiv.append(title2)
-                                                        theDiv.append(desc2)
-                                                        theDiv.append(switchlabel2)
-
-                                                        if (sWarning != null && warning2 != null) {
-                                                            if (sWarning.static) {
-                                                                warning2.style.display = "block"
-                                                            } else {
-                                                                if (inp2.value == "" || inp2.value == null) {
-                                                                    warning2.style.display = "none"
-                                                                } else {
-                                                                    warning2.style.display = "block"
-                                                                }
-                                                            }
-                                                            theDiv.append(warning2)
-                                                        }
-
-                                                        settingDiv.append(theDiv)
-                                                    break;
-                                                }
-
-                                                panel.append(settingDiv)
+                                            let warning : HTMLDivElement | null = null;
+                                            if (settingWarning != null) {
+                                                var text = settingWarning.getText() == null ? "" : settingWarning.getText()
+                                                var info = settingWarning.getInformational() == null ? false : settingWarning.getInformational()
+                                                warning = createWarningBox(text,info);
                                             }
-        
+
+                                            let labelDiv = document.createElement("div")
+                                            labelDiv.ariaOrientation = "vertical"
+                                            labelDiv.setAttribute("data-orientation", "vertical")
+                                            labelDiv.style.padding = "10px"
+                                            labelDiv.style.maxWidth = "auto"
+                                            labelDiv.style.paddingBottom = "3px"
+                                            labelDiv.style.marginBottom = "3px"
+
+                                            let title = document.createElement("div")
+                                            title.ariaOrientation = "horizontal"
+                                            title.style.display = "flex";
+
+                                            let titleTxt = document.createElement("h4")
+                                            titleTxt.innerHTML = settingName
+                                            titleTxt.style.maxWidth = "auto"
+
+                                            if (isExperimental) {
+                                                let experimental = getSVG("experimental", "experimental")
+                                                experimental.style.maxWidth = "20"
+                                                experimental.style.maxHeight = "20";
+                                                title.append(experimental)
+                                            }
+                                            title.append(titleTxt)
                                             
-                                        break;
+                                            let desc = document.createElement("p")
+                                            desc.innerHTML = settingDesc
+                                            desc.style.maxWidth = "auto"
+                                            desc.style.padding = "0"
+                                            desc.style.margin = "0";
 
-                                        case PanelType.Descriptive:
-                                            if (pText == null) validConfig = false;
-                                            else
-                                            var content = document.createElement("p")
-                                            content.innerHTML = pText;
+                                            labelDiv.append(title)
+                                            labelDiv.append(desc)
 
-                                            panel.append(content)
-                                        break;
+                                            if (setting instanceof ToggleSetting) {
+                                                let switchlabel = document.createElement("label")
+                                                let inp = document.createElement("input")
+                                                let slider = document.createElement("span")
 
-                                        case PanelType.Blank:
-                                            // here so that he settings panel doesnt error out
-                                        break;
+                                                switchlabel.className = "switch"
+                                                switchlabel.style.marginTop = "10px"
+                                                slider.className = "slider round"
+                                                inp.type = "checkbox"
 
-                                        default:
-                                            validConfig = false;
-                                        break;
-                                    }
+                                                inp.checked = settingVariable
 
-                                    if (!validConfig) {
-                                        log("Settings", "Invalid panel configuration error!")
-                                        baseLog(psetting);
-                                        continue;
+                                                inp.addEventListener('change', e => {
+                                                    chrome.storage.sync.set({
+                                                        [settingVariableName]: inp.checked
+                                                    })
+
+                                                    settingsWarningBox.style.display = "block"
+                                                    
+                                                    if (settingWarning != null) {
+                                                        if (!settingWarning.getStatic() && warning != null) {
+                                                            if (!inp.checked) {
+                                                                warning.style.display = "none"
+                                                            } else {
+                                                                warning.style.display = "block"
+                                                            }
+                                                        }
+                                                    }
+                                                });
+
+                                                switchlabel.append(inp)
+                                                switchlabel.append(slider)
+
+                                                settingContentDiv.append(switchlabel)
+                                                
+                                                if (settingWarning != null && warning != null) {
+                                                    if (settingWarning.getStatic()) warning.style.display = "block"
+                                                    else {
+                                                        if (!inp.checked) {
+                                                            warning.style.display = "none"
+                                                        } else {
+                                                            warning.style.display = "block"
+                                                        }
+                                                    }
+
+                                                    settingDiv.append(warning)
+                                                }
+                                            } else if (setting instanceof InputSetting) {
+                                                let theDiv = document.createElement("div")
+        
+                                                let switchlabel2 = document.createElement("label")
+                                                let inp2 = document.createElement("textarea")
+    
+                                                inp2.value = settingVariable
+    
+                                                inp2.addEventListener('change', (e : Event) => {
+                                                    const value = ((<HTMLInputElement>e.target).value)
+                                                    chrome.storage.sync.set({
+                                                        [settingVariableName]: value
+                                                    })
+
+                                                    settingsWarningBox.style.display = "block"
+
+                                                    if (settingWarning != null) {
+                                                        if (!settingWarning.getStatic() && warning != null) {
+                                                            if (value == "" || value == null) {
+                                                                warning.style.display = "none"
+                                                            } else {
+                                                                warning.style.display = "block"
+                                                            }
+                                                        }
+                                                    }
+                                                    
+                                                });
+
+                                                if (setting.getPlaceholder() != null) {
+                                                    var placeholder = <string>setting.getPlaceholder();
+                                                    if (placeholder != null) {
+                                                        inp2.placeholder = placeholder
+                                                    }
+                                                }
+
+                                                inp2.style.minWidth = `${100}%`
+                                                inp2.style.resize = "both"
+
+                                                settingDiv.ariaOrientation = "vertical"
+                                                settingDiv.setAttribute("data-orientation", "vertical")
+    
+                                                switchlabel2.append(inp2)
+
+                                                settingContentDiv.append(switchlabel2)
+
+                                                if (settingWarning != null && warning != null) {
+                                                    if (settingWarning.getStatic()) {
+                                                        warning.style.display = "block"
+                                                    } else {
+                                                        if (inp2.value == "" || inp2.value == null) {
+                                                            warning.style.display = "none"
+                                                        } else {
+                                                            warning.style.display = "block"
+                                                        }
+                                                    }
+                                                    theDiv.append(warning)
+                                                }
+
+                                                settingDiv.append(theDiv)
+                                            }
+
+                                            settingContentDiv.append(labelDiv)
+                                            settingDiv.append(settingContentDiv)
+                                        }
+
+                                    } else if (panelConfig instanceof DescriptivePanel) {
+                                        var content = document.createElement("p")
+                                        var text = <string>panelConfig.getText()
+                                        if (text != null) content.innerHTML = text;
+
+                                        panel.append(content)
+                                    } else if (panelConfig instanceof BlankPanel) {
+                                        // here so the code doesn't error out
+                                    } else {
+                                        log("Settings", "Invalid panel loaded!")
+                                        baseLog(panelConfig)
                                     }
                                     
                                     section.append(header)
@@ -563,9 +501,10 @@ export var toggleDebugMenu : Function;
         
                                     settings.append(section)
 
-                                    if (pInitialise != null) {
+                                    if (panelConfig.getInit() != null) {
                                         try {
-                                            pInitialise(section, header, description, panel);
+                                            var initFunc : Function = <Function>panelConfig.getInit();
+                                            if (initFunc != null) initFunc(section, header, description, panel);
                                         } catch(e) {
                                             log("Settings", "Failed to run panel initialisation!")
                                             baseLog(e)
@@ -577,9 +516,9 @@ export var toggleDebugMenu : Function;
 
                                 try {
                                     // held together with hopes and prayers
-                                    var firstOption = menu.childNodes[1];
+                                    var firstOption = <HTMLElement>menu.childNodes[1];
                                     var cNameA = firstOption.className;
-                                    var cNameDiv = firstOption.childNodes[0].className;
+                                    var cNameDiv = (<HTMLElement>firstOption.childNodes[0]).className;
                                     var Icon = firstOption.childNodes[0].childNodes[0].cloneNode(true);
 
                                     for (let o of customDropDownOptions) {
@@ -626,8 +565,11 @@ export var toggleDebugMenu : Function;
                                 doProgressiveDisclosure(realnode)
                             } else if (name.includes("SummaryProgressCounts")) {
                                 if (!customSettings.progressiveDisclosure) continue;
-                                let scores = realnode.textContent.split("/")
-                                realnode.textContent = scores[0]
+                                var txt = realnode.textContent;
+                                if (txt != null) {
+                                    let scores = txt.split("/")
+                                    realnode.textContent = scores[0]
+                                }
                             } else if (name.includes("StudentName")) {
                                 if (customSettings.disableNameInTopright) {
                                     realnode.style.display = "none"
@@ -644,7 +586,7 @@ export var toggleDebugMenu : Function;
                             } else if (name.includes("PageBackgroundImage")) {
                                 if (customSettings.darkMode) {
                                     // log("CSS", "Changed the background gradient to the dark variant!")
-                                    realnode.src = chrome.runtime.getURL("assets/darkmode/gradients/maths.svg")
+                                    (<HTMLImageElement>realnode).src = chrome.runtime.getURL("assets/darkmode/gradients/maths.svg")
                                 }
                             }
 
@@ -676,7 +618,7 @@ export var toggleDebugMenu : Function;
 
                         for (let realnode of list) {
                             if (realnode == null) continue;
-                            var name = realnode.className;
+                            var name = <string>realnode.className;
                             if (name == null || name.includes == null) continue;
                             try {
                                 doClassMapping(realnode, name, Conditions.ModifiedTransitionPage);
@@ -697,7 +639,7 @@ export var toggleDebugMenu : Function;
                     }
                     for (let realnode of list) {
                         if (realnode == null) continue;
-                        var name = realnode.className;
+                        var name = <string>realnode.className;
                         if (name == null || name.includes == null) continue;
                         try {
                             doClassMapping(realnode, name, Conditions.Removed)

@@ -7,7 +7,7 @@ import { updateDebugMenu } from "./api.js";
 
 // note: this is not synced by default.
 // they are synced when the page loads, in api.js
-export const customSettings = { // default settings
+export const customSettings : { [key: string]: any } = { // default settings
     hideVideoButton: false, // hide video button for extreme++ mega challenge >:)
     jumpscareWhenWrong: false, // animation when q wrong (slighly broken)
     jumpscareWhenCorrect: false, // animation when q correct (slighly broken)
@@ -327,9 +327,8 @@ export const keyboardMapping : KeyboardMapping[] = [
         .setClassMatches(["AccordionContent"])
         .setKeySuccessful((element : HTMLElement, key : string) => {
             let taskToClick = parseInt(key)-1;
-            let current = 0;
 
-            let buttons = []
+            let buttons : Node[] = []
             for (let node of element.querySelectorAll("*")) {
                 let name = node.className;
                 if (name == null) continue;
