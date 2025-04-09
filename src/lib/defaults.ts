@@ -470,35 +470,39 @@ export const StrokeType = {
 // classes
 
 export class Question {
-    questionID : QuestionID;
-    questionData : QuestionData;
+    #questionID : QuestionID;
+    #questionData : QuestionData;
 
     constructor(questionID : QuestionID) {
-        this.questionID = questionID;
-        this.questionData = new QuestionData(questionID);
-        this.questionData.syncData();
+        this.#questionID = questionID;
+        this.#questionData = new QuestionData(questionID);
+        this.#questionData.syncData();
     }
 
-    getID() {
-        return this.questionID;
+    getID() : QuestionID {
+        return this.#questionID;
+    }
+
+    getData() : QuestionData {
+        return this.#questionData;
     }
 }
 
 export class QuestionData {
-    data : any;
-    questionID : QuestionID;
+    #data : any;
+    #questionID : QuestionID;
 
     constructor(questionID : QuestionID) {
-        this.questionID = questionID;
+        this.#questionID = questionID;
     }
 
-    getData() {
-        return this.data == null ? this.syncData() : this.data; // js promise, be careful
+    getData() : Promise<any> {
+        return this.#data == null ? this.syncData() : this.#data; // js promise, be careful
     }
 
-    syncData() {
-        this.data = new Promise((resolve, reject) => {
-            chrome.storage.local.get([this.questionID.getID()]) .then((res) => {
+    syncData() : Promise<any> {
+        this.#data = new Promise((resolve, reject) => {
+            chrome.storage.local.get([this.#questionID.getID()]) .then((res) => {
                 for (var key in res){
                     resolve(res[key])
                     return;
@@ -508,10 +512,10 @@ export class QuestionData {
                 resolve({}) // fresh data
             })
         })
-        return this.data;
+        return this.#data;
     }
 
-    setKey(key : string, value : any) {
+    setKey(key : string, value : any) : Promise<any> {
         return new Promise((resolve, reject) => {
             this.getData() .then((res : any) => {
                 if (res == null) {
@@ -527,7 +531,7 @@ export class QuestionData {
         })
     }
 
-    getKey(key : string) {
+    getKey(key : string) : Promise<any> {
         return new Promise((resolve, reject) => {
             this.getData() .then((res : any) => {
                 try {
@@ -543,18 +547,18 @@ export class QuestionData {
         this.setKey("lastUsed", Date.now())
     }
 
-    getUseDate() {
+    getUseDate() : Promise<any> {
         return this.getKey("lastUsed");
     }
 
-    removeKey(key : string) {
+    removeKey(key : string) : Promise<any> {
         return this.setKey(key, null)
     }
 
-    updateData(data : any) {
+    updateData(data : any) : Promise<any> | null {
         if (data == null) return null;
         return new Promise((resolve, reject) => {
-            chrome.storage.local.set({[this.questionID.getID()]: data}) .then((res : any) => {
+            chrome.storage.local.set({[this.#questionID.getID()]: data}) .then((res : any) => {
                 resolve(res)
             })
         })
@@ -562,19 +566,20 @@ export class QuestionData {
 }
 
 export class QuestionID {
-    uri : string;
-    task : number;
-    question : number;
-    platformID : PlatformID;
-    revision : boolean;
+    #uri : string;
+    #task : number;
+    #question : number;
+    #platformID : PlatformID;
+    #revision : boolean;
     constructor(uri : string, task : number, question : number, platformID : PlatformID, revision : boolean) {
-        this.uri = uri;
-        this.task = task;
-        this.question = question;
-        this.platformID = platformID == null ? PlatformID.Unknown : platformID;
-        this.revision = revision == null ? false : revision;
+        this.#uri = uri;
+        this.#task = task;
+        this.#question = question;
+        this.#platformID = platformID == null ? PlatformID.Unknown : platformID;
+        this.#revision = revision == null ? false : revision;
     }
-    isSimilar(otherQuestionID : QuestionID) {
+
+    isSimilar(otherQuestionID : QuestionID) : boolean {
         if (otherQuestionID.constructor.name != this.constructor.name) return false;
         return this.getURI() == otherQuestionID.getURI()
         && this.getTask() == otherQuestionID.getTask()
@@ -582,71 +587,71 @@ export class QuestionID {
         && this.getPlatformID() == otherQuestionID.getPlatformID();
     }
 
-    getPlatformID() {
-        return this.platformID;
+    getPlatformID() : PlatformID {
+        return this.#platformID;
     }
 
-    getTask() {
-        return this.task;
+    getTask() : number {
+        return this.#task;
     }
 
-    getQuestion() {
-        return this.question;
+    getQuestion() : number {
+        return this.#question;
     }
 
-    getURI() {
-        return this.uri;
+    getURI() : string {
+        return this.#uri;
     }
 
-    isRevisionQuestion() {
-        return this.revision;
+    isRevisionQuestion() : boolean {
+        return this.#revision;
     }
 
     // for normal questions
-    getStandardAlphabeticID() {
-        return `${this.task}${convertNumberToLetter(this.question)}`
+    getStandardAlphabeticID() : string {
+        return `${this.#task}${convertNumberToLetter(this.#question)}`
     }
 
     // for revision platform
-    getRevisionAlphabeticID() {
-        return `Q${this.question}`
+    getRevisionAlphabeticID() : string {
+        return `Q${this.#question}`
     }
 
-    getAlphabeticID() {
-        return this.revision ? this.getRevisionAlphabeticID() : this.getStandardAlphabeticID()
+    getAlphabeticID() : string {
+        return this.#revision ? this.getRevisionAlphabeticID() : this.getStandardAlphabeticID()
     }
 
-    getID() {
-        return `QuestionID/${this.getPlatformID()}/${this.revision ? "Rev" : "Std"}/${this.getURI()}:${this.getTask()}:${this.getQuestion()}`
+    getID() : string {
+        return `QuestionID/${this.getPlatformID()}/${this.#revision ? "Rev" : "Std"}/${this.getURI()}:${this.getTask()}:${this.getQuestion()}`
     }
 }
 
 export class WhiteboardStroke {
-    x : number | null = null;
-    y : number | null = null;
-    customColour : string | null = null;
+    #x : number | null = null;
+    #y : number | null = null;
+    #customColour : string | null = null;
 
     constructor(x : number | null, y : number | null, colour : string | null) {
-        this.x = x;
-        this.y = y;
-        this.customColour = colour;
+        this.#x = x;
+        this.#y = y;
+        this.#customColour = colour;
     }
 
-    getX() {
-        return this.x == null ? 0: this.x;
+    getX() : number {
+        return this.#x == null ? 0: this.#x;
     }
 
-    getY() {
-        return this.y == null ? 0: this.y;
+    getY() : number {
+        return this.#y == null ? 0: this.#y;
     }
 
-    getColour() {
-        return this.customColour == null ?
+    getColour() : string {
+        return this.#customColour == null ?
         customSettings.darkMode ? (customSettings.whiteboardDarkModeOverride ? "#000000" : "#FFFFFF") : "#000000"
-        : this.customColour;
+        : this.#customColour;
     }
 
-    serialise() {
+    serialise() : string {
         const version = 0;
         var data = version+""
         data+=" "+StrokeType.Stroke;
@@ -662,7 +667,7 @@ export class TerminatedWhiteboardStroke extends WhiteboardStroke {
         super(null, null, null)
     }
 
-    serialise() {
+    serialise() : string {
         const version = 0;
         return version+" "+StrokeType.Terminator;
     }
@@ -673,7 +678,7 @@ export class DefaultPenWhiteboardStroke extends WhiteboardStroke {
         super(x, y, null)
     }
 
-    serialise() {
+    serialise() : string {
         const version = 0;
         var data = version+""
         data+=" "+StrokeType.Stroke;
@@ -681,5 +686,263 @@ export class DefaultPenWhiteboardStroke extends WhiteboardStroke {
         data+=" "+this.getY();
         data+=" !"
         return data;
+    }
+}
+
+export class KeyboardMapping {
+    #action : Actions | null = null;
+    #classMatches: string[] | null = null;
+    #keys : string[] | null = null;
+
+    #checkMatch: Function | null = null;
+    #keyStarted: Function | null = null;
+    #keySuccessful: Function | null = null;
+
+    setAction(action : Actions) : KeyboardMapping {
+        this.#action = action;
+        return this;
+    }
+
+    getAction() : Actions | null {
+        return this.#action;
+    }
+
+    setClassMatches(classMatches : string[]) : KeyboardMapping {
+        this.#classMatches = classMatches;
+        return this;
+    }
+
+    getClassMatches() : string[] | null {
+        return this.#classMatches;
+    }
+
+    setCheckMatch(callback : Function) : KeyboardMapping {
+        this.#checkMatch = callback;
+        return this;
+    }
+
+    getCheckMatch() : Function | null {
+        return this.#checkMatch;
+    }
+
+    setKeyStarted(callback : Function) : KeyboardMapping {
+        this.#keyStarted = callback;
+        return this;
+    }
+
+    getKeyStarted() : Function | null {
+        return this.#keyStarted;
+    }
+
+    setKeySuccessful(callback : Function) : KeyboardMapping {
+        this.#keySuccessful = callback;
+        return this;
+    }
+
+    getKeySuccessful() : Function | null {
+        return this.#keySuccessful;
+    }
+
+    setKeys(keys : string[]) : KeyboardMapping {
+        this.#keys = keys;
+        return this;
+    }
+
+    getKeys() : string[] | null {
+        return this.#keys;
+    }
+}
+
+export class Panel {
+    #title: string;
+    #desc: string;
+
+    #init: Function | null = null;
+
+    constructor(title: string, description: string) {
+        this.#title = title;
+        this.#desc = description;
+    }
+
+    getDescription() : string | null {
+        return this.#desc;
+    }
+
+    getTitle() : string {
+        return this.#title;
+    }
+
+    setInit(callback : Function) : Panel {
+        this.#init = callback;
+        return this;
+    }
+
+    getInit() : Function | null {
+        return this.#init;
+    }
+}
+
+export class BlankPanel extends Panel {
+    constructor(title: string, description: string) {
+        super(title, description)
+    }
+}
+
+export class DescriptivePanel extends Panel {
+    #text: string | null = null;
+
+    constructor(title: string, description: string) {
+        super(title, description)
+    }
+
+    setText(text : string) : DescriptivePanel {
+        this.#text = text;
+        return this;
+    }
+
+    getText() : string | null {
+        return this.#text;
+    }
+}
+
+export class SettingsPanel extends Panel {
+    #settings: Setting[] | null = null;
+
+    constructor(title: string, description: string) {
+        super(title, description)
+    }
+
+    setSettings(settings : Setting[]) : SettingsPanel {
+        this.#settings = settings;
+        return this;
+    }
+
+    addSetting(setting : Setting) : SettingsPanel {
+        if (this.#settings == null) {
+            this.#settings = [];
+            this.#settings.push(setting);
+        }
+        return this;
+    }
+
+    getSettings() : Setting[] | null {
+        return this.#settings;
+    }
+}
+
+export class Setting {
+    #warning: SettingWarning | null = null;
+    #variableName: string;
+    #type: SettingsType | null = null;
+    #name: string | null = null;
+    #description: string | null = null;
+    #experimental: boolean = false;
+
+    constructor(variableName : string) {
+        this.#variableName = variableName;
+    }
+
+    setWarning(warning : SettingWarning) : Setting {
+        this.#warning = warning;
+        return this;
+    }
+
+    getWarning() : SettingWarning | null {
+        return this.#warning;
+    }
+    
+    getVariableName() : string {
+        return this.#variableName
+    }
+
+    setExperimental(bool : boolean) : Setting {
+        this.#experimental = bool;
+        return this;
+    }
+
+    getExperimental() : boolean {
+        return this.#experimental;
+    }
+
+    setName(name : string) : Setting {
+        this.#name = name;
+        return this;
+    }
+
+    getName() : string | null {
+        return this.#name;
+    }
+
+    setType(type : SettingsType) : Setting {
+        this.#type = type;
+        return this;
+    }
+
+    getType() : SettingsType | null {
+        return this.#type;
+    }
+
+    setDescription(text : string) : Setting {
+        this.#description = text;
+        return this;
+    }
+
+    getDescription() : string | null {
+        return this.#description;
+    }
+}
+
+export class ToggleSetting extends Setting {
+    constructor(variableName : string) {
+        super(variableName);
+    }
+}
+
+export class InputSetting extends Setting {
+    #placeholder : string | null = null;
+
+    constructor(variableName : string) {
+        super(variableName);
+    }
+
+    setPlaceholder(text : string) : Setting {
+        this.#placeholder = text;
+        return this;
+    }
+
+    getPlaceholder() : string | null {
+        return this.#placeholder;
+    }
+}
+
+export class SettingWarning {
+    #static: boolean | null = null;
+    #informational: boolean | null = null;
+    #text: string;
+
+    constructor(text : string) {
+        this.#text = text;
+    }
+
+    getText() : string {
+        return this.#text;
+    }
+
+    setInformational(bool : boolean) : SettingWarning {
+        this.#informational = bool;
+        return this;
+    }
+
+    getInformational() : boolean | null {
+        return this.#informational;
+    }
+
+    setStatic(bool : boolean) : SettingWarning {
+        this.#static = bool;
+        return this;
+    }
+
+    getStatic() : boolean | null {
+        return this.#static;
     }
 }

@@ -1,5 +1,5 @@
-import {PanelType, SettingsType, Actions, Conditions, jumpscare, getQuestion, createBlur, createBlurredMenu, TerminatedWhiteboardStroke, DefaultPenWhiteboardStroke, PlatformID, getSVG, deserialiseWhiteboardStroke, WhiteboardStroke} from "../lib/defaults.js"
-import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent, log, baseLog } from "../lib/index.js";
+import { Actions, Conditions, jumpscare, getQuestion, createBlur, createBlurredMenu, TerminatedWhiteboardStroke, DefaultPenWhiteboardStroke, PlatformID, getSVG, deserialiseWhiteboardStroke, WhiteboardStroke, KeyboardMapping, Panel, SettingsPanel, SettingWarning, InputSetting, ToggleSetting, DescriptivePanel, BlankPanel} from "../lib/defaults.js"
+import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent, log } from "../lib/index.js";
 import { updateDebugMenu } from "./api.js";
 
 // settings which are set by the user
@@ -46,224 +46,94 @@ var logLength = 25;
 // settings panels
 // this manages each panel seen in the settings page of SparxMaths
 // i'm not going to explain how it works here: it's a bit too complex to feasibly do so
-export const settingsFrontend = [
-    {
-        header: "UI Tweaks",
-        description: "Small UI tweaks to fix issues with Sparx.",
-        panel: {
-            type: PanelType.Settings,
-            content: [
-                {
-                    type: SettingsType.Toggle,
-                    variable: "darkMode",
-                    name: "Dark mode",
-                    experimental: true,
-                    description: "Enable a native dark mode for the website (doesn't support images unfortunately)",
-                    warning: {
-                        text: "Dark mode is an experimental setting where it tries its best to adapt the CSS of the website. Do not expect this dark mode to be perfect - it will have issues.",
-                        static: false,
-                    }
-                },
-                {
-                    type: SettingsType.Toggle,
-                    variable: "progressiveDisclosure",
-                    name: "Progressive Disclosure",
-                    description: "Hide tasks which haven't yet completed, to motivate you to finish. Doesn't work on revision.",
-                },
-                // {
-                //     type: SettingsType.Toggle,
-                //     variable: "calculator",
-                //     experimental: true,
-                //     name: "Enable Calculator feature",
-                //     description: "Allow you to press on the calculator button to show a calculator to work out your answer.",
-                // },
-                {
-                    type: SettingsType.Toggle,
-                    variable: "keyboardShortcuts",
-                    experimental: true,
-                    name: "Enable keyboard shortcuts",
-                    description: "Enable shortcuts to make using Sparx on a keyboard easier",
-                    warning: {
-                        text: "H - Open \"My Homework\" tab<br>R - Open \"Revision & Assessments\" tab<br>C - open Compulsary tab<br>X - open XP Boost tab<br>T - open Target tab<br>I - open Independent Learning tab<br>Q - Open the assignment at the top of the page<br>[1-9] - Open task 1-9<br>Esc - Use the back button, or press the logo if no back buttons exist.",
-                        static: false,
-                        info: true,
-                    }
-                },
-                {
-                    type: SettingsType.Input,
-                    variable: "customCSS",
-                    name: "Custom CSS",
-                    description: "Input custom CSS code to style SparxMaths the way you want to.",
-                    typeSpecific: {
-                        placeholder: "Input custom CSS Code here.\nThis applies when you refresh the page."
-                    },
-                    warning: {
-                        text: "The website may not appear as originally intended with Custom CSS.",
-                        static: false,
-                    }
-                }
-            ]
-        }
-    },
-    {
-        header: "Hiding UI",
-        description: "Hide certain parts of the UI for whatever reason",
-        panel: {
-            type: PanelType.Settings,
-            content: [
-                {
-                    type: SettingsType.Toggle,
-                    variable: "hideVideoButton",
-                    name: "Disable help videos",
-                    description: "Remove the video button, so that you can't see the help (basically hardcore mode)",
-                },
-                {
-                    type: SettingsType.Toggle,
-                    variable: "disableNameInTopright",
-                    name: "Hide name",
-                    description: "Hide the name in the top right corner of the screen.",
-                },
-                {
-                    type: SettingsType.Toggle,
-                    variable: "disableXPInTopRight",
-                    name: "Hide XP count",
-                    description: "Hide the XP in the top right corner of the screen.",
-                },
-                {
-                    type: SettingsType.Toggle,
-                    variable: "hideColourOverlay",
-                    name: "Hide Colour overlay",
-                    description: "Disable the colour overlay and the settings panel (so that if the extension fails or isn't available, you still have the colour overlay)",
-                },
-            ]
-        }
-    },
-    {
-        header: "Whiteboard",
-        description: "Settings for the Whiteboard feature in questions",
-        panel: {
-            type: PanelType.Settings,
-            content: [
-                {
-                    type: SettingsType.Toggle,
-                    variable: "whiteboard",
-                    experimental: true,
-                    name: "Enable Whiteboard feature",
-                    description: "Show a whiteboard button which lets you work out your answer.",
-                },
-                {
-                    type: SettingsType.Toggle,
-                    variable: "whiteboardDarkModeOverride",
-                    experimental: false,
-                    name: "Dark mode override",
-                    description: "Use the light mode whiteboard even if in dark mode.",
-                },
-            ]
-        }
-    },
-    {
-        header: "Fun Settings",
-        description: "Fun small additions to make Sparx more enjoyable to use!",
-        panel: {
-            type: PanelType.Settings,
-            content: [
-                {
-                    type: SettingsType.Toggle,
-                    variable: "audio",
-                    name: "Play extension audio",
-                    description: "Allows the extension to play sound.",
-                },
-                {
-                    type: SettingsType.Toggle,
-                    experimental: true,
-                    variable: "jumpscareWhenWrong",
-                    name: "Jumpscare upon incorrect answer",
-                    description: "Play a funny animation whenever you get a question wrong (it's scary) (plays a sound)",
-                },
-                {
-                    type: SettingsType.Toggle,
-                    experimental: true,
-                    variable: "jumpscareWhenCorrect",
-                    name: "Jumpscare upon correct answer",
-                    description: "Play a funny animation whenever you get a question correct (it's scary) (plays a sound)",
-                }
-            ]
-        }
-    },
-    {
-        header: "Extension Settings",
-        description: "Settings to do with the extension itself",
-        panel: {
-            type: PanelType.Settings,
-            content: [
-                {
-                    type: SettingsType.Toggle,
-                    variable: "enableCustomLogo",
-                    name: "Enable Custom logo",
-                    description: "Whether or not to use the custom SparxPlus logo in the top left.",
-                },
-                {
-                    type: SettingsType.Toggle,
-                    variable: "enableStartupNotification",
-                    name: "Enable Startup Notification",
-                    description: "Whether or not to notify you whenever SparxPlus successfully loads.",
-                },
-                {
-                    type: SettingsType.Toggle,
-                    variable: "enableDebugByDefault",
-                    name: "Show debug menu by default",
-                    description: "Whether or not to enable the debug menu in the top left corner by default. Use \"Home\" to toggle.",
-                },
-                {
-                    type: SettingsType.Toggle,
-                    variable: "test",
-                    name: "Enable Development features",
-                    description: "Enable features which are in development.",
-                    warning: {
-                        text: "Development features are work in progress, and could cause issues with the website.",
-                        static: false,
-                    }
-                },
-            ]
-        }
-    },
-    {
-        header: "Data management",
-        description: "Manage extension data",
-        panel: {
-            type: PanelType.Settings,
-            content: [
-                {
-                    // TODO: rework this into a button
-                    type: SettingsType.Toggle,
-                    variable: "resetSyncNextRefresh",
-                    name: "Reset Extension settings upon next refresh",
-                    description: "Reset the settings that the Extension currently has when the page is refreshed.",
-                    warning: {
-                        text: "This setting will reset the extension's settings back to the defaults. Are you sure you want to continue?",
-                        static: false,
-                    }
-                },
-                {
-                    // TODO: rework this into a button
-                    type: SettingsType.Toggle,
-                    variable: "resetLocalNextRefresh",
-                    name: "Reset Extension data upon next refresh",
-                    description: "Reset the data that the extension holds in regard to questions (eg. whiteboard data)",
-                    warning: {
-                        text: "This setting will reset everything that the extension holds about Questions, eg. whiteboard data. Are you sure you want to continue?",
-                        static: false,
-                    }
-                },
-            ]
-        }
-    },
-    {
-        header: "About",
-        description: "About SparxPlus",
-        panel: {
-            type: PanelType.Descriptive,
-            text: `
+export const settingsFrontend : Panel[] = [
+    new SettingsPanel("UI Tweaks", "Small UI tweaks to fix issues with Sparx.")
+        .addSetting(new ToggleSetting("darkmode")
+                    .setName("Dark mode")
+                    .setDescription("Enable a native dark mode for the website (doesn't support images unfortunately)")
+                    .setExperimental(true)
+                    .setWarning(new SettingWarning("Dark mode is an experimental setting where it tries its best to adapt the CSS of the website. Do not expect this dark mode to be perfect - it will have issues.")))
+        .addSetting(new ToggleSetting("progressiveDisclosure")
+                    .setName("Progressive Disclosure")
+                    .setDescription("Hide tasks which haven't yet completed, to motivate you to finish. Doesn't work on revision."))
+        // .addSetting(new ToggleSetting("calculator")
+        //             .setName("Enable built-in calculator")
+        //             .setDescription("Allow you to press on the calculator button to show a calculator to work out your answer.")
+        //             .setExperimental(true))
+        .addSetting(new ToggleSetting("keyboardShortcuts")
+                    .setName("Enable keyboard shortcuts")
+                    .setDescription("Enable shortcuts to make using Sparx on a keyboard easier")
+                    .setWarning(new SettingWarning("H - Open \"My Homework\" tab<br>R - Open \"Revision & Assessments\" tab<br>C - open Compulsary tab<br>X - open XP Boost tab<br>T - open Target tab<br>I - open Independent Learning tab<br>Q - Open the assignment at the top of the page<br>[1-9] - Open task 1-9<br>Esc - Use the back button, or press the logo if no back buttons exist.")
+                        .setInformational(true)))
+        .addSetting(new InputSetting("customCSS")
+                    .setPlaceholder("Input custom CSS Code here.\nThis applies when you refresh the page.")
+                    .setName("Custom CSS")
+                    .setDescription("Input custom CSS code to style SparxMaths the way you want to.")
+                    .setWarning(new SettingWarning("The website may not appear as originally intended with Custom CSS."))),
+
+    new SettingsPanel("Hiding UI", "Hide certain parts of the UI for whatever reason")
+        .addSetting(new ToggleSetting("hideVideoButton")
+                    .setName("Disable help videos")
+                    .setDescription("Remove the video button, so that you can't see the help (basically hardcode mode"))
+        .addSetting(new ToggleSetting("disableNameInTopright")
+                    .setName("Hide name")
+                    .setDescription("Hide the name in the top right corner of the screen."))
+        .addSetting(new ToggleSetting("disableXPInTopRight")
+                    .setName("Hide XP Count")
+                    .setDescription("Hide the XP in the top right corner of the screen."))
+        .addSetting(new ToggleSetting("hideColourOverlay")
+                    .setName("Hide Colour overlay")
+                    .setDescription("Disable the colour overlay and the settings panel (so that if the extension fails or isn't available, you still have the colour overlay)")),
+
+    new SettingsPanel("Whiteboard", "Settings for the Whiteboard feature in questions")
+        .addSetting(new ToggleSetting("whiteboard")
+                    .setName("Enable Whiteboard feature")
+                    .setDescription("Show a whiteboard button which lets you work out your answer.")
+                    .setExperimental(true))
+        .addSetting(new ToggleSetting("whiteboardDarkModeOverride")
+                    .setName("Dark mode override")
+                    .setDescription("Use the light mode whiteboard even if in dark mode.")),
+
+    new SettingsPanel("Fun Settings", "Fun small additions to make Sparx more enjoyable to use!")
+        .addSetting(new ToggleSetting("jumpscareWhenWrong")
+                    .setName("Jumpscare upon incorrect answer")
+                    .setDescription("Play a funny animation whenever you get a question wrong (it's scary) (requires audio)")
+                    .setExperimental(true))
+        .addSetting(new ToggleSetting("jumpscareWhenCorrect")
+                    .setName("Jumpscare upon correct answer")
+                    .setDescription("Play a funny animation whenever you get a question correct (it's scary) (requires audio)")
+                    .setExperimental(true)),
+
+    new SettingsPanel("Extension Settings", "Settings that manage the extension itself")
+        .addSetting(new ToggleSetting("enableCustomLogo")
+                    .setName("Enable Custom logo")
+                    .setDescription("Whether or not to use the custom SparxPlus logo in the top left."))
+        .addSetting(new ToggleSetting("enableStartupNotification")
+                    .setName("Enable Startup Notification")
+                    .setDescription("Whether or not to notify you whenever SparxPlus successfully loads."))
+        .addSetting(new ToggleSetting("enableDebugByDefault")
+                    .setName("Show debug menu by default")
+                    .setDescription("Whether or not to enable the debug menu in the top left corner by default. Use \"Home\" to toggle."))
+        .addSetting(new ToggleSetting("audio")
+                    .setName("Play extension audio")
+                    .setDescription("Allows the extension to play sound."))
+        .addSetting(new ToggleSetting("test")
+                    .setName("Enable development features")
+                    .setDescription("Enable features which are in development.")
+                    .setWarning(new SettingWarning("Development features are work in progress, and could cause issues with the website."))),
+
+    new SettingsPanel("Data management", "Manage the extension data")
+        .addSetting(new ToggleSetting("resetSyncNextRefresh")
+                    .setName("Reset Extension settings upon next refresh")
+                    .setDescription("Reset the settings that the Extension currently has when the page is refreshed.")
+                    .setWarning(new SettingWarning("This setting will reset the extension's settings back to the defaults. Are you sure you want to continue?")))
+        .addSetting(new ToggleSetting("resetLocalNextRefresh")
+                    .setName("Reset Extension data upon next refresh")
+                    .setDescription("Reset the data that the extension holds in regard to questions (eg. whiteboard data)")
+                    .setWarning(new SettingWarning("This setting will reset everything that the extension holds about Questions, eg. whiteboard data. Are you sure you want to continue?"))),
+
+    new DescriptivePanel("About", "About SparxPlus")
+        .setText(`
             Thanks for trying SparxPlus!
             <br>If you have anything to say about the extension, please leave a review at the <a href="${getGoogleLink()}">Chrome Web Store</a> page for this extension, or alternatively just join my discord, linked below! (This is so I can hear your feedback, and I can improve!)
             <br>
@@ -278,104 +148,97 @@ export const settingsFrontend = [
             <br>
             <br>This project is not affiliated with Sparx, SparxMaths and/or Sparx-learning.
             <br>
-            <br><h6>[SparxPlus version ${getVersion()}, last updated ${getLastUpdated()}]</h6>`
-        }
-    },
-    {
-        header: "Logs",
-        description: "Logs that SparxPlus has generated. (If you see any errors, please let the developer know!)",
-        panel: {
-            type: PanelType.Blank,
-            initialise: (section : any, header : any, description : any, panel : HTMLElement) => {
-                var logs = document.createElement("p")
-                panel.append(logs);
+            <br><h6>[SparxPlus version ${getVersion()}, last updated ${getLastUpdated()}]</h6>`),
 
-                loadedPanel = panel;
-                textObjectExpanded = false;
-                loadedShowObject = null;
+    new BlankPanel("Logs", "Logs outputted by SparxPlus")
+        .setInit((section : any, header : any, description : any, panel : HTMLElement) => {
+            var logs = document.createElement("p")
+            panel.append(logs);
 
-                const updateLogs = () => {
-                    if (loadedTextObject != null) {
-                        if (textObjectExpanded) {
-                            var fullTxt = "";
-                            for (var log of getLogs()) {
-                                fullTxt += log+"<br>";
-                            }
-                            fullTxt+="-- End of logs --"
+            loadedPanel = panel;
+            textObjectExpanded = false;
+            loadedShowObject = null;
 
-                            loadedTextObject.innerHTML = fullTxt;
-                        } else {
-                            var truncatedTxt = "";
-                            var i = 0;
-                            var isTruncated = false;
-                            for (var log of getLogs()) {
-                                i++;
-                                if (i <= logLength) truncatedTxt += log+"<br>";
-                                else isTruncated = true;
-                            }
-                            if (isTruncated && !textObjectExpanded && loadedShowObject == null) {
-                                loadedShowObject = document.createElement("a");
-                                loadedShowObject.textContent = "Click to show more"
-                                loadedShowObject.style.textDecoration = "underline"
-                                loadedShowObject.style.color = "blue";
-                                loadedShowObject.style.cursor = "pointer";
-                                loadedShowObject.onclick = (e) => {
-                                    textObjectExpanded = true;
-                                    if (loadedShowObject != null) loadedShowObject.remove()
-                                    loadedShowObject = null;
-
-                                    var fullTxt = "";
-                                    for (var log of getLogs()) {
-                                        fullTxt += log+"<br>";
-                                    }
-                                    fullTxt+="-- End of logs --"
-
-                                    if (loadedTextObject != null) loadedTextObject.innerHTML = fullTxt;
-                                }
-                                if (loadedPanel != null) loadedPanel.append(loadedShowObject)
-                            } else {
-                                truncatedTxt+="-- End of logs --"
-                            }
-                            loadedTextObject.innerHTML = truncatedTxt;
+            const updateLogs = () => {
+                if (loadedTextObject != null) {
+                    if (textObjectExpanded) {
+                        var fullTxt = "";
+                        for (var log of getLogs()) {
+                            fullTxt += log+"<br>";
                         }
+                        fullTxt+="-- End of logs --"
+
+                        loadedTextObject.innerHTML = fullTxt;
+                    } else {
+                        var truncatedTxt = "";
+                        var i = 0;
+                        var isTruncated = false;
+                        for (var log of getLogs()) {
+                            i++;
+                            if (i <= logLength) truncatedTxt += log+"<br>";
+                            else isTruncated = true;
+                        }
+                        if (isTruncated && !textObjectExpanded && loadedShowObject == null) {
+                            loadedShowObject = document.createElement("a");
+                            loadedShowObject.textContent = "Click to show more"
+                            loadedShowObject.style.textDecoration = "underline"
+                            loadedShowObject.style.color = "blue";
+                            loadedShowObject.style.cursor = "pointer";
+                            loadedShowObject.onclick = (e) => {
+                                textObjectExpanded = true;
+                                if (loadedShowObject != null) loadedShowObject.remove()
+                                loadedShowObject = null;
+
+                                var fullTxt = "";
+                                for (var log of getLogs()) {
+                                    fullTxt += log+"<br>";
+                                }
+                                fullTxt+="-- End of logs --"
+
+                                if (loadedTextObject != null) loadedTextObject.innerHTML = fullTxt;
+                            }
+                            if (loadedPanel != null) loadedPanel.append(loadedShowObject)
+                        } else {
+                            truncatedTxt+="-- End of logs --"
+                        }
+                        loadedTextObject.innerHTML = truncatedTxt;
                     }
                 }
-
-                if (loadedTextObject == null) {
-                    // avoid memory leaks ;)
-                    addChangedEvent(() => {
-                        updateLogs()
-                    })
-                }
-
-                loadedTextObject = logs;
-
-                updateLogs()
             }
-        }
-    },
+
+            if (loadedTextObject == null) {
+                // avoid memory leaks ;)
+                addChangedEvent(() => {
+                    updateLogs()
+                })
+            }
+
+            loadedTextObject = logs;
+
+            updateLogs()
+        })
 ]
 
 // keyboard shortcuts
-// each key is matched to a part of a class name, or element via the elementCheck function
+// each key is matched to a part of a class name, or element via the setCheckMatch function
 // this then performs an action on that element
-// keyStarted and keySuccessful functions are ran when the key is pressed and finished respectively.
-export const keyboardMapping = [
-    // see https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values
-    // for key names that aren't Key*
-    {
-        classMatches: ["SparxPlusBackQuestionButton", "BackButton", "SMLogo"], // happens in order
-        keys: ["Escape"],
-        action: Actions.Button,
-    },
-    {
-        classMatches: ["SMLogo"],
-        keys: ["p"],
-        action: Actions.Button,
-    },
-    {
-        classMatches: ["NavButton"],
-        elementCheck: (element : HTMLElement) => {
+// setKeyStarted and setKeySuccessful functions are ran when the key is pressed and finished respectively.
+export const keyboardMapping : KeyboardMapping[] = [
+    new KeyboardMapping()
+        .setKeys(["Escape"])
+        .setAction(Actions.Button)
+        .setClassMatches(["SparxPlusBackQuestionButton", "BackButton", "SMLogo"]),
+
+    new KeyboardMapping()
+        .setKeys(["p"])
+        .setAction(Actions.Button)
+        .setClassMatches(["SMLogo"]),
+
+    new KeyboardMapping()
+        .setKeys(["c"])
+        .setAction(Actions.Button)
+        .setClassMatches(["NavButton"])
+        .setCheckMatch((element : HTMLElement) => {
             try {
                 var name : string = "compulsory"
                 var children = element.children;
@@ -387,13 +250,13 @@ export const keyboardMapping = [
             } catch(e) {
                 return false;
             }
-        },
-        keys: ["c"],
-        action: Actions.Button,
-    },
-    {
-        classMatches: ["NavButton"],
-        elementCheck: (element : HTMLElement) => {
+        }),
+
+    new KeyboardMapping()
+        .setKeys(["x"])
+        .setAction(Actions.Button)
+        .setClassMatches(["NavButton"])
+        .setCheckMatch((element : HTMLElement) => {
             try {
                 var name : string = "xp boost"
                 var children = element.children;
@@ -405,13 +268,13 @@ export const keyboardMapping = [
             } catch(e) {
                 return false;
             }
-        },
-        keys: ["x"],
-        action: Actions.Button,
-    },
-    {
-        classMatches: ["NavButton"],
-        elementCheck: (element : HTMLElement) => {
+        }),
+
+    new KeyboardMapping()
+        .setKeys(["t"])
+        .setAction(Actions.Button)
+        .setClassMatches(["NavButton"])
+        .setCheckMatch((element : HTMLElement) => {
             try {
                 var name : string = "target"
                 var children = element.children;
@@ -423,13 +286,13 @@ export const keyboardMapping = [
             } catch(e) {
                 return false;
             }
-        },
-        keys: ["t"],
-        action: Actions.Button,
-    },
-    {
-        classMatches: ["NavButton"],
-        elementCheck: (element : HTMLElement) => {
+        }),
+
+    new KeyboardMapping()
+        .setKeys(["i"])
+        .setAction(Actions.Button)
+        .setClassMatches(["NavButton"])
+        .setCheckMatch((element : HTMLElement) => {
             try {
                 var name : string = "independent learning"
                 var children = element.children;
@@ -441,29 +304,28 @@ export const keyboardMapping = [
             } catch(e) {
                 return false;
             }
-        },
-        keys: ["i"],
-        action: Actions.Button,
-    },
-    {
-        classMatches: ["PackageAccordionTrigger"],
-        keys: ["q"],
-        action: Actions.Button,
-    },
-    {
-        classMatches: ["SparxPlusHomeworkButton"],
-        keys: ["h"],
-        action: Actions.Click,
-    },
-    {
-        classMatches: ["SparxPlusRevisionButton"],
-        keys: ["r"],
-        action: Actions.Click,
-    },
-    {
-        classMatches: ["AccordionContent"],
-        keySuccessful: (element : HTMLElement, key : KeyType) => {
-            // we work around the system because yes
+        }),
+
+    new KeyboardMapping()
+        .setKeys(["q"])
+        .setAction(Actions.Button)
+        .setClassMatches(["PackageAccordionTrigger"]),
+
+    new KeyboardMapping()
+        .setKeys(["h"])
+        .setAction(Actions.Click)
+        .setClassMatches(["SparxPlusHomeworkButton"]),
+
+    new KeyboardMapping()
+        .setKeys(["r"])
+        .setAction(Actions.Click)
+        .setClassMatches(["SparxPlusRevisionButton"]),
+
+    new KeyboardMapping()
+        .setKeys(["1", "2", "3", "4", "5", "6", "7", "8", "9"])
+        .setAction(Actions.None)
+        .setClassMatches(["AccordionContent"])
+        .setKeySuccessful((element : HTMLElement, key : string) => {
             let taskToClick = parseInt(key)-1;
             let current = 0;
 
@@ -483,15 +345,9 @@ export const keyboardMapping = [
             } catch(e) {
 
             }
-        },
-        keys: ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
-        action: Actions.None,
-    }
-]
+        }),
+];
 
-// whenever an element with a certain class is added/modified,
-// it is assigned a custom class. (under the conditions of elementCheck, if it exists)
-// (this is for styling / functionality / dark mode)
 export const classMapping = [
     {
         classMatches: ["QuestionScrollableContent"],
@@ -816,14 +672,14 @@ export const classMapping = [
                 menu.append(whiteboardContainer)
 
                 const setWhiteboardData = () => {
-                    question.questionData.setKey("Whiteboard", whiteboardData)
-                    question.questionData.updateUseDate();
-                    question.questionData.getData() .then((data : any) => {
-                        question.questionData.updateData(data);
+                    question.getData().setKey("Whiteboard", whiteboardData)
+                    question.getData().updateUseDate();
+                    question.getData().getData() .then((data : any) => {
+                        question.getData().updateData(data);
                     })
                 }
 
-                question.questionData.getKey("Whiteboard") .then((val) => {
+                question.getData().getKey("Whiteboard") .then((val) => {
                     whiteboardData = val == null ? [] : <string[]>val;
 
                     canvas.width = canvas.getBoundingClientRect().width

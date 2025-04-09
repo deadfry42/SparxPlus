@@ -1,5 +1,5 @@
-import { appendStyleContent, appendStyleSheet, Conditions, createNewOptionInDDM, createNewSettingsPanel, createWarningBox, deserialiseQuestionID, getDescendants, getQuestionID, getSVG, jumpscare, PanelType, PlatformID, QuestionData, QuestionID, sendNotification, SettingsType } from "../lib/defaults.js";
-import { baseLog, getIsRelease, log } from "../lib/index.js";
+import { Actions, appendStyleContent, appendStyleSheet, Conditions, createNewOptionInDDM, createNewSettingsPanel, createWarningBox, deserialiseQuestionID, getDescendants, getQuestionID, getSVG, jumpscare, PanelType, PlatformID, QuestionData, QuestionID, sendNotification, SettingsType } from "../lib/defaults.js";
+import { baseLog, getIsRelease, getLastUpdated, log } from "../lib/index.js";
 import { classMapping, customSettings, keyboardMapping, settingsFrontend } from "./index.js";
 
 export var updateDebugMenu : Function;
@@ -742,19 +742,15 @@ export var toggleDebugMenu : Function;
 
         let matched = false;
         for (let mapping of keyboardMapping) {
-            if (matched) break;
-            var viable = true;
-            var matches = mapping.classMatches;
-            var keys = mapping.keys;
-            var action : string = mapping.action;
+            var matches = mapping.getClassMatches();
+            var keys : string[] | null = mapping.getKeys();
+            var action : Actions | null = mapping.getAction();
 
             if (matches == null || keys == null || action == null) continue;
 
-            var elementCheck : Function | undefined = mapping.elementCheck;
-            var keyStarted : Function | undefined = mapping.keyStarted;
-            var keySuccessful : Function | undefined = mapping.keySuccessful;
-
-            if (!viable) continue;
+            var elementCheck : Function | null = mapping.getCheckMatch;
+            var keyStarted : Function | null = mapping.getKeyStarted;
+            var keySuccessful : Function | null = mapping.getKeySuccessful;
 
             var foundKey = null;
 
@@ -803,8 +799,8 @@ export var toggleDebugMenu : Function;
 
             // match, key pressed
 
-            switch((<string>action).toLowerCase()) {
-                case "click":
+            switch(action) {
+                case Actions.Click:
                     element.dispatchEvent(new MouseEvent("click", {
                         view: window,
                         button: 0,
@@ -815,7 +811,7 @@ export var toggleDebugMenu : Function;
                     if (keySuccessful != null) keySuccessful(element, foundKey)
                 break;
 
-                case "rightclick":
+                case Actions.RightClick:
                     element.dispatchEvent(new MouseEvent("click", {
                         view: window,
                         button: 2,
@@ -826,12 +822,12 @@ export var toggleDebugMenu : Function;
                     if (keySuccessful != null) keySuccessful(element, foundKey)
                 break;
 
-                case "button":
+                case Actions.Button:
                     if (element instanceof HTMLButtonElement) element.click();
                     if (keySuccessful != null) keySuccessful(element, foundKey)
                 break;
 
-                case "none":
+                case Actions.None:
                     if (keySuccessful != null) keySuccessful(element, foundKey)
                 break;
             }
