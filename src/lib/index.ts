@@ -1,7 +1,7 @@
-var logs = [];
-var changedEvents = [];
+var logs : string[] = [];
+var changedEvents : Function[] = [];
 
-function log(department, msg) {
+export function log(department : string, msg : string) {
     var res = "[SparxPlus] "+department+" // "+msg
     console.log(res)
     logs.push(res)
@@ -11,7 +11,7 @@ function log(department, msg) {
     }
 }
 
-function baseLog(msg) {
+export function baseLog(msg : string) {
     console.log(msg)
     logs.push(msg)
 
@@ -20,36 +20,36 @@ function baseLog(msg) {
     }
 }
 
-function getVersion() {
+export function getVersion() {
     // putting chrome / browser checking here instead of a browser variable cuz it'd fuck up the rest of the code
-    return "v"+(chrome == null ? browser : chrome).runtime.getManifest().version+""+(!getIsRelease() ? "-dev" : "")
+    return "v"+chrome.runtime.getManifest().version+""+(!getIsRelease() ? "-dev" : "")
 }
 
-function getIsRelease() {
+export function getIsRelease() {
     return false;
 }
 
-function getGithubLink() {
+export function getGithubLink() {
     return "https://github.com/deadfry42/SparxPlus"
 }
 
-function getDiscordLink() {
+export function getDiscordLink() {
     return "https://discord.gg/uKbdBa4M5B"
 }
 
-function getGoogleLink() {
+export function getGoogleLink() {
     return "https://chromewebstore.google.com/detail/sparx-plus/mlkhfcljmcjcnemaajbgmojapbkhoaik"
 }
 
-function getLastUpdated() {
+export function getLastUpdated() {
     return "6th of April, 2025"
 }
 
-function getLogs() {
+export function getLogs() {
     return logs;
 }
 
-function addChangedEvent(event) {
+export function addChangedEvent(event : Function) {
     changedEvents.push(event);
 }
 
