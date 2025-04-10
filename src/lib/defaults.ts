@@ -827,7 +827,7 @@ export class Panel {
     #title: string;
     #desc: string;
 
-    #init: Function | null = null;
+    init: Function | null = null;
 
     constructor(title: string, description: string) {
         this.#title = title;
@@ -843,12 +843,8 @@ export class Panel {
     }
 
     setInit(callback : Function) : Panel {
-        this.#init = callback;
+        this.init = callback;
         return this;
-    }
-
-    getInit() : Function | null {
-        return this.#init;
     }
 };
 

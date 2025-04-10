@@ -59,6 +59,11 @@ const configurePanels = (sparxPanelClassName : string, settingsWarning : HTMLEle
         } else {
             log("Settings", "Invalid panel configuration!")
             baseLog(panelConfig);
+            continue;
+        }
+
+        if (panelConfig.init != null) {
+            panelConfig.init(panel);
         }
 
         configuredPanels.push(panelSection)
