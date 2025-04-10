@@ -1,5 +1,4 @@
-import { customSettings } from "../maths/index.ts";
-import { log, baseLog } from "./index.ts";
+import { log, baseLog } from "./index";
 
 export function convertNumberToLetter(num : number) {
     return String.fromCharCode((num-1) + 'A'.charCodeAt(0))
@@ -459,13 +458,13 @@ export const enum PlatformID {
     SparxMaths,
     SparxScience,
     Unknown
-}
+};
 
 export const StrokeType = {
     Stroke: 0,
     Terminator: 1,
     Unknown: -1,
-}
+};
 
 // classes
 
@@ -486,7 +485,7 @@ export class Question {
     getData() : QuestionData {
         return this.#questionData;
     }
-}
+};
 
 export class QuestionData {
     #data : any;
@@ -563,7 +562,7 @@ export class QuestionData {
             })
         })
     }
-}
+};
 
 export class QuestionID {
     #uri : string;
@@ -624,7 +623,7 @@ export class QuestionID {
     getID() : string {
         return `QuestionID/${this.getPlatformID()}/${this.#revision ? "Rev" : "Std"}/${this.getURI()}:${this.getTask()}:${this.getQuestion()}`
     }
-}
+};
 
 export class WhiteboardStroke {
     #x : number | null = null;
@@ -646,9 +645,11 @@ export class WhiteboardStroke {
     }
 
     getColour() : string {
-        return this.#customColour == null ?
-        customSettings.darkMode ? (customSettings.whiteboardDarkModeOverride ? "#000000" : "#FFFFFF") : "#000000"
-        : this.#customColour;
+        // return this.#customColour == null ?
+        // customSettings.darkMode ? (customSettings.whiteboardDarkModeOverride ? "#000000" : "#FFFFFF") : "#000000"
+        // : this.#customColour;
+
+        return this.#customColour == null ? "#000000" : this.#customColour;
     }
 
     serialise() : string {
@@ -660,7 +661,7 @@ export class WhiteboardStroke {
         data+=" "+this.getColour();
         return data;
     }
-}
+};
 
 export class TerminatedWhiteboardStroke extends WhiteboardStroke {
     constructor() {
@@ -671,7 +672,7 @@ export class TerminatedWhiteboardStroke extends WhiteboardStroke {
         const version = 0;
         return version+" "+StrokeType.Terminator;
     }
-}
+};
 
 export class DefaultPenWhiteboardStroke extends WhiteboardStroke {
     constructor(x : number, y : number) {
@@ -687,7 +688,7 @@ export class DefaultPenWhiteboardStroke extends WhiteboardStroke {
         data+=" !"
         return data;
     }
-}
+};
 
 export class ClassMapping {
     #classMatches: string[] | null = null;
@@ -779,7 +780,7 @@ export class ClassMapping {
     getConditions() : Conditions[] | null {
         return this.#conditions;
     }
-}
+};
 
 export class KeyboardMapping {
     #action : Actions | null = null;
@@ -843,7 +844,7 @@ export class KeyboardMapping {
     getKeys() : string[] | null {
         return this.#keys;
     }
-}
+};
 
 export class Panel {
     #title: string;
@@ -872,13 +873,13 @@ export class Panel {
     getInit() : Function | null {
         return this.#init;
     }
-}
+};
 
 export class BlankPanel extends Panel {
     constructor(title: string, description: string) {
         super(title, description)
     }
-}
+};
 
 export class DescriptivePanel extends Panel {
     #text: string | null = null;
@@ -895,7 +896,7 @@ export class DescriptivePanel extends Panel {
     getText() : string | null {
         return this.#text;
     }
-}
+};
 
 export class SettingsPanel extends Panel {
     #settings: Setting[] | null = null;
@@ -920,7 +921,7 @@ export class SettingsPanel extends Panel {
     getSettings() : Setting[] | null {
         return this.#settings;
     }
-}
+};
 
 export class Setting {
     #warning: SettingWarning | null = null;
@@ -972,13 +973,13 @@ export class Setting {
     getDescription() : string | null {
         return this.#description;
     }
-}
+};
 
 export class ToggleSetting extends Setting {
     constructor(variableName : string) {
         super(variableName);
     }
-}
+};
 
 export class InputSetting extends Setting {
     #placeholder : string | null = null;
@@ -995,7 +996,7 @@ export class InputSetting extends Setting {
     getPlaceholder() : string | null {
         return this.#placeholder;
     }
-}
+};
 
 export class SettingWarning {
     #static: boolean | null = null;
@@ -1027,4 +1028,4 @@ export class SettingWarning {
     getStatic() : boolean | null {
         return this.#static;
     }
-}
+};

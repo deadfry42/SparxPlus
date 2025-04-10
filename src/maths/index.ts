@@ -1,6 +1,5 @@
-import { Actions, Conditions, jumpscare, getQuestion, createBlur, createBlurredMenu, TerminatedWhiteboardStroke, DefaultPenWhiteboardStroke, PlatformID, getSVG, deserialiseWhiteboardStroke, WhiteboardStroke, KeyboardMapping, Panel, SettingsPanel, SettingWarning, InputSetting, ToggleSetting, DescriptivePanel, BlankPanel} from "../lib/defaults.ts"
-import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent, log } from "../lib/index.ts";
-import { updateDebugMenu } from "./api.ts";
+import { Actions, Conditions, jumpscare, getQuestion, createBlur, createBlurredMenu, TerminatedWhiteboardStroke, DefaultPenWhiteboardStroke, PlatformID, getSVG, deserialiseWhiteboardStroke, WhiteboardStroke, KeyboardMapping, Panel, SettingsPanel, SettingWarning, InputSetting, ToggleSetting, DescriptivePanel, BlankPanel} from "../lib/defaults"
+import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent, log } from "../lib/index";
 
 // settings which are set by the user
 // and used to determine what features should be available
@@ -35,6 +34,17 @@ export const customSettings : { [key: string]: any } = { // default settings
     // calculatorButton: true, // click the "Calculator Allowed" button and bring up a calculator
     // bookworkTracker: false, // track the bookwork codes in a list, so that you can write them down later
 };
+
+export var updateDebugMenu : Function | null; 
+export var toggleDebugMenu : Function | null;
+
+export function setUpdateDebugMenu(callback : Function) {
+    updateDebugMenu = callback
+}
+
+export function setToggleDebugMenu(callback : Function) {
+    toggleDebugMenu = callback
+}
 
 var loadedTextObject : HTMLElement | null = null;
 var loadedShowObject : HTMLElement | null = null;
@@ -352,7 +362,7 @@ export const classMapping = [
         classMatches: ["QuestionScrollableContent"],
         conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added, Conditions.Removed],
         ifMatched: () => {
-            updateDebugMenu()
+            if (updateDebugMenu != null) updateDebugMenu()
         },
     },
     {

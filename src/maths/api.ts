@@ -1,9 +1,6 @@
-import { Actions, appendStyleContent, appendStyleSheet, BlankPanel, Conditions, createNewOptionInDDM, createNewSettingsPanel, createWarningBox, DescriptivePanel, deserialiseQuestionID, getDescendants, getQuestionID, getSVG, InputSetting, jumpscare, PanelType, PlatformID, QuestionData, QuestionID, sendNotification, Setting, SettingsPanel, SettingsType, ToggleSetting } from "../lib/defaults.ts";
-import { baseLog, getIsRelease, getLastUpdated, log } from "../lib/index.ts";
-import { classMapping, customSettings, keyboardMapping, settingsFrontend } from "./index.ts";
-
-export var updateDebugMenu : Function;
-export var toggleDebugMenu : Function;
+import { Actions, appendStyleContent, appendStyleSheet, BlankPanel, Conditions, createNewOptionInDDM, createNewSettingsPanel, createWarningBox, DescriptivePanel, deserialiseQuestionID, getDescendants, getQuestionID, getSVG, InputSetting, jumpscare, PanelType, PlatformID, QuestionData, QuestionID, sendNotification, Setting, SettingsPanel, SettingsType, ToggleSetting } from "../lib/defaults";
+import { baseLog, getIsRelease, getLastUpdated, log } from "../lib/index";
+import { classMapping, customSettings, keyboardMapping, settingsFrontend, setUpdateDebugMenu, setToggleDebugMenu, toggleDebugMenu } from "./index";
 
 (async () => {
     log("Maths", "Sparx Plus started with SparxMaths!")
@@ -160,7 +157,7 @@ export var toggleDebugMenu : Function;
     // and also async
     (async () => {
 
-        updateDebugMenu = () => {
+        setUpdateDebugMenu(() => {
             
             try {
                 var questionID : QuestionID | null = getQuestionID(PlatformID.SparxMaths);
@@ -169,15 +166,15 @@ export var toggleDebugMenu : Function;
             } catch(e) {
                 qIDTag.innerText = ""
             }
-        }
+        })
 
-        toggleDebugMenu = () => {
+        setToggleDebugMenu(() => {
             if (debugMenu.classList.contains("SparxPlusDebugMenuHidden")) {
                 debugMenu.classList.remove("SparxPlusDebugMenuHidden")
             } else {
                 debugMenu.classList.add("SparxPlusDebugMenuHidden")
             }
-        }
+        })
 
         const debugMenu = document.createElement("div")
         debugMenu.className = "SparxPlusDebugMenu SparxPlusDebugMenuHidden"
@@ -227,7 +224,7 @@ export var toggleDebugMenu : Function;
                 });
             }
             if (res.enableDebugByDefault) {
-                toggleDebugMenu();
+                if (toggleDebugMenu != null) toggleDebugMenu();
             }
         }
 
