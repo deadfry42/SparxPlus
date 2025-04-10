@@ -1,5 +1,6 @@
 import { Actions, appendStyleContent, appendStyleSheet, BlankPanel, Conditions, createNewOptionInDDM, createNewSettingsPanel, createWarningBox, DescriptivePanel, deserialiseQuestionID, getDescendants, getQuestionID, getSVG, InputSetting, jumpscare, PanelType, PlatformID, QuestionData, QuestionID, sendNotification, Setting, SettingsPanel, SettingsType, ToggleSetting } from "../lib/defaults";
 import { baseLog, getIsRelease, getLastUpdated, log } from "../lib/index";
+import { applySettingsPage } from "./features/settings";
 import { classMapping, customSettings, keyboardMapping, settingsFrontend, setUpdateDebugMenu, setToggleDebugMenu, toggleDebugMenu } from "./index";
 
 (async () => {
@@ -197,6 +198,7 @@ import { classMapping, customSettings, keyboardMapping, settingsFrontend, setUpd
         log("HTML", "Page finished loading!")
 
         const settingsLoaded = (res : any) => {
+            baseLog(res)
             if (res.darkMode) {
                 appendStyleSheet("darkmodeSP", chrome.runtime.getURL("assets/css/darkmodemaths.css"));
             }
@@ -283,231 +285,236 @@ import { classMapping, customSettings, keyboardMapping, settingsFrontend, setUpd
 
                                 if (settings == null) return;
 
-                                var SettingsHeader = document.createElement("h1")
-                                SettingsHeader.textContent = "SparxPlus settings"
+                                applySettingsPage(settings, name)
 
-                                var settingsWarningBox = createWarningBox("Settings will apply after refreshing the page")
-                                settingsWarningBox.style.display = "none"
+                                // var SettingsHeader = document.createElement("h1")
+                                // SettingsHeader.textContent = "SparxPlus settings"
 
-                                settings.append(SettingsHeader)
-                                settings.append(settingsWarningBox)
+                                // var settingsWarningBox = createWarningBox("Settings will apply after refreshing the page")
+                                // settingsWarningBox.style.display = "none"
 
-                                if (!getIsRelease()) {        
-                                    settings.append(createWarningBox("This is not a tagged release version of Sparx Plus - some features may be unintentionally broken, or in the works!"))
-                                }
+                                // settings.append(SettingsHeader)
+                                // settings.append(settingsWarningBox)
 
-                                for (var panelConfig of settingsFrontend) {
-                                    var header = document.createElement("h2")
-                                    header.textContent = panelConfig.getTitle()
+                                // if (!getIsRelease()) {        
+                                //     settings.append(createWarningBox("This is not a tagged release version of Sparx Plus - some features may be unintentionally broken, or in the works!"))
+                                // }
 
-                                    var section = document.createElement("section")
+                                // for (let panelConfig of settingsFrontend) {
+                                //     let header = document.createElement("h2")
+                                //     header.textContent = panelConfig.getTitle()
+
+                                //     let section = document.createElement("section")
                                     
-                                    var description = document.createElement("p")
-                                    var descText = panelConfig.getDescription()
-                                    if (descText != null) description.innerHTML = descText;
+                                //     let description = document.createElement("p")
+                                //     let descText = panelConfig.getDescription()
+                                //     if (descText != null) description.innerHTML = descText;
 
-                                    var panel = createNewSettingsPanel(name)
+                                //     let panel = createNewSettingsPanel(name)
 
-                                    if (panelConfig instanceof SettingsPanel) {
+                                //     if (panelConfig instanceof SettingsPanel) {
 
-                                        // settings panel
+                                //         baseLog(panelConfig)
+
+                                //         // settings panel
+
+                                //         let settingDiv = document.createElement("div")
                                         
-                                        const settingsList = <Setting[]>panelConfig.getSettings()
-                                        for (const setting of settingsList) {
-                                            var settingVariableName = setting.getVariableName();
-                                            var settingName : string = <string>setting.getName() == null ? "Unknown" : <string>setting.getName();
-                                            var settingDesc : string = <string>setting.getDescription() == null ? "Unknown" : <string>setting.getDescription();
-                                            var settingWarning = setting.getWarning();
-                                            var isExperimental : boolean = <boolean>setting.getExperimental() == null ? false : <boolean>setting.getExperimental();
+                                //         let settingsList = <Setting[]>panelConfig.getSettings()
+                                //         for (let setting of settingsList) {
+                                //             let settingVariableName = setting.getVariableName();
+                                //             let settingName : string = <string>setting.getName() == null ? "Unknown" : <string>setting.getName();
+                                //             let settingDesc : string = <string>setting.getDescription() == null ? "Unknown" : <string>setting.getDescription();
+                                //             let settingWarning = setting.getWarning();
+                                //             let isExperimental : boolean = <boolean>setting.getExperimental() == null ? false : <boolean>setting.getExperimental();
 
-                                            var settingVariable : any = customSettings[settingVariableName];
+                                //             var settingVariable : any = customSettings[settingVariableName];
 
-                                            let settingDiv = document.createElement("div")
+                                //             let settingContentDiv = document.createElement("div")
+                                //             settingContentDiv.style.display = "flex";
 
-                                            let settingContentDiv = document.createElement("div")
-                                            settingContentDiv.style.display = "flex";
+                                //             let warning : HTMLDivElement | null = null;
+                                //             if (settingWarning != null) {
+                                //                 let text = settingWarning.getText() == null ? "" : settingWarning.getText()
+                                //                 let info = settingWarning.getInformational() == null ? false : settingWarning.getInformational()
+                                //                 warning = createWarningBox(text,info);
+                                //             }
 
-                                            let warning : HTMLDivElement | null = null;
-                                            if (settingWarning != null) {
-                                                var text = settingWarning.getText() == null ? "" : settingWarning.getText()
-                                                var info = settingWarning.getInformational() == null ? false : settingWarning.getInformational()
-                                                warning = createWarningBox(text,info);
-                                            }
+                                //             let labelDiv = document.createElement("div")
+                                //             labelDiv.ariaOrientation = "vertical"
+                                //             labelDiv.setAttribute("data-orientation", "vertical")
+                                //             labelDiv.style.padding = "10px"
+                                //             labelDiv.style.maxWidth = "auto"
+                                //             labelDiv.style.paddingBottom = "3px"
+                                //             labelDiv.style.marginBottom = "3px"
 
-                                            let labelDiv = document.createElement("div")
-                                            labelDiv.ariaOrientation = "vertical"
-                                            labelDiv.setAttribute("data-orientation", "vertical")
-                                            labelDiv.style.padding = "10px"
-                                            labelDiv.style.maxWidth = "auto"
-                                            labelDiv.style.paddingBottom = "3px"
-                                            labelDiv.style.marginBottom = "3px"
+                                //             let title = document.createElement("div")
+                                //             title.ariaOrientation = "horizontal"
+                                //             title.style.display = "flex";
 
-                                            let title = document.createElement("div")
-                                            title.ariaOrientation = "horizontal"
-                                            title.style.display = "flex";
+                                //             let titleTxt = document.createElement("h4")
+                                //             titleTxt.innerHTML = settingName
+                                //             titleTxt.style.maxWidth = "auto"
 
-                                            let titleTxt = document.createElement("h4")
-                                            titleTxt.innerHTML = settingName
-                                            titleTxt.style.maxWidth = "auto"
-
-                                            if (isExperimental) {
-                                                let experimental = getSVG("experimental", "experimental")
-                                                experimental.style.maxWidth = "20"
-                                                experimental.style.maxHeight = "20";
-                                                title.append(experimental)
-                                            }
-                                            title.append(titleTxt)
+                                //             if (isExperimental) {
+                                //                 let experimental = getSVG("experimental", "experimental")
+                                //                 experimental.style.maxWidth = "20"
+                                //                 experimental.style.maxHeight = "20";
+                                //                 title.append(experimental)
+                                //             }
+                                //             title.append(titleTxt)
                                             
-                                            let desc = document.createElement("p")
-                                            desc.innerHTML = settingDesc
-                                            desc.style.maxWidth = "auto"
-                                            desc.style.padding = "0"
-                                            desc.style.margin = "0";
+                                //             let desc = document.createElement("p")
+                                //             desc.innerHTML = settingDesc
+                                //             desc.style.maxWidth = "auto"
+                                //             desc.style.padding = "0"
+                                //             desc.style.margin = "0";
 
-                                            labelDiv.append(title)
-                                            labelDiv.append(desc)
+                                //             labelDiv.append(title)
+                                //             labelDiv.append(desc)
 
-                                            if (setting instanceof ToggleSetting) {
-                                                let switchlabel = document.createElement("label")
-                                                let inp = document.createElement("input")
-                                                let slider = document.createElement("span")
+                                //             if (setting instanceof ToggleSetting) {
+                                //                 let switchlabel = document.createElement("label")
+                                //                 let inp = document.createElement("input")
+                                //                 let slider = document.createElement("span")
 
-                                                switchlabel.className = "switch"
-                                                switchlabel.style.marginTop = "10px"
-                                                slider.className = "slider round"
-                                                inp.type = "checkbox"
+                                //                 switchlabel.className = "switch"
+                                //                 switchlabel.style.marginTop = "10px"
+                                //                 slider.className = "slider round"
+                                //                 inp.type = "checkbox"
 
-                                                inp.checked = settingVariable
+                                //                 inp.checked = settingVariable
 
-                                                inp.addEventListener('change', e => {
-                                                    chrome.storage.sync.set({
-                                                        [settingVariableName]: inp.checked
-                                                    })
+                                //                 inp.addEventListener('change', e => {
+                                //                     chrome.storage.sync.set({
+                                //                         [settingVariableName]: inp.checked
+                                //                     })
 
-                                                    settingsWarningBox.style.display = "block"
+                                //                     settingsWarningBox.style.display = "block"
                                                     
-                                                    if (settingWarning != null) {
-                                                        if (!settingWarning.getStatic() && warning != null) {
-                                                            if (!inp.checked) {
-                                                                warning.style.display = "none"
-                                                            } else {
-                                                                warning.style.display = "block"
-                                                            }
-                                                        }
-                                                    }
-                                                });
+                                //                     if (settingWarning != null) {
+                                //                         if (!settingWarning.getStatic() && warning != null) {
+                                //                             if (!inp.checked) {
+                                //                                 warning.style.display = "none"
+                                //                             } else {
+                                //                                 warning.style.display = "block"
+                                //                             }
+                                //                         }
+                                //                     }
+                                //                 });
 
-                                                switchlabel.append(inp)
-                                                switchlabel.append(slider)
+                                //                 switchlabel.append(inp)
+                                //                 switchlabel.append(slider)
 
-                                                settingContentDiv.append(switchlabel)
+                                //                 settingContentDiv.append(switchlabel)
                                                 
-                                                if (settingWarning != null && warning != null) {
-                                                    if (settingWarning.getStatic()) warning.style.display = "block"
-                                                    else {
-                                                        if (!inp.checked) {
-                                                            warning.style.display = "none"
-                                                        } else {
-                                                            warning.style.display = "block"
-                                                        }
-                                                    }
-
-                                                    settingDiv.append(warning)
-                                                }
-                                            } else if (setting instanceof InputSetting) {
-                                                let theDiv = document.createElement("div")
+                                //                 if (settingWarning != null && warning != null) {
+                                //                     if (settingWarning.getStatic()) warning.style.display = "block"
+                                //                     else {
+                                //                         if (!inp.checked) {
+                                //                             warning.style.display = "none"
+                                //                         } else {
+                                //                             warning.style.display = "block"
+                                //                         }
+                                //                     }
+                                //                 }
+                                //             } else if (setting instanceof InputSetting) {
+                                //                 let theDiv = document.createElement("div")
         
-                                                let switchlabel2 = document.createElement("label")
-                                                let inp2 = document.createElement("textarea")
+                                //                 let switchlabel2 = document.createElement("label")
+                                //                 let inp2 = document.createElement("textarea")
     
-                                                inp2.value = settingVariable
+                                //                 inp2.value = settingVariable
     
-                                                inp2.addEventListener('change', (e : Event) => {
-                                                    const value = ((<HTMLInputElement>e.target).value)
-                                                    chrome.storage.sync.set({
-                                                        [settingVariableName]: value
-                                                    })
+                                //                 inp2.addEventListener('change', (e : Event) => {
+                                //                     const value = ((<HTMLInputElement>e.target).value)
+                                //                     chrome.storage.sync.set({
+                                //                         [settingVariableName]: value
+                                //                     })
 
-                                                    settingsWarningBox.style.display = "block"
+                                //                     settingsWarningBox.style.display = "block"
 
-                                                    if (settingWarning != null) {
-                                                        if (!settingWarning.getStatic() && warning != null) {
-                                                            if (value == "" || value == null) {
-                                                                warning.style.display = "none"
-                                                            } else {
-                                                                warning.style.display = "block"
-                                                            }
-                                                        }
-                                                    }
+                                //                     if (settingWarning != null) {
+                                //                         if (!settingWarning.getStatic() && warning != null) {
+                                //                             if (value == "" || value == null) {
+                                //                                 warning.style.display = "none"
+                                //                             } else {
+                                //                                 warning.style.display = "block"
+                                //                             }
+                                //                         }
+                                //                     }
                                                     
-                                                });
+                                //                 });
 
-                                                if (setting.getPlaceholder() != null) {
-                                                    var placeholder = <string>setting.getPlaceholder();
-                                                    if (placeholder != null) {
-                                                        inp2.placeholder = placeholder
-                                                    }
-                                                }
+                                //                 if (setting.getPlaceholder() != null) {
+                                //                     var placeholder = <string>setting.getPlaceholder();
+                                //                     if (placeholder != null) {
+                                //                         inp2.placeholder = placeholder
+                                //                     }
+                                //                 }
 
-                                                inp2.style.minWidth = `${100}%`
-                                                inp2.style.resize = "both"
+                                //                 inp2.style.minWidth = `${100}%`
+                                //                 inp2.style.resize = "both"
 
-                                                settingDiv.ariaOrientation = "vertical"
-                                                settingDiv.setAttribute("data-orientation", "vertical")
+                                //                 settingDiv.ariaOrientation = "vertical"
+                                //                 settingDiv.setAttribute("data-orientation", "vertical")
     
-                                                switchlabel2.append(inp2)
+                                //                 switchlabel2.append(inp2)
 
-                                                settingContentDiv.append(switchlabel2)
+                                //                 settingContentDiv.append(switchlabel2)
 
-                                                if (settingWarning != null && warning != null) {
-                                                    if (settingWarning.getStatic()) {
-                                                        warning.style.display = "block"
-                                                    } else {
-                                                        if (inp2.value == "" || inp2.value == null) {
-                                                            warning.style.display = "none"
-                                                        } else {
-                                                            warning.style.display = "block"
-                                                        }
-                                                    }
-                                                    theDiv.append(warning)
-                                                }
+                                //                 if (settingWarning != null && warning != null) {
+                                //                     if (settingWarning.getStatic()) {
+                                //                         warning.style.display = "block"
+                                //                     } else {
+                                //                         if (inp2.value == "" || inp2.value == null) {
+                                //                             warning.style.display = "none"
+                                //                         } else {
+                                //                             warning.style.display = "block"
+                                //                         }
+                                //                     }
+                                //                     // theDiv.append(warning)
+                                //                 }
 
-                                                settingDiv.append(theDiv)
-                                            }
+                                //                 settingDiv.append(theDiv)
+                                //             }
 
-                                            settingContentDiv.append(labelDiv)
-                                            settingDiv.append(settingContentDiv)
-                                        }
+                                //             settingContentDiv.append(labelDiv)
+                                //             settingDiv.append(settingContentDiv)
+                                //             if (warning != null) settingDiv.append(warning)
+                                //         }
 
-                                    } else if (panelConfig instanceof DescriptivePanel) {
-                                        var content = document.createElement("p")
-                                        var text = <string>panelConfig.getText()
-                                        if (text != null) content.innerHTML = text;
+                                        
+                                //         panel.append(settingDiv)
+                                //     } else if (panelConfig instanceof DescriptivePanel) {
+                                //         let content = document.createElement("p")
+                                //         let text = <string>panelConfig.getText()
+                                //         if (text != null) content.innerHTML = text;
 
-                                        panel.append(content)
-                                    } else if (panelConfig instanceof BlankPanel) {
-                                        // here so the code doesn't error out
-                                    } else {
-                                        log("Settings", "Invalid panel loaded!")
-                                        baseLog(panelConfig)
-                                    }
+                                //         panel.append(content)
+                                //     } else if (panelConfig instanceof BlankPanel) {
+                                //         // here so the code doesn't error out
+                                //     } else {
+                                //         log("Settings", "Invalid panel loaded!")
+                                //         baseLog(panelConfig)
+                                //     }
                                     
-                                    section.append(header)
-                                    section.append(description)
-                                    section.append(panel)
+                                //     section.append(header)
+                                //     section.append(description)
+                                //     section.append(panel)
         
-                                    settings.append(section)
+                                //     settings.append(section)
 
-                                    if (panelConfig.getInit() != null) {
-                                        try {
-                                            var initFunc : Function = <Function>panelConfig.getInit();
-                                            if (initFunc != null) initFunc(section, header, description, panel);
-                                        } catch(e) {
-                                            log("Settings", "Failed to run panel initialisation!")
-                                            baseLog(e)
-                                        }
-                                    }
-                                }
+                                //     if (panelConfig.getInit() != null) {
+                                //         try {
+                                //             var initFunc : Function = <Function>panelConfig.getInit();
+                                //             if (initFunc != null) initFunc(section, header, description, panel);
+                                //         } catch(e) {
+                                //             log("Settings", "Failed to run panel initialisation!")
+                                //             baseLog(e)
+                                //         }
+                                //     }
+                                // }
                             } else if (name.includes("DropdownMenuContent")) {
                                 var menu = realnode;
 

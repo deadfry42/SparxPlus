@@ -58,7 +58,7 @@ var logLength = 25;
 // i'm not going to explain how it works here: it's a bit too complex to feasibly do so
 export const settingsFrontend : Panel[] = [
     new SettingsPanel("UI Tweaks", "Small UI tweaks to fix issues with Sparx.")
-        .addSetting(new ToggleSetting("darkmode")
+        .addSetting(new ToggleSetting("darkMode")
                     .setName("Dark mode")
                     .setDescription("Enable a native dark mode for the website (doesn't support images unfortunately)")
                     .setExperimental(true)

@@ -645,6 +645,9 @@ export class WhiteboardStroke {
     }
 
     getColour() : string {
+
+        // TODO: finish this default pen impl.
+
         // return this.#customColour == null ?
         // customSettings.darkMode ? (customSettings.whiteboardDarkModeOverride ? "#000000" : "#FFFFFF") : "#000000"
         // : this.#customColour;
@@ -913,6 +916,8 @@ export class SettingsPanel extends Panel {
     addSetting(setting : Setting) : SettingsPanel {
         if (this.#settings == null) {
             this.#settings = [];
+            this.#settings.push(setting);
+        } else {
             this.#settings.push(setting);
         }
         return this;
