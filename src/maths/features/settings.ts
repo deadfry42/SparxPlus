@@ -5,7 +5,7 @@ import { BlankPanel, createNewSettingsPanel, createWarningBox, DescriptivePanel,
 export const applySettingsPage = (sparxSettingsDiv : HTMLElement, sparxPanelClassName : string) => {
     var settingsWarning = applyHeader(sparxSettingsDiv);
 
-    var configuredPanels : HTMLElement[] = configurePanels(sparxSettingsDiv, sparxPanelClassName, settingsWarning);
+    var configuredPanels : HTMLElement[] = configurePanels(sparxPanelClassName, settingsWarning);
 
     for (let panel of configuredPanels) {
         sparxSettingsDiv.append(panel);
@@ -30,7 +30,7 @@ const applyHeader = (sparxSettingsDiv : HTMLElement) : HTMLElement => {
     return settingsWarningBox;
 }
 
-const configurePanels = (sparxSettingsDiv : HTMLElement, sparxPanelClassName : string, settingsWarning : HTMLElement) : HTMLElement[] => {
+const configurePanels = (sparxPanelClassName : string, settingsWarning : HTMLElement) : HTMLElement[] => {
     var configuredPanels : HTMLElement[] = [];
 
     for (let panelConfig of settingsFrontend) {
