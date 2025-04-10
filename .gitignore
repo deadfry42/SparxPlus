@@ -1,5 +1,5 @@
 SparxPlus.zip
-src/css/reference-css.css
+assets/css/sparx-reference.css
 .VSCodeCounter
 node_modules
 dist
