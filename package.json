@@ -1,0 +1,48 @@
+{
+  "name": "SparxPlus",
+  "version": "0.3.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "license": "GPL-version-3.0",
+  "private": false,
+  "engines": {
+    "node": ">= 14.0.0",
+    "npm": ">= 6.0.0"
+  },
+  "homepage": "https://github.com/deadfry42/SparxPlus",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deadfry42/SparxPlus.git"
+  },
+  "bugs": "https://github.com/deadfry42/SparxPlus/issues",
+  "keywords": [],
+  "author": {
+    "name": "deadfry42",
+    "email": "nk.personal.work@gmail.com",
+    "url": "https://nikodem.co.uk"
+  },
+  "contributors": [],
+  "scripts": {
+    "run": "webpack --config webpack.dev.cjs",
+    "build": "webpack --config webpack.prod.cjs"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-typescript": "^7.27.0",
+    "@tsconfig/recommended": "^1.0.8",
+    "@types/chrome": "^0.0.313",
+    "babel-loader": "^10.0.0",
+    "copy-webpack-plugin": "^13.0.0",
+    "html-webpack-plugin": "^5.6.3",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "webpack": "^5.99.5",
+    "webpack-cli": "^6.0.1",
+    "webpack-merge": "^6.0.1"
+  },
+  "dependencies": {
+    "circular-dependency-plugin": "^5.2.2"
+  }
+}

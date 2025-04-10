@@ -17,6 +17,13 @@ Compatible with:
 
 This extension is not affiliated with Sparx, otherwise known as [Sparx-Learning](https://sparx-learning.com).  
   
+### Instructions on how to compile
+* Clone this repo
+* (Make sure you have npm installed)
+* run `npm i`
+* once done, run `npm run build`
+* once done, the finished extension is placed in the dist folder.
+
 ### How to download
 Visit https://nikodem.co.uk/ and check the "Sparx Plus" Tab.  
 > Available for Chrome & Firefox, with Safari planned in the future.
