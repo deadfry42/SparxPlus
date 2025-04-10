@@ -1,7 +1,7 @@
 {
     "name": "Sparx Plus",
     "description": "A browser extension for SparxLearning web apps to improve QoL (without sacrificing learning!) Compatible with SparxMaths.",
-    "version": "0.2.6",
+    "version": "0.3.0",
     "manifest_version": 3,
     "permissions": ["storage"],
     "browser_specific_settings": {
