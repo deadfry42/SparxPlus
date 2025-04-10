@@ -164,7 +164,7 @@ export const settingsFrontend : Panel[] = [
             <br><h6>[SparxPlus version ${getVersion()}, last updated ${getLastUpdated()}]</h6>`),
 
     new BlankPanel("Logs", "Logs outputted by SparxPlus")
-        .setInit((section : any, header : any, description : any, panel : HTMLElement) => {
+        .setInit((panel : HTMLElement) => {
             var logs = document.createElement("p")
             panel.append(logs);
 
