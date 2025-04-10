@@ -1,5 +1,15 @@
 import { log } from "./index";
 
+export var customSettings : { [key: string]: any } = {};
+
+export function setCustomSettings(settings : { [key: string]: any }) {
+    customSettings = settings;
+}
+
+export function getCustomSettings() : { [key: string]: any } {
+    return customSettings;
+}
+
 export function convertNumberToLetter(num : number) {
     return String.fromCharCode((num-1) + 'A'.charCodeAt(0))
 }
@@ -645,14 +655,9 @@ export class WhiteboardStroke {
     }
 
     getColour() : string {
-
-        // TODO: finish this default pen impl.
-
-        // return this.#customColour == null ?
-        // customSettings.darkMode ? (customSettings.whiteboardDarkModeOverride ? "#000000" : "#FFFFFF") : "#000000"
-        // : this.#customColour;
-
-        return this.#customColour == null ? "#000000" : this.#customColour;
+        return this.#customColour == null ?
+        getCustomSettings().darkMode ? (getCustomSettings().whiteboardDarkModeOverride ? "#000000" : "#FFFFFF") : "#000000"
+        : this.#customColour;
     }
 
     serialise() : string {

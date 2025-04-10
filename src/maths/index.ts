@@ -1,4 +1,4 @@
-import { Actions, Conditions, jumpscare, getQuestion, createBlur, createBlurredMenu, TerminatedWhiteboardStroke, DefaultPenWhiteboardStroke, PlatformID, getSVG, deserialiseWhiteboardStroke, WhiteboardStroke, KeyboardMapping, Panel, SettingsPanel, SettingWarning, InputSetting, ToggleSetting, DescriptivePanel, BlankPanel} from "../lib/defaults"
+import { Actions, Conditions, jumpscare, getQuestion, createBlur, createBlurredMenu, TerminatedWhiteboardStroke, DefaultPenWhiteboardStroke, PlatformID, getSVG, deserialiseWhiteboardStroke, WhiteboardStroke, KeyboardMapping, Panel, SettingsPanel, SettingWarning, InputSetting, ToggleSetting, DescriptivePanel, BlankPanel, setCustomSettings} from "../lib/defaults"
 import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent, log } from "../lib/index";
 import { doWhiteboard } from "./features/whiteboard";
 
@@ -35,6 +35,8 @@ export const customSettings : { [key: string]: any } = { // default settings
     // calculatorButton: true, // click the "Calculator Allowed" button and bring up a calculator
     // bookworkTracker: false, // track the bookwork codes in a list, so that you can write them down later
 };
+
+setCustomSettings(customSettings)
 
 export var updateDebugMenu : Function | null; 
 export var toggleDebugMenu : Function | null;

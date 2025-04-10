@@ -1,5 +1,4 @@
-import { customSettings } from ".."
-import { Conditions, createBlur, createBlurredMenu, DefaultPenWhiteboardStroke, deserialiseWhiteboardStroke, getQuestion, getSVG, PlatformID, TerminatedWhiteboardStroke, WhiteboardStroke } from "../../lib/defaults"
+import { Conditions, createBlur, createBlurredMenu, DefaultPenWhiteboardStroke, deserialiseWhiteboardStroke, getCustomSettings, getQuestion, getSVG, PlatformID, TerminatedWhiteboardStroke, WhiteboardStroke } from "../../lib/defaults"
 
 export const doWhiteboard = (element : HTMLElement, condition : Conditions) => {
     var btn = document.createElement("button")
@@ -146,7 +145,7 @@ export const doWhiteboard = (element : HTMLElement, condition : Conditions) => {
                 canvas.className = "SparxPlusWhiteboard"
                 canvas.style.width = "100%"
                 canvas.style.height = "100%"
-                if (!customSettings.darkMode || customSettings.whiteboardDarkModeOverride) {
+                if (!getCustomSettings().darkMode || getCustomSettings().whiteboardDarkModeOverride) {
                     canvas.style.backgroundColor = "white"
                 }
 
@@ -156,7 +155,7 @@ export const doWhiteboard = (element : HTMLElement, condition : Conditions) => {
                 whiteboardContainer.append(canvas)
 
                 let painting = false;
-                let brushColor = customSettings.darkMode ? (customSettings.whiteboardDarkModeOverride ? "#000000" : "#FFFFFF") : "#000000";
+                let brushColor = getCustomSettings().darkMode ? (getCustomSettings().whiteboardDarkModeOverride ? "#000000" : "#FFFFFF") : "#000000";
                 let brushSize = 5;
 
                 const clear = () => {
