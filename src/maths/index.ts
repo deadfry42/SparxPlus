@@ -1,4 +1,4 @@
-import { Actions, Conditions, jumpscare, getQuestion, createBlur, createBlurredMenu, TerminatedWhiteboardStroke, DefaultPenWhiteboardStroke, PlatformID, getSVG, deserialiseWhiteboardStroke, WhiteboardStroke, KeyboardMapping, Panel, SettingsPanel, SettingWarning, InputSetting, ToggleSetting, DescriptivePanel, BlankPanel, setCustomSettings} from "../lib/defaults"
+import { Actions, Conditions, jumpscare, getQuestion, createBlur, createBlurredMenu, TerminatedWhiteboardStroke, DefaultPenWhiteboardStroke, PlatformID, getSVG, deserialiseWhiteboardStroke, WhiteboardStroke, KeyboardMapping, Panel, SettingsPanel, SettingWarning, InputSetting, ToggleSetting, DescriptivePanel, BlankPanel, setCustomSettings, ClassMapping} from "../lib/defaults"
 import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent, log } from "../lib/index";
 import { doWhiteboard } from "./features/whiteboard";
 
@@ -360,36 +360,30 @@ export const keyboardMapping : KeyboardMapping[] = [
         }),
 ];
 
-export const classMapping = [
-    {
-        classMatches: ["QuestionScrollableContent"],
-        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added, Conditions.Removed],
-        ifMatched: () => {
+export const classMapping : ClassMapping[] = [
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added, Conditions.Removed])
+        .addClassMatch("QuestionScrollableContent")
+        .setIfMatched((element : HTMLElement, condition : Conditions) => {
             if (updateDebugMenu != null) updateDebugMenu()
-        },
-    },
-    {
-        classMatches: ["TopicFilterLabel"],
-        newClass: ["SparxPlusTopicFilterLabel"],
-        conditions: [Conditions.Added],
-    },
-    {
-        classMatches: ["SupportTipsItem"],
-        newClass: ["SparxPlusSupportTipsItem"],
-        newClassesToChildren: ["SparxPlusSupportTipsText"],
-        conditions: [Conditions.Added],
-    },
-    {
-        classMatches: ["IndependentLearningNoContentMessage"],
-        newClassesToChildren: ["SparxPlusIndependentLearningNoContentMessageText"],
-        conditions: [Conditions.Added],
-    },
+        }),
 
-    {
-        classMatches: ["ButtonSecondary"],
-        newClass: ["SparxPlusSecondaryButton"],
-        conditions: [Conditions.ModifiedTransitionPage, Conditions.Added],
-        ifMatched: (element : HTMLElement, condition : Conditions) => {
+    new ClassMapping([Conditions.Added])
+        .addClassMatch("TopicFilterLabel")
+        .addNewClass("SparxPlusTopicFilterLabel"),
+
+    new ClassMapping([Conditions.Added])
+        .addClassMatch("SupportTipsItem")
+        .addNewClass("SparxPlusSupportTipsItem")
+        .addNewClassToChildren("SparxPlusSupportTipsText"),
+
+    new ClassMapping([Conditions.Added])
+        .addClassMatch("IndependentLearningNoContentMessage")
+        .addNewClass("SparxPlusIndependentLearningNoContentMessageText"),
+
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Added])
+        .addClassMatch("ButtonSecondary")
+        .addNewClass("ButtonSecondary")
+        .setIfMatched((element : HTMLElement, condition : Conditions) => {
             if (!element.classList.contains("SparxPlusBackQuestionButton")) {
                 for (var children of element.children) {
                     var cname = children.className;
@@ -405,13 +399,12 @@ export const classMapping = [
                     }
                 }
             }
-        }
-    },
-    {
-        classMatches: ["TextElement"],
-        newClass: ["SparxPlusTextElement"],
-        conditions: [Conditions.ModifiedTransitionPage],
-        ifMatched: (element : HTMLElement, condition : Conditions) => {
+        }),
+
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
+        .addClassMatch("TextElement")
+        .addNewClass("SparxPlusTextElement")
+        .setIfMatched((element : HTMLElement, condition : Conditions) => {
             for (var child of element.children) {
                 if (child.constructor.name == document.createElement("table").constructor.name) {
                     if (!child.classList.contains("SparxPlusTable")) {
@@ -419,95 +412,78 @@ export const classMapping = [
                     }
                 }
             }
-        }
-    },
-    {
-        classMatches: ["MenuItemText"],
-        newClass: ["SparxPlusHomeworkButton"],
-        conditions: [Conditions.Added],
-        elementCheck: (element : HTMLElement, condition : Conditions) => {
+        }),
+
+    new ClassMapping([Conditions.Added])
+        .addClassMatch("MenuItemText")
+        .addNewClass("SparxPlusHomeworkButton")
+        .setElementCheck((element : HTMLElement, condition : Conditions) => {
             try {
                 return (<any>element.firstChild).data.toLowerCase() == "my homework";
             } catch(e) {
                 return false;
             }
-        }
-    },
-    {
-        classMatches: ["MenuItemText"],
-        newClass: ["SparxPlusRevisionButton"],
-        conditions: [Conditions.Added],
-        elementCheck: (element : HTMLElement, condition : Conditions) => {
+        }),
+
+    new ClassMapping([Conditions.Added])
+        .addClassMatch("MenuItemText")
+        .addNewClass("SparxPlusRevisionButton")
+        .setElementCheck((element : HTMLElement, condition : Conditions) => {
             try {
-                return (<any>element.firstChild).toLowerCase() == "revision & assessments";
+                return (<any>element.firstChild).data.toLowerCase() == "revision & assessments";
             } catch(e) {
                 return false;
             }
-        }
-    },
-    {
-        classMatches: ["TextElement"],
-        newClass: ["SparxPlusTextElement"],
-        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
-    },
-    {
-        classMatches: ["Option_"],
-        newClass: ["SparxPlusOption"],
-        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified],
-    },
-    {
-        classMatches: ["OptionSelected_"],
-        newClass: ["SparxPlusOptionSelected"],
-        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified],
-    },
-    {
-        classMatches: ["CardContent_"],
-        newClass: ["SparxPlusCardContent"],
-        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
-    },
-    {
-        classMatches: ["CardContentSelected_"],
-        newClass: ["SparxPlusCardContentSelected"],
-        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
-    },
-    {
-        classMatches: ["TextFieldComponent"],
-        newClass: ["SparxPlusTextFieldComponent"],
-        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
-    },
-    {
-        classMatches: ["TextField"],
-        newClass: ["SparxPlusTextField"],
-        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
-    },
-    {
-        classMatches: ["InlineSlotOptions"],
-        newClass: ["SparxPlusInlineSlotOptions"],
-        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
-    },
-    {
-        classMatches: ["TimesTablesButton"],
-        conditions: [Conditions.Added],
-        ifMatched: (element : HTMLElement, condition : Conditions) => {
+        }),
+
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified])
+        .addClassMatch("Option_")
+        .addNewClass("SparxPlusOption"),
+
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified])
+        .addClassMatch("OptionSelected_")
+        .addNewClass("SparxPlusOptionSelected"),
+
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
+        .addClassMatch("CardContent_")
+        .addNewClass("SparxPlusCardContent"),
+
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
+        .addClassMatch("CardContentSelected_")
+        .addNewClass("SparxPlusCardContentSelected"),
+
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
+        .addClassMatch("TextFieldComponent")
+        .addNewClass("SparxPlusTextFieldComponent"),
+
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
+        .addClassMatch("TextField")
+        .addNewClass("SparxPlusTextField"),
+
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
+        .addClassMatch("InlineSlotOptions")
+        .addNewClass("SparxPlusInlineSlotOptions"),
+
+    new ClassMapping([Conditions.Modified, Conditions.Added])
+        .addClassMatch("TimesTablesButton")
+        .setIfMatched((element : HTMLElement, condition : Conditions) => {
             if (customSettings.darkMode) {
                 element.style.backgroundImage = `url(${chrome.runtime.getURL("assets/darkmode/images/TimesTableCard.png")})`
             }
-        }
-    },
-    {
-        classMatches: ["ColourOverlay"],
-        newClass: ["SparxPlusColourOverlay"],
-        conditions: [Conditions.Modified, Conditions.Added],
-        ifMatched: (element : HTMLElement, condition : Conditions) => {
+        }),
+
+    new ClassMapping([Conditions.Modified, Conditions.Added])
+        .addClassMatch("ColourOverlay")
+        .addNewClass("SparxPlusColourOverlay")
+        .setIfMatched((element : HTMLElement, condition : Conditions) => {
             if (customSettings.hideColourOverlay) {
                 element.style.display = "none";
             }
-        }
-    },
-    {
-        classMatches: ["OverlaySettingsContainer"],
-        conditions: [Conditions.Modified, Conditions.Added],
-        ifMatched: (element : HTMLElement, condition : Conditions) => {
+        }),
+
+    new ClassMapping([Conditions.Modified, Conditions.Added])
+        .addClassMatch("OverlaySettingsContainer")
+        .setIfMatched((element : HTMLElement, condition : Conditions) => {
             if (customSettings.hideColourOverlay) {
                 var p = element.parentNode;
                 // this might just be the hackiest fix possible
@@ -519,25 +495,23 @@ export const classMapping = [
                     }
                 }
             }
-        }
-    },
-    {
-        classMatches: ["Button"],
-        newClass: ["SparxPlusKeypadButton"],
-        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
-        elementCheck: (element : HTMLElement, condition : Conditions) => {
+        }),
+
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
+        .addClassMatch("Button")
+        .addNewClass("SparxPlusKeypadButton")
+        .setElementCheck((element : HTMLElement, condition : Conditions) => {
             var id = element.id;
             if (id == null || id.includes == null) return false;
 
             if (id.includes("button-")) {
                 return true;
             }
-        }
-    },
-    {
-        classMatches: ["AnswerPart"],
-        conditions: [Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added],
-        ifMatched: (element : HTMLElement, condition : Conditions) => {
+        }),
+
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
+        .addClassMatch("AnswerPart")
+        .setIfMatched((element : HTMLElement, condition : Conditions) => {
             // answerPart changed (this is the only way i could detect the answer being inputted :p)
             var result = document.body.querySelectorAll(`[class*="ResultFullWidth"]`)
             for (var res of result) {
@@ -551,14 +525,13 @@ export const classMapping = [
                     if (customSettings.jumpscareWhenCorrect) jumpscare("assets/memes/correct", customSettings.audio)
                 }
             }
-        }
-    },
-    {
-        classMatches: ["!SparxPlusQuestionInfo", "QuestionInfo"], // non match SparxPlusQuestionInfo so this only runs if it hasn't been modified
-        newClass: ["SparxPlusQuestionInfo"],
-        conditions: [Conditions.Added, Conditions.ModifiedTransitionPage],
-        ifMatched: (element : HTMLElement, condition : Conditions) => {
+        }),
+
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Added])
+        .addClassMatch("!SparxPlusQuestionInfo")
+        .addClassMatch("QuestionInfo")
+        .addNewClass("SparxPlusQuestionInfo")
+        .setIfMatched((element : HTMLElement, condition : Conditions) => {
             doWhiteboard(element, condition)
-        }
-    }
-]
+        }),
+];

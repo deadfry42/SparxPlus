@@ -765,19 +765,8 @@ export class ClassMapping {
     getNewClassesToChildren() : string[] | null {
         return this.#newClassesToChildren;
     }
-
-    setConditions(conditions : Conditions[]) : ClassMapping {
-        this.#conditions = conditions;
-        return this;
-    }
-
-    addCondition(newCondition : Conditions) : ClassMapping {
-        if (this.#conditions == null) this.#conditions = [];
-        this.#conditions.push(newCondition);
-        return this;
-    }
     
-    getConditions() : Conditions[] | null {
+    getConditions() : Conditions[] {
         return this.#conditions;
     }
 };

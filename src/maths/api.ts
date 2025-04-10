@@ -41,21 +41,16 @@ import { classMapping, customSettings, keyboardMapping, settingsFrontend, setUpd
 
     function doClassMapping(realnode : HTMLElement, name : string, Condition : Conditions) {
         for (var mapping of classMapping) {
-            var valid = true;
-            var mMatches : string[] = mapping.classMatches;
-            var mCondition : Conditions[] = mapping.conditions;
-            var mClasses = mapping.newClass;
-            var mChildClasses = mapping.newClassesToChildren;
-            var mElementCheck = mapping.elementCheck;
-            var mIfMatched = mapping.ifMatched;
+            let mMatches : string[] | null = mapping.getClassMatches();
+            let mClasses : string[] | null = mapping.getNewClasses();
+            let mChildClasses : string[] | null = mapping.getNewClassesToChildren();
+            let mCondition : Conditions[] = mapping.getConditions();
+
+            let mElementCheck : Function | null = mapping.elementCheck;
+            let mIfMatched : Function | null = mapping.ifMatched;
 
             if (mMatches == null || mCondition == null) continue;
-
-            if (!valid) {
-                log("ClassMapping", "Invalid config!")
-                baseLog(mapping)
-                continue;
-            };
+            
             var isCondition = false;
 
             for (var condition of mCondition) {
