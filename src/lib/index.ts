@@ -42,7 +42,7 @@ export function getGoogleLink() {
 }
 
 export function getLastUpdated() {
-    return "6th of April, 2025"
+    return "11th of April, 2025"
 }
 
 export function getLogs() {
