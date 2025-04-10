@@ -36,6 +36,11 @@
             "matches": ["*://www.sparxmaths.uk/*", "*://maths.sparx-learning.com/*"],
             "css": ["assets/css/maths.css"],
             "js": ["maths.js"]
+        },
+        {
+            "matches": ["*://app.sparxscience.com/*", "*://science.sparx-learning.com/*"],
+            "css": [],
+            "js": ["src/lib/index.js", "src/lib/defaults.js", "src/science/index.js"]
         }
     ]
 }

@@ -1,6 +1,6 @@
-import { Actions, Conditions, jumpscare, getQuestion, createBlur, createBlurredMenu, TerminatedWhiteboardStroke, DefaultPenWhiteboardStroke, PlatformID, getSVG, deserialiseWhiteboardStroke, WhiteboardStroke, KeyboardMapping, Panel, SettingsPanel, SettingWarning, InputSetting, ToggleSetting, DescriptivePanel, BlankPanel} from "../lib/defaults.js"
-import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent, log } from "../lib/index.js";
-import { updateDebugMenu } from "./api.js";
+import { Actions, Conditions, jumpscare, getQuestion, createBlur, createBlurredMenu, TerminatedWhiteboardStroke, DefaultPenWhiteboardStroke, PlatformID, getSVG, deserialiseWhiteboardStroke, WhiteboardStroke, KeyboardMapping, Panel, SettingsPanel, SettingWarning, InputSetting, ToggleSetting, DescriptivePanel, BlankPanel} from "../lib/defaults.ts"
+import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent, log } from "../lib/index.ts";
+import { updateDebugMenu } from "./api.ts";
 
 // settings which are set by the user
 // and used to determine what features should be available

@@ -5,8 +5,8 @@ module.exports = {
     mode: 'production',
     target: 'web',
     entry: {
-        maths: './src/maths/maths.ts',
-        sigma: './src/maths/sigma.ts',
+        maths: './src/maths/api.ts',
+        
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -19,12 +19,28 @@ module.exports = {
                 from: path.resolve('manifest.json'),
                 to: path.resolve('dist'),
             }]
+        }),
+        new CopyPlugin({
+            patterns: [{
+                from: path.resolve('assets'),
+                to: path.resolve('dist/assets'),
+            }]
         })
     ],
+    // module: {
+    //     rules: [
+    //         {
+    //             test: /\.ts$/,
+    //             loader: "babel-loader",
+    //             exclude: /(node_modules)/
+    //         }
+    //     ]
+    // },
     module: {
         rules: [
             {
-                test: /.(ts)$/,
+                // test: /.(ts)$/,
+                test: /\.ts$/,
                 exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader',
@@ -37,5 +53,13 @@ module.exports = {
                 }
             }
         ]
+    },
+    resolve: {
+    alias: {
+            maths: path.resolve(__dirname, 'src/maths/'),
+            lib: path.resolve(__dirname, 'src/lib/'),
+            science: path.resolve(__dirname, 'src/science/'),
+        },
+        extensions: ['.ts']
     },
 }

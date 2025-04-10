@@ -1,5 +1,5 @@
-import { customSettings } from "../maths/index.js";
-import { log, baseLog } from "./index.js";
+import { customSettings } from "../maths/index.ts";
+import { log, baseLog } from "./index.ts";
 
 export function convertNumberToLetter(num : number) {
     return String.fromCharCode((num-1) + 'A'.charCodeAt(0))
@@ -686,6 +686,98 @@ export class DefaultPenWhiteboardStroke extends WhiteboardStroke {
         data+=" "+this.getY();
         data+=" !"
         return data;
+    }
+}
+
+export class ClassMapping {
+    #classMatches: string[] | null = null;
+    #newClasses: string[] | null = null;
+    #newClassesToChildren: string[] | null = null;
+    #conditions: Conditions[];
+
+    #elementCheck: Function | null = null;
+    #ifMatched: Function | null = null;
+
+    constructor(conditions : Conditions[]) {
+        this.#conditions = conditions;
+    }
+
+    setElementCheck(callback : Function) : ClassMapping {
+        this.#elementCheck = callback;
+        return this;
+    }
+
+    getElementCheck() : Function | null {
+        return this.#elementCheck;
+    }
+
+    setIfMatched(callback : Function) : ClassMapping {
+        this.#ifMatched = callback;
+        return this;
+    }
+
+    getIfMatched() : Function | null {
+        return this.#ifMatched;
+    }
+
+    setClassMatches(classMatches : string[]) : ClassMapping {
+        this.#classMatches = classMatches;
+        return this;
+    }
+
+    addClassMatch(classMatch : string) : ClassMapping {
+        if (this.#classMatches == null) this.#classMatches = [];
+        this.#classMatches.push(classMatch);
+        return this;
+    }
+    
+    getClassMatches() : string[] | null {
+        return this.#classMatches;
+    }
+
+    setNewClasses(newClasses : string[]) : ClassMapping {
+        this.#newClasses = newClasses;
+        return this;
+    }
+
+    addNewClass(newClass : string) : ClassMapping {
+        if (this.#newClasses == null) this.#newClasses = [];
+        this.#newClasses.push(newClass);
+        return this;
+    }
+    
+    getNewClasses() : string[] | null {
+        return this.#newClasses;
+    }
+
+    setNewClassesToChildren(newClasses : string[]) : ClassMapping {
+        this.#newClassesToChildren = newClasses;
+        return this;
+    }
+
+    addNewClassToChildren(newClass : string) : ClassMapping {
+        if (this.#newClassesToChildren == null) this.#newClassesToChildren = [];
+        this.#newClassesToChildren.push(newClass);
+        return this;
+    }
+    
+    getNewClassesToChildren() : string[] | null {
+        return this.#newClassesToChildren;
+    }
+
+    setConditions(conditions : Conditions[]) : ClassMapping {
+        this.#conditions = conditions;
+        return this;
+    }
+
+    addCondition(newCondition : Conditions) : ClassMapping {
+        if (this.#conditions == null) this.#conditions = [];
+        this.#conditions.push(newCondition);
+        return this;
+    }
+    
+    getConditions() : Conditions[] | null {
+        return this.#conditions;
     }
 }
 

@@ -1,6 +1,6 @@
-import { Actions, appendStyleContent, appendStyleSheet, BlankPanel, Conditions, createNewOptionInDDM, createNewSettingsPanel, createWarningBox, DescriptivePanel, deserialiseQuestionID, getDescendants, getQuestionID, getSVG, InputSetting, jumpscare, PanelType, PlatformID, QuestionData, QuestionID, sendNotification, Setting, SettingsPanel, SettingsType, ToggleSetting } from "../lib/defaults.js";
-import { baseLog, getIsRelease, getLastUpdated, log } from "../lib/index.js";
-import { classMapping, customSettings, keyboardMapping, settingsFrontend } from "./index.js";
+import { Actions, appendStyleContent, appendStyleSheet, BlankPanel, Conditions, createNewOptionInDDM, createNewSettingsPanel, createWarningBox, DescriptivePanel, deserialiseQuestionID, getDescendants, getQuestionID, getSVG, InputSetting, jumpscare, PanelType, PlatformID, QuestionData, QuestionID, sendNotification, Setting, SettingsPanel, SettingsType, ToggleSetting } from "../lib/defaults.ts";
+import { baseLog, getIsRelease, getLastUpdated, log } from "../lib/index.ts";
+import { classMapping, customSettings, keyboardMapping, settingsFrontend } from "./index.ts";
 
 export var updateDebugMenu : Function;
 export var toggleDebugMenu : Function;
@@ -201,7 +201,7 @@ export var toggleDebugMenu : Function;
 
         const settingsLoaded = (res : any) => {
             if (res.darkMode) {
-                appendStyleSheet("darkmodeSP", chrome.runtime.getURL("src/css/darkmodemaths.css"));
+                appendStyleSheet("darkmodeSP", chrome.runtime.getURL("assets/css/darkmodemaths.css"));
             }
             if (res.test) {
                 addOptionToDDMenu(null, "SparxPlus Test", () => {
