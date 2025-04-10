@@ -464,9 +464,9 @@ import { classMapping, customSettings, keyboardMapping, settingsFrontend, setUpd
 
             if (matches == null || keys == null || action == null) continue;
 
-            var elementCheck : Function | null = mapping.getCheckMatch;
-            var keyStarted : Function | null = mapping.getKeyStarted;
-            var keySuccessful : Function | null = mapping.getKeySuccessful;
+            var elementCheck : Function | null = mapping.checkMatch;
+            var keyStarted : Function | null = mapping.keyStarted;
+            var keySuccessful : Function | null = mapping.keySuccessful;
 
             var foundKey = null;
 

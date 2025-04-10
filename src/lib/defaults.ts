@@ -704,29 +704,21 @@ export class ClassMapping {
     #newClassesToChildren: string[] | null = null;
     #conditions: Conditions[];
 
-    #elementCheck: Function | null = null;
-    #ifMatched: Function | null = null;
+    elementCheck: Function | null = null;
+    ifMatched: Function | null = null;
 
     constructor(conditions : Conditions[]) {
         this.#conditions = conditions;
     }
 
     setElementCheck(callback : Function) : ClassMapping {
-        this.#elementCheck = callback;
+        this.elementCheck = callback;
         return this;
-    }
-
-    getElementCheck() : Function | null {
-        return this.#elementCheck;
     }
 
     setIfMatched(callback : Function) : ClassMapping {
-        this.#ifMatched = callback;
+        this.ifMatched = callback;
         return this;
-    }
-
-    getIfMatched() : Function | null {
-        return this.#ifMatched;
     }
 
     setClassMatches(classMatches : string[]) : ClassMapping {
@@ -795,9 +787,9 @@ export class KeyboardMapping {
     #classMatches: string[] | null = null;
     #keys : string[] | null = null;
 
-    #checkMatch: Function | null = null;
-    #keyStarted: Function | null = null;
-    #keySuccessful: Function | null = null;
+    checkMatch: Function | null = null;
+    keyStarted: Function | null = null;
+    keySuccessful: Function | null = null;
 
     setAction(action : Actions) : KeyboardMapping {
         this.#action = action;
@@ -818,30 +810,18 @@ export class KeyboardMapping {
     }
 
     setCheckMatch(callback : Function) : KeyboardMapping {
-        this.#checkMatch = callback;
+        this.checkMatch = callback;
         return this;
-    }
-
-    getCheckMatch() : Function | null {
-        return this.#checkMatch;
     }
 
     setKeyStarted(callback : Function) : KeyboardMapping {
-        this.#keyStarted = callback;
+        this.keyStarted = callback;
         return this;
-    }
-
-    getKeyStarted() : Function | null {
-        return this.#keyStarted;
     }
 
     setKeySuccessful(callback : Function) : KeyboardMapping {
-        this.#keySuccessful = callback;
+        this.keySuccessful = callback;
         return this;
-    }
-
-    getKeySuccessful() : Function | null {
-        return this.#keySuccessful;
     }
 
     setKeys(keys : string[]) : KeyboardMapping {
