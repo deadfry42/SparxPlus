@@ -1,4 +1,4 @@
-import { log, baseLog } from "./index";
+import { log } from "./index";
 
 export function convertNumberToLetter(num : number) {
     return String.fromCharCode((num-1) + 'A'.charCodeAt(0))

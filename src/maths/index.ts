@@ -630,7 +630,6 @@ export const classMapping = [
                             if (hasTerminator) end = true;
                             hasTerminator = true;
                         }
-                        console.log(stroke.serialise())
                         whiteboardData.push(stroke.serialise());
                         count++;
                     }
