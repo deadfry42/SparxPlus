@@ -382,7 +382,7 @@ export const classMapping : ClassMapping[] = [
 
     new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Added])
         .addClassMatch("ButtonSecondary")
-        .addNewClass("ButtonSecondary")
+        .addNewClass("SparxPlusSecondaryButton")
         .setIfMatched((element : HTMLElement, condition : Conditions) => {
             if (!element.classList.contains("SparxPlusBackQuestionButton")) {
                 for (var children of element.children) {
