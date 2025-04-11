@@ -1,4 +1,4 @@
-import { Actions, Conditions, jumpscare, getQuestion, createBlur, createBlurredMenu, TerminatedWhiteboardStroke, DefaultPenWhiteboardStroke, PlatformID, getSVG, deserialiseWhiteboardStroke, WhiteboardStroke, KeyboardMapping, Panel, SettingsPanel, SettingWarning, InputSetting, ToggleSetting, DescriptivePanel, BlankPanel, setCustomSettings, ClassMapping} from "../lib/defaults"
+import { Actions, Conditions, jumpscare, KeyboardMapping, Panel, SettingsPanel, SettingWarning, InputSetting, ToggleSetting, DescriptivePanel, BlankPanel, setCustomSettings, ClassMapping} from "../lib/defaults"
 import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent, log } from "../lib/index";
 import { doWhiteboard } from "./features/whiteboard";
 

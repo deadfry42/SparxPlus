@@ -5,8 +5,7 @@ const path = require('path')
 module.exports = {
     mode: 'production',
     target: 'web',
-    entry: {maths: './src/maths/api.ts',},
-    devtool: 'inline-source-map',
+    entry: {maths: './src/maths/backend.ts',},
     module: {
       rules: [
         {

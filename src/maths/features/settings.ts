@@ -1,6 +1,6 @@
 import { customSettings, settingsFrontend } from "..";
 import { baseLog, getIsRelease, log } from "../../lib";
-import { BlankPanel, createNewSettingsPanel, createWarningBox, DescriptivePanel, getSVG, InputSetting, Panel, Setting, SettingsPanel, SettingWarning, ToggleSetting } from "../../lib/defaults"
+import { BlankPanel, createNewSettingsPanel, createWarningBox, DescriptivePanel, getSVG, InputSetting, SettingsPanel, SettingWarning, ToggleSetting } from "../../lib/defaults"
 
 export const applySettingsPage = (sparxSettingsDiv : HTMLElement, sparxPanelClassName : string) => {
     var settingsWarning = applyHeader(sparxSettingsDiv);

@@ -1,7 +1,7 @@
 import { Actions, appendStyleContent, appendStyleSheet, BlankPanel, Conditions, createNewOptionInDDM, createNewSettingsPanel, createWarningBox, DescriptivePanel, deserialiseQuestionID, getDescendants, getQuestionID, getSVG, InputSetting, jumpscare, PanelType, PlatformID, QuestionData, QuestionID, sendNotification, Setting, SettingsPanel, SettingsType, ToggleSetting } from "../lib/defaults";
-import { baseLog, getIsRelease, getLastUpdated, log } from "../lib/index";
+import { baseLog, getLastUpdated, log } from "../lib/index";
 import { applySettingsPage } from "./features/settings";
-import { classMapping, customSettings, keyboardMapping, settingsFrontend, setUpdateDebugMenu, setToggleDebugMenu, toggleDebugMenu } from "./index";
+import { classMapping, customSettings, keyboardMapping, setUpdateDebugMenu, setToggleDebugMenu, toggleDebugMenu } from "./index";
 
 (async () => {
     log("Maths", "Sparx Plus started with SparxMaths!")
