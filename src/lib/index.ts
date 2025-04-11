@@ -26,7 +26,7 @@ export function getVersion() {
 }
 
 export function getIsRelease() {
-    return false;
+    return true;
 }
 
 export function getGithubLink() {
