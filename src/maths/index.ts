@@ -30,6 +30,7 @@ export const customSettings : { [key: string]: any } = { // default settings
 
     whiteboard: false, // add a draw button, and show a whiteboard on screen (similar to video popup) and let the user draw
     whiteboardDarkModeOverride: false, // if is dark mode, pretend is light mode anyway.
+    whiteboardShowSize: false, // show the size of the whiteboard data (in bytes)
 
     // goals:
     // calculatorButton: true, // click the "Calculator Allowed" button and bring up a calculator
@@ -105,7 +106,10 @@ export const settingsFrontend : Panel[] = [
                     .setExperimental(true))
         .addSetting(new ToggleSetting("whiteboardDarkModeOverride")
                     .setName("Dark mode override")
-                    .setDescription("Use the light mode whiteboard even if in dark mode.")),
+                    .setDescription("Use the light mode whiteboard even if in dark mode."))
+        .addSetting(new ToggleSetting("whiteboardShowSize")
+                    .setName("Show data size")
+                    .setDescription("Show the size of the whiteboard data (in bytes)")),
 
     new SettingsPanel("Fun Settings", "Fun small additions to make Sparx more enjoyable to use!")
         .addSetting(new ToggleSetting("jumpscareWhenWrong")

@@ -23,6 +23,14 @@ export const doWhiteboard = (element : HTMLElement, condition : Conditions) => {
                 controlDiv.className = "WhiteboardControlDiv"
                 controlDiv.style.marginLeft = "30px"
 
+                var memoryDiv = document.createElement("div")
+                memoryDiv.className = "WhiteboardControlDiv"
+                memoryDiv.style.top = "30px"
+                memoryDiv.style.width = "auto"
+
+                var memoryText = document.createElement("p")
+                memoryText.innerText = ""
+
                 var undoButton = document.createElement("button")
                 undoButton.setAttribute("aria-label", "Close")
                 undoButton.className = "SparxPlusIconButton"
@@ -121,6 +129,21 @@ export const doWhiteboard = (element : HTMLElement, condition : Conditions) => {
 
                 menu.append(controlDiv)
 
+                var updateMemoryText = () => {};
+
+                if (getCustomSettings().whiteboardShowSize) {
+                    memoryDiv.append(memoryText)
+
+                    updateMemoryText = () => {
+                        var string = JSON.stringify(whiteboardData);
+                        var bytes = string.length*8;
+                        memoryText.innerText = `Whiteboard size: ${bytes}B`
+                    };
+                    updateMemoryText();
+
+                    menu.append(memoryDiv)
+                }
+
                 var whiteboardContainer = document.createElement("div") 
                 whiteboardContainer.className = "SparxPlusVideoContainer SparxPlusWhiteboard"
                 menu.append(whiteboardContainer)
@@ -183,6 +206,7 @@ export const doWhiteboard = (element : HTMLElement, condition : Conditions) => {
                         }
                     }
                     ctx.beginPath();
+                    updateMemoryText();
                 }
 
                 const storeStop = () => {
@@ -223,6 +247,7 @@ export const doWhiteboard = (element : HTMLElement, condition : Conditions) => {
                     ctx.moveTo(x, y);
 
                     storeStroke(newStroke)
+                    updateMemoryText();
                 }
 
                 canvas.addEventListener('mousedown', start);
