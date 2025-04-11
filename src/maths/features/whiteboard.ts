@@ -48,7 +48,7 @@ export const doWhiteboard = (element : HTMLElement, condition : Conditions) => {
                         };
 
                         var removal = whiteboardData.pop();
-                        if (removal != null) removedData.push(removal);
+                        if (removal != null) removedData.unshift(removal);
                     }
                     clear()
                     redraw()
