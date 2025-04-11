@@ -16,6 +16,12 @@ Compatible with:
 > This means that stuff like an autosolver, is not going to be availble in this extension.
 
 This extension is not affiliated with Sparx, otherwise known as [Sparx-Learning](https://sparx-learning.com).  
+
+### Features
+* Fully configurable settings, available in the settings tab
+* A native (albeit experimental) dark mode
+* Progressive Disclosure, a feature which hides tasks that you aren't currently doing, and the amount of tasks
+* Whiteboard (To do working out)
   
 ### Instructions on how to compile
 * Clone this repo
