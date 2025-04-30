@@ -1,6 +1,6 @@
 import { customSettings, settingsFrontend } from "..";
 import { baseLog, getIsRelease, log } from "../../lib";
-import { BlankPanel, createNewSettingsPanel, createWarningBox, DescriptivePanel, getSVG, InputSetting, SettingsPanel, SettingWarning, ToggleSetting } from "../../lib/defaults"
+import { BlankPanel, createNewSettingsPanel, createWarningBox, DescriptivePanel, getSVG, InputSetting, SettingsPanel, SettingWarning, TextSetting, ToggleSetting } from "../../lib/defaults"
 
 export const applySettingsPage = (sparxSettingsDiv : HTMLElement, sparxPanelClassName : string) => {
     var settingsWarning = applyHeader(sparxSettingsDiv);
@@ -78,8 +78,8 @@ const configureSettingsPanel = (panelConfig : SettingsPanel, panel : HTMLElement
 
     for (let settingConfig of settingsList) {
         let settingName : string = <string>settingConfig.getName() == null ? "Unknown" : <string>settingConfig.getName();
-        let settingDesc : string = <string>settingConfig.getDescription() == null ? "Unknown" : <string>settingConfig.getDescription();
         let isExperimental : boolean = <boolean>settingConfig.getExperimental() == null ? false : <boolean>settingConfig.getExperimental();
+        let settingDesc : string | null = <string>settingConfig.getDescription();
         
         let settingsOuterContainer : HTMLDivElement = document.createElement("div");
         settingsOuterContainer.ariaOrientation = "vertical"
@@ -138,19 +138,25 @@ const configureSettingsPanel = (panelConfig : SettingsPanel, panel : HTMLElement
         }
         title.append(titleTxt)
 
-        let desc = document.createElement("p")
-        desc.innerHTML = settingDesc
-        desc.style.maxWidth = "auto"
-        desc.style.padding = "0"
-        desc.style.margin = "0";
+        if (settingDesc != null) {
+            let desc = document.createElement("p")
+            desc.innerHTML = settingDesc
+            desc.style.maxWidth = "auto"
+            desc.style.padding = "0"
+            desc.style.margin = "0";
 
-        labelDiv.append(title)
-        labelDiv.append(desc)
+            labelDiv.append(title)
+            labelDiv.append(desc)
+        } else {
+            labelDiv.append(title)
+        }
 
         if (settingConfig instanceof ToggleSetting) {
             configureToggleSetting(settingConfig, labelDiv, settingsOuterContainer, changeWarningVisibility, updateSettingsWarning);
         } else if (settingConfig instanceof InputSetting) {
             configureInputSetting(settingConfig, labelDiv, settingsOuterContainer, changeWarningVisibility, updateSettingsWarning);
+        } else if (settingConfig instanceof TextSetting) {
+            configureTextSetting(settingConfig, labelDiv, settingsOuterContainer, changeWarningVisibility, updateSettingsWarning);
         }
 
         if (settingWarningElement != null) settingsOuterContainer.append(settingWarningElement)
@@ -197,6 +203,22 @@ const configureToggleSetting = (settingConfig : ToggleSetting, settingsLabelDiv 
 
     settingsOuterContainer.append(settingsInnerContainer)
 }
+
+const configureTextSetting = (settingConfig : TextSetting, settingsLabelDiv : HTMLDivElement, settingsOuterContainer : HTMLDivElement, changeWarningVisibility : Function, updateSettingsWarning : Function) => {
+    let value : string | null = settingConfig.getValue();
+
+    let inputLabel = document.createElement("p")
+
+    // this setting type doesn't support warnings
+    // why would it need it anyway
+
+    inputLabel.style.marginLeft = "15px"
+    inputLabel.innerText = value;
+
+    settingsOuterContainer.append(settingsLabelDiv)
+    settingsOuterContainer.append(inputLabel)
+}
+
 
 const configureInputSetting = (settingConfig : InputSetting, settingsLabelDiv : HTMLDivElement, settingsOuterContainer : HTMLDivElement, changeWarningVisibility : Function, updateSettingsWarning : Function) => {
     let settingVariableName = settingConfig.getVariableName();

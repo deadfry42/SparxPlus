@@ -1,4 +1,4 @@
-import { Conditions, createBlur, createBlurredMenu, DefaultPenWhiteboardStroke, deserialiseWhiteboardStroke, getCustomSettings, getQuestion, getSVG, PlatformID, TerminatedWhiteboardStroke, WhiteboardStroke } from "../../lib/defaults"
+import { Conditions, createBlur, createBlurredMenu, DefaultPenWhiteboardStroke, deserialiseWhiteboardStroke, formatBytes, getCustomSettings, getQuestion, getSVG, PlatformID, TerminatedWhiteboardStroke, WhiteboardStroke } from "../../lib/defaults"
 
 export const doWhiteboard = (element : HTMLElement, condition : Conditions) => {
     var btn = document.createElement("button")
@@ -137,7 +137,7 @@ export const doWhiteboard = (element : HTMLElement, condition : Conditions) => {
                     updateMemoryText = () => {
                         var string = JSON.stringify(whiteboardData);
                         var bytes = string.length*8;
-                        memoryText.innerText = `Whiteboard size: ${bytes}B`
+                        memoryText.innerText = `Whiteboard size: ${formatBytes(bytes)}`
                     };
                     updateMemoryText();
 

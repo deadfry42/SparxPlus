@@ -1,5 +1,5 @@
-import { Actions, Conditions, jumpscare, KeyboardMapping, Panel, SettingsPanel, SettingWarning, InputSetting, ToggleSetting, DescriptivePanel, BlankPanel, setCustomSettings, ClassMapping} from "../lib/defaults"
-import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent, log } from "../lib/index";
+import { Actions, Conditions, jumpscare, KeyboardMapping, Panel, SettingsPanel, SettingWarning, InputSetting, ToggleSetting, DescriptivePanel, BlankPanel, setCustomSettings, ClassMapping, TextSetting, getQuestion, getQuestionID, deserialiseQuestionID, QuestionData, formatBytes} from "../lib/defaults"
+import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent, log, baseLog } from "../lib/index";
 import { doWhiteboard } from "./features/whiteboard";
 
 // settings which are set by the user
@@ -109,7 +109,32 @@ export const settingsFrontend : Panel[] = [
                     .setDescription("Use the light mode whiteboard even if in dark mode."))
         .addSetting(new ToggleSetting("whiteboardShowSize")
                     .setName("Show data size")
-                    .setDescription("Show the size of the whiteboard data (in bytes)")),
+                    .setDescription("Show the size of the whiteboard data (in bytes)"))
+        .addSetting(new TextSetting("blank")
+                    .operate((setting) => {
+                        // this is promise-ception
+
+                        var byteCount : number = 0; 
+
+                        chrome.storage.local.get() .then((res) => {
+                            for (var key in res) {
+                                var id = deserialiseQuestionID(key);
+                                if (id == null) continue;
+
+                                var data : QuestionData = new QuestionData(id);
+                                data.syncData() .then(() => {
+                                    data.getKey("Whiteboard") .then((val) => {
+                                        var string = JSON.stringify(val);
+                                        var bytes = string.length*8;
+                                        byteCount += bytes;
+                                        setting.setValue(formatBytes(byteCount))
+                                    })
+                                })
+                                
+                            }
+                        })
+                    })
+                    .setName("Current size of all whiteboard data")),
 
     new SettingsPanel("Fun Settings", "Fun small additions to make Sparx more enjoyable to use!")
         .addSetting(new ToggleSetting("jumpscareWhenWrong")

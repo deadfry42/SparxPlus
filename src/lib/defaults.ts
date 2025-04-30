@@ -14,6 +14,18 @@ export function convertNumberToLetter(num : number) {
     return String.fromCharCode((num-1) + 'A'.charCodeAt(0))
 }
 
+export function formatBytes(bytes : number, decimals = 2) {
+    if (!+bytes) return '0 Bytes'
+
+    const k = 1024
+    const dm = decimals < 0 ? 0 : decimals
+    const sizes = ['Bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
+}
+
 export function replaceElement(matchClassString : string, element : Element) {
     var x = document.getElementsByTagName('*');
     for (var i = 0; i < x.length; i++) {
@@ -946,6 +958,33 @@ export class Setting {
 
     getDescription() : string | null {
         return this.#description;
+    }
+};
+
+export class TextSetting extends Setting {
+    #value: string = "undefined";
+
+    constructor(variableName : string) {
+        super(variableName);
+    }
+
+    setValue(text : string) : TextSetting {
+        this.#value = text;
+        return this;
+    }
+
+    calculateText(text : () => string) : TextSetting {
+        this.#value = text();
+        return this;
+    }
+
+    operate(code : (self : TextSetting) => void) : TextSetting {
+        code(this)
+        return this;
+    }
+
+    getValue() : string {
+        return this.#value;
     }
 };
 

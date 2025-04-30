@@ -1,4 +1,4 @@
-import { baseLog, isExperimental } from "../../lib";
+import { baseLog, isExperimental, log } from "../../lib";
 import { createBlur, createBlurredMenu, createWarningBox } from "../../lib/defaults";
 
 const key = "seenSplashScreen"
@@ -17,6 +17,7 @@ const checkHasSeen = () : Promise<boolean> => {
 }
 
 const setSeen = () => {
+    log("SplashScreen", "Hiding Splash Screen from now on...")
     chrome.storage.local.set({[key]: true});
 }
 
@@ -81,10 +82,11 @@ export const doSplashScreen = () => {
     
         document.body.append(blur)
         document.body.append(menu)
+
+        log("SplashScreen", "Splash Screen Created!")
     }
 
     checkHasSeen() .then((hasSeen) => {
-        baseLog(hasSeen)
         if (!hasSeen) instructions();
     })
 }
