@@ -3,7 +3,7 @@
     "description": "A browser extension for SparxLearning web apps to improve QoL (without sacrificing learning!) Compatible with SparxMaths.",
     "version": "0.3.0",
     "manifest_version": 3,
-    "permissions": ["storage"],
+    "permissions": ["storage", "unlimitedStorage"],
     "browser_specific_settings": {
         "gecko": {
             "id": "sparx-plus@nikodem.co.uk"

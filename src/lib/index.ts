@@ -20,6 +20,10 @@ export function baseLog(msg : any) {
     }
 }
 
+export function isExperimental() {
+    return true;
+}
+
 export function getVersion() {
     // putting chrome / browser checking here instead of a browser variable cuz it'd fuck up the rest of the code
     return "v"+chrome.runtime.getManifest().version+""+(!getIsRelease() ? "-dev" : "")
@@ -42,7 +46,7 @@ export function getGoogleLink() {
 }
 
 export function getLastUpdated() {
-    return "11th of April, 2025"
+    return "30th of April, 2025"
 }
 
 export function getLogs() {

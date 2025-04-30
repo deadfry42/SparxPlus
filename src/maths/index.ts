@@ -11,7 +11,7 @@ export const customSettings : { [key: string]: any } = { // default settings
     hideVideoButton: false, // hide video button for extreme++ mega challenge >:)
     jumpscareWhenWrong: false, // animation when q wrong (slighly broken)
     jumpscareWhenCorrect: false, // animation when q correct (slighly broken)
-    enableStartupNotification: true, // show notification when sparx plus loads
+    enableStartupNotification: false, // show notification when sparx plus loads
     enableCustomLogo: true, // show logo in top left
     progressiveDisclosure: false, // hide incomplete questions
     disableNameInTopright: false, // hide name in top right
@@ -524,6 +524,7 @@ export const classMapping : ClassMapping[] = [
                 if (name.includes("Incorrect")) {
                     log("Maths", "Got question wrong!");
                     if (customSettings.jumpscareWhenWrong) jumpscare("assets/memes/wrong", customSettings.audio)
+                    
                 } else if (name.includes("Correct")) {
                     log("Maths", "Got question wrong!")
                     if (customSettings.jumpscareWhenCorrect) jumpscare("assets/memes/correct", customSettings.audio)
@@ -538,4 +539,9 @@ export const classMapping : ClassMapping[] = [
         .setIfMatched((element : HTMLElement, condition : Conditions) => {
             doWhiteboard(element, condition)
         }),
+
+    new ClassMapping([Conditions.Modified, Conditions.Added])
+        .addClassMatch("!SparxPlusDisabled")
+        .addClassMatch("Disabled")
+        .addNewClass("SparxPlusDisabled")
 ];

@@ -436,8 +436,7 @@ export function deserialiseWhiteboardStroke(data : string) {
     }
 }
 
-// enums (i would use typescript but it doesn't play nice with browser extensions)
-// this is good enough
+// enums
 export const enum Conditions {
     Added,
     Modified,

@@ -15,6 +15,7 @@
     --colours-text-body-inverted: var(--palette-light-grey);
 
     --colours-locked: #202020;
+    --colours-locked-dark: #3b3b37;
     --colours-disabled: #202020;
 
     --colours-light-background: #2a2a28; /* lets make it not that */
@@ -57,7 +58,7 @@
 }
 
 p, h1, h2, h3, h4, h5, h6 {
-  color: var(--palette-light-grey) !important;
+  color: var(--palette-light-grey) !important
 }
 
 a {
@@ -142,6 +143,10 @@ a:active {
 .SparxPlusTextField {
     background: #3b3b37 !important;
     color: var(--palette-light-grey);
+}
+
+.SparxPlusDisabled {
+    color: #7e7e78 !important;
 }
 
 .experimental {
