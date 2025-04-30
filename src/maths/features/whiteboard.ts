@@ -255,7 +255,6 @@ export const doWhiteboard = (element : HTMLElement, condition : Conditions) => {
                     else {
                         // sparx maths is actually helping whatttt
                         let distance = Math.sqrt(Math.abs((x-lastX)^2 + (y-lastY)^2))
-                        baseLog(distance)
                         canDraw = distance >= distanceRequired;
                     }
 
