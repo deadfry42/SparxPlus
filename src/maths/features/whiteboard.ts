@@ -1,3 +1,4 @@
+import { baseLog } from "../../lib"
 import { Conditions, createBlur, createBlurredMenu, DefaultPenWhiteboardStroke, deserialiseWhiteboardStroke, formatBytes, getCustomSettings, getQuestion, getSVG, PlatformID, TerminatedWhiteboardStroke, WhiteboardStroke } from "../../lib/defaults"
 
 export const doWhiteboard = (element : HTMLElement, condition : Conditions) => {
@@ -6,6 +7,11 @@ export const doWhiteboard = (element : HTMLElement, condition : Conditions) => {
             btn.className = "SparxPlusWhiteboardButton"
 
             btn.onmouseup = async (e) => {
+
+                const distanceRequired = 3;
+                let lastX: number | null = null;
+                let lastY: number | null = null;
+
                 const question = getQuestion(PlatformID.SparxMaths);
                 if (question == null) return;
 
@@ -219,11 +225,15 @@ export const doWhiteboard = (element : HTMLElement, condition : Conditions) => {
 
                 const start = (e : MouseEvent) => {
                     painting = true;
+                    lastX = null;
+                    lastY = null;
                     draw(e)
                 }
 
                 const end = () => {
                     painting = false;
+                    lastX = null;
+                    lastY = null;
                     ctx.beginPath();
                     storeStop();
                 }
@@ -239,15 +249,29 @@ export const doWhiteboard = (element : HTMLElement, condition : Conditions) => {
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
 
-                    var newStroke = new DefaultPenWhiteboardStroke(x, y);
-                
-                    ctx.lineTo(x, y);
-                    ctx.stroke();
-                    ctx.beginPath();
-                    ctx.moveTo(x, y);
+                    let canDraw : boolean | null = null;
 
-                    storeStroke(newStroke)
-                    updateMemoryText();
+                    if (lastX == null || lastY == null) canDraw = true
+                    else {
+                        // sparx maths is actually helping whatttt
+                        let distance = Math.sqrt(Math.abs((x-lastX)^2 + (y-lastY)^2))
+                        baseLog(distance)
+                        canDraw = distance >= distanceRequired;
+                    }
+
+                    if (canDraw) {
+                        lastX = x;
+                        lastY = y;
+                        var newStroke = new DefaultPenWhiteboardStroke(x, y);
+                    
+                        ctx.lineTo(x, y);
+                        ctx.stroke();
+                        ctx.beginPath();
+                        ctx.moveTo(x, y);
+
+                        storeStroke(newStroke)
+                        updateMemoryText();
+                    }
                 }
 
                 canvas.addEventListener('mousedown', start);
