@@ -217,6 +217,7 @@ export const doWhiteboard = (element : HTMLElement, condition : Conditions) => {
 
                 const storeStop = () => {
                     storeStroke(new TerminatedWhiteboardStroke())
+
                 }
 
                 const storeStroke = (stroke : WhiteboardStroke) => {
@@ -236,6 +237,7 @@ export const doWhiteboard = (element : HTMLElement, condition : Conditions) => {
                     lastY = null;
                     ctx.beginPath();
                     storeStop();
+                    setWhiteboardData(); // save after every stroke to prevent data loss
                 }
 
                 const draw = (e : MouseEvent) => {
