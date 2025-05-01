@@ -1,0 +1,25 @@
+name: Build
+
+on:
+  push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: node:22
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          node-version: 22
+      - name: build
+        run: |
+          npm install
+          npm run build
+      - name: create artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: |
+            dist
