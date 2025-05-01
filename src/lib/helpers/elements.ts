@@ -212,30 +212,3 @@ export function createStyleElementFromContent(id : string, content : string) {
     }
     return style;
 }
-
-export function replaceElement(matchClassString : string, element : Element) {
-    var x = document.getElementsByTagName('*');
-    for (var i = 0; i < x.length; i++) {
-        var e = x.item(i)
-        if (e != null) {
-            var cname = e.className;
-            if (cname != null) {
-                try {
-                    if (cname.includes(matchClassString)) {
-                        // sparx logo element
-                            var item = e.children.item(0);
-                            if (item != null) {
-                                element.className = item.className
-                                item?.remove();
-                                e.append(element);
-                            }
-    
-                            return true;
-                    }
-                } catch {
-                    return false;
-                }
-            }
-        }
-    }
-}

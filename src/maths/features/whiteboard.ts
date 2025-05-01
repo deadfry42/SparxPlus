@@ -27,8 +27,6 @@ export const doWhiteboard = (element : HTMLElement) => {
         var whiteboardData : string[] = []
         var removedData : string[] = []
 
-        var startIndex = 0;
-
         var controlDiv = document.createElement("div")
         controlDiv.className = "WhiteboardControlDiv"
         controlDiv.style.marginLeft = "30px"
@@ -128,7 +126,6 @@ export const doWhiteboard = (element : HTMLElement) => {
         clearButton.onclick = () => {
             if (confirm("Are you sure you want to clear the whiteboard?")) {
                 whiteboardData = [];
-                startIndex = 0;
                 painting = false;
                 clear();
                 redraw();
