@@ -1,6 +1,6 @@
-import { QuestionID, Question } from "./classes/questionClasses";
-import { PlatformID } from "./constants/enums";
-import { log } from "./index";
+import { QuestionID, Question } from "../classes/questionClasses";
+import { PlatformID } from "../constants/enums";
+import { log } from "../index";
 
 export var customSettings : { [key: string]: any } = {};
 

@@ -1,5 +1,5 @@
 import { StrokeType } from "../constants/enums";
-import { getCustomSettings } from "../defaults";
+import { getCustomSettings } from "../helpers/defaults";
 
 export class WhiteboardStroke {
     #x : number | null = null;

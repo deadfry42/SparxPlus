@@ -1,6 +1,6 @@
 import { QuestionData, QuestionID } from "../lib/classes/questionClasses";
 import { Conditions, PlatformID, Actions } from "../lib/constants/enums";
-import { getQuestionID, getAsset, getDescendants } from "../lib/defaults";
+import { getQuestionID, getAsset, getDescendants } from "../lib/helpers/defaults";
 import { deserialiseQuestionID } from "../lib/helpers/deserialisation";
 import { appendStyleSheet, sendNotification, jumpscare, appendStyleContent, createNewOptionInDDM } from "../lib/helpers/elements";
 import { baseLog, getLastUpdated, log } from "../lib/index";

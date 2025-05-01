@@ -1,5 +1,5 @@
 import { isExperimental, log } from "../../lib";
-import { getAsset } from "../../lib/defaults";
+import { getAsset } from "../../lib/helpers/defaults";
 import { createBlur, createBlurredMenu, createWarningBox } from "../../lib/helpers/elements";
 
 const key = "seenSplashScreen"

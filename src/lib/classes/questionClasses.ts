@@ -1,5 +1,5 @@
 import { PlatformID } from "../constants/enums";
-import { convertNumberToLetter } from "../defaults";
+import { convertNumberToLetter } from "../helpers/defaults";
 
 export class Question {
     #questionID : QuestionID;
