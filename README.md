@@ -1,8 +1,8 @@
 # SparxPlus
 A browser (chrome and firefox, and soon maybe safari?) extension for SparxLearning web apps to improve QoL (without sacrificing learning!)  
 Compatible with:
-* <img width=14 src="assets/icon/sparx/maths.svg"> [SparxMaths](https://sparxmaths.com).
-* More is planned in the future.
+* <img width=14 src="assets/icon/sparx/maths.svg"> [SparxMaths](https://maths.sparx-learning.com).
+* <img width=14 src="assets/icon/sparx/science.svg"> [SparxScience](https://science.sparx-learning.com). (Planned, not yet supported)
 
 > [!WARNING]
 > This is not officially supported by Sparx, and can be removed, banned or stop working whenever.  
