@@ -1,4 +1,8 @@
-import { Actions, appendStyleContent, appendStyleSheet, BlankPanel, Conditions, createNewOptionInDDM, createNewSettingsPanel, createWarningBox, DescriptivePanel, deserialiseQuestionID, getAsset, getDescendants, getQuestionID, getSVG, InputSetting, jumpscare, PanelType, PlatformID, QuestionData, QuestionID, sendNotification, Setting, SettingsPanel, SettingsType, ToggleSetting } from "../lib/defaults";
+import { QuestionData, QuestionID } from "../lib/classes/questionClasses";
+import { Conditions, PlatformID, Actions } from "../lib/constants/enums";
+import { getQuestionID, getAsset, getDescendants } from "../lib/defaults";
+import { deserialiseQuestionID } from "../lib/helpers/deserialisation";
+import { appendStyleSheet, sendNotification, jumpscare, appendStyleContent, createNewOptionInDDM } from "../lib/helpers/elements";
 import { baseLog, getLastUpdated, log } from "../lib/index";
 import { applySettingsPage } from "./features/settings";
 import { doSplashScreen } from "./features/splashscreen";

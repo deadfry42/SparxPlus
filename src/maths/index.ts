@@ -1,4 +1,10 @@
-import { Actions, Conditions, jumpscare, KeyboardMapping, Panel, SettingsPanel, SettingWarning, InputSetting, ToggleSetting, DescriptivePanel, BlankPanel, setCustomSettings, ClassMapping, TextSetting, deserialiseQuestionID, QuestionData, formatBytes, getAsset} from "../lib/defaults"
+import { KeyboardMapping, ClassMapping } from "../lib/classes/mappingClasses";
+import { QuestionData } from "../lib/classes/questionClasses";
+import { Panel, SettingsPanel, ToggleSetting, SettingWarning, InputSetting, TextSetting, DescriptivePanel, BlankPanel } from "../lib/classes/settingsClasses";
+import { Actions, Conditions } from "../lib/constants/enums";
+import { formatBytes, getAsset, setCustomSettings } from "../lib/defaults";
+import { deserialiseQuestionID } from "../lib/helpers/deserialisation";
+import { jumpscare } from "../lib/helpers/elements";
 import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent, log } from "../lib/index";
 import { doWhiteboard } from "./features/whiteboard";
 

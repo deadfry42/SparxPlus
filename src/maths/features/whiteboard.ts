@@ -1,4 +1,9 @@
-import { createBlur, createBlurredMenu, DefaultPenWhiteboardStroke, deserialiseWhiteboardStroke, formatBytes, getCustomSettings, getQuestion, getSVG, PlatformID, TerminatedWhiteboardStroke, WhiteboardStroke } from "../../lib/defaults"
+import { TerminatedWhiteboardStroke, WhiteboardStroke, DefaultPenWhiteboardStroke } from "../../lib/classes/whiteboardClasses"
+import { PlatformID } from "../../lib/constants/enums"
+import { getSVG } from "../../lib/constants/svgs"
+import { getQuestion, getCustomSettings, formatBytes } from "../../lib/defaults"
+import { deserialiseWhiteboardStroke } from "../../lib/helpers/deserialisation"
+import { createBlur, createBlurredMenu } from "../../lib/helpers/elements"
 
 export const doWhiteboard = (element : HTMLElement) => {
     var btn = document.createElement("button")
