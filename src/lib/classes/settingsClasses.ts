@@ -1,4 +1,10 @@
-export class Panel {
+export interface Panel {
+    getDescription() : string | null;
+    getTitle() : string;
+    setInit(callback : Function) : Panel;
+};
+
+export class BlankPanel implements Panel {
     #title: string;
     #desc: string;
 
@@ -23,17 +29,16 @@ export class Panel {
     }
 };
 
-export class BlankPanel extends Panel {
-    constructor(title: string, description: string) {
-        super(title, description)
-    }
-};
-
-export class DescriptivePanel extends Panel {
+export class DescriptivePanel implements Panel {
     #text: string | null = null;
+    #title: string;
+    #desc: string;
+
+    init: Function | null = null;
 
     constructor(title: string, description: string) {
-        super(title, description)
+        this.#title = title;
+        this.#desc = description;
     }
 
     setText(text : string) : DescriptivePanel {
@@ -44,13 +49,31 @@ export class DescriptivePanel extends Panel {
     getText() : string | null {
         return this.#text;
     }
+
+    getDescription() : string | null {
+        return this.#desc;
+    }
+
+    getTitle() : string {
+        return this.#title;
+    }
+
+    setInit(callback : Function) : Panel {
+        this.init = callback;
+        return this;
+    }
 };
 
-export class SettingsPanel extends Panel {
+export class SettingsPanel implements Panel {
     #settings: Setting[] | null = null;
+    #title: string;
+    #desc: string;
+
+    init: Function | null = null;
 
     constructor(title: string, description: string) {
-        super(title, description)
+        this.#title = title;
+        this.#desc = description;
     }
 
     setSettings(settings : Setting[]) : SettingsPanel {
@@ -71,9 +94,35 @@ export class SettingsPanel extends Panel {
     getSettings() : Setting[] | null {
         return this.#settings;
     }
+
+    getDescription() : string | null {
+        return this.#desc;
+    }
+
+    getTitle() : string {
+        return this.#title;
+    }
+
+    setInit(callback : Function) : Panel {
+        this.init = callback;
+        return this;
+    }
 };
 
-export class Setting {
+export interface Setting {
+    setWarning(warning : SettingWarning) : Setting;
+    getWarning() : SettingWarning | null;
+    getVariableName() : string;
+    setExperimental(bool : boolean) : Setting;
+    getExperimental() : boolean;
+    setName(name : string) : Setting;
+    getName() : string | null;
+    setDescription(text : string) : Setting;
+    getDescription() : string | null;
+};
+
+export class TextSetting implements Setting {
+    #value: string = "undefined";
     #warning: SettingWarning | null = null;
     #variableName: string;
     #name: string | null = null;
@@ -82,54 +131,6 @@ export class Setting {
 
     constructor(variableName : string) {
         this.#variableName = variableName;
-    }
-
-    setWarning(warning : SettingWarning) : Setting {
-        this.#warning = warning;
-        return this;
-    }
-
-    getWarning() : SettingWarning | null {
-        return this.#warning;
-    }
-    
-    getVariableName() : string {
-        return this.#variableName
-    }
-
-    setExperimental(bool : boolean) : Setting {
-        this.#experimental = bool;
-        return this;
-    }
-
-    getExperimental() : boolean {
-        return this.#experimental;
-    }
-
-    setName(name : string) : Setting {
-        this.#name = name;
-        return this;
-    }
-
-    getName() : string | null {
-        return this.#name;
-    }
-
-    setDescription(text : string) : Setting {
-        this.#description = text;
-        return this;
-    }
-
-    getDescription() : string | null {
-        return this.#description;
-    }
-};
-
-export class TextSetting extends Setting {
-    #value: string = "undefined";
-
-    constructor(variableName : string) {
-        super(variableName);
     }
 
     setValue(text : string) : TextSetting {
@@ -150,28 +151,159 @@ export class TextSetting extends Setting {
     getValue() : string {
         return this.#value;
     }
-};
 
-export class ToggleSetting extends Setting {
-    constructor(variableName : string) {
-        super(variableName);
+    setWarning(warning : SettingWarning) : TextSetting {
+        this.#warning = warning;
+        return this;
+    }
+
+    getWarning() : SettingWarning | null {
+        return this.#warning;
+    }
+    
+    getVariableName() : string {
+        return this.#variableName
+    }
+
+    setExperimental(bool : boolean) : TextSetting {
+        this.#experimental = bool;
+        return this;
+    }
+
+    getExperimental() : boolean {
+        return this.#experimental;
+    }
+
+    setName(name : string) : TextSetting {
+        this.#name = name;
+        return this;
+    }
+
+    getName() : string | null {
+        return this.#name;
+    }
+
+    setDescription(text : string) : TextSetting {
+        this.#description = text;
+        return this;
+    }
+
+    getDescription() : string | null {
+        return this.#description;
     }
 };
 
-export class InputSetting extends Setting {
+export class ToggleSetting implements Setting {
+    #warning: SettingWarning | null = null;
+    #variableName: string;
+    #name: string | null = null;
+    #description: string | null = null;
+    #experimental: boolean = false;
+
+    constructor(variableName : string) {
+        this.#variableName = variableName;
+    }
+
+    setWarning(warning : SettingWarning) : ToggleSetting {
+        this.#warning = warning;
+        return this;
+    }
+
+    getWarning() : SettingWarning | null {
+        return this.#warning;
+    }
+    
+    getVariableName() : string {
+        return this.#variableName
+    }
+
+    setExperimental(bool : boolean) : ToggleSetting {
+        this.#experimental = bool;
+        return this;
+    }
+
+    getExperimental() : boolean {
+        return this.#experimental;
+    }
+
+    setName(name : string) : ToggleSetting {
+        this.#name = name;
+        return this;
+    }
+
+    getName() : string | null {
+        return this.#name;
+    }
+
+    setDescription(text : string) : ToggleSetting {
+        this.#description = text;
+        return this;
+    }
+
+    getDescription() : string | null {
+        return this.#description;
+    }
+};
+
+export class InputSetting implements Setting {
     #placeholder : string | null = null;
+    #warning: SettingWarning | null = null;
+    #variableName: string;
+    #name: string | null = null;
+    #description: string | null = null;
+    #experimental: boolean = false;
 
     constructor(variableName : string) {
-        super(variableName);
+        this.#variableName = variableName;
     }
 
-    setPlaceholder(text : string) : Setting {
+    setPlaceholder(text : string) : InputSetting {
         this.#placeholder = text;
         return this;
     }
 
     getPlaceholder() : string | null {
         return this.#placeholder;
+    }
+
+    setWarning(warning : SettingWarning) : InputSetting {
+        this.#warning = warning;
+        return this;
+    }
+
+    getWarning() : SettingWarning | null {
+        return this.#warning;
+    }
+    
+    getVariableName() : string {
+        return this.#variableName
+    }
+
+    setExperimental(bool : boolean) : InputSetting {
+        this.#experimental = bool;
+        return this;
+    }
+
+    getExperimental() : boolean {
+        return this.#experimental;
+    }
+
+    setName(name : string) : InputSetting {
+        this.#name = name;
+        return this;
+    }
+
+    getName() : string | null {
+        return this.#name;
+    }
+
+    setDescription(text : string) : InputSetting {
+        this.#description = text;
+        return this;
+    }
+
+    getDescription() : string | null {
+        return this.#description;
     }
 };
 
