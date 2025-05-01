@@ -1,10 +1,10 @@
 import { baseLog, isExperimental, log } from "../../lib";
-import { createBlur, createBlurredMenu, createWarningBox } from "../../lib/defaults";
+import { createBlur, createBlurredMenu, createWarningBox, getAsset } from "../../lib/defaults";
 
 const key = "seenSplashScreen"
 
 const checkHasSeen = () : Promise<boolean> => {
-    return new Promise((resolve, rej) => {
+    return new Promise((resolve) => {
         chrome.storage.local.get([key]).then((res) => {
             if (res == null) resolve(false);
             if (key in res) {
@@ -38,7 +38,7 @@ export const doSplashScreen = () => {
         var headerIcon = document.createElement("img")
         headerIcon.width = 50
         headerIcon.height = 50
-        headerIcon.src = chrome.runtime.getURL("assets/icon/plugin-icon-fullsize.png")
+        headerIcon.src = getAsset("icon/plugin-icon-fullsize.png")
         header.append(headerIcon)
     
         var headerText = document.createElement("h1")

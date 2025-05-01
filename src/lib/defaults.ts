@@ -14,12 +14,19 @@ export function convertNumberToLetter(num : number) {
     return String.fromCharCode((num-1) + 'A'.charCodeAt(0))
 }
 
+export function getAsset(path : string) : string {
+    // idiot proofing
+    if (path.startsWith("assets/") || path.startsWith("./assets/")) return chrome.runtime.getURL(path)
+    else if (path.startsWith("/")) return chrome.runtime.getURL("assets"+path)
+    return chrome.runtime.getURL("assets/"+path)
+}
+
 export function formatBytes(bytes : number, decimals = 2) {
     if (!+bytes) return '0 Bytes'
 
     const k = 1024
     const dm = decimals < 0 ? 0 : decimals
-    const sizes = ['Bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
+    const sizes = ['Bytes', 'KiB', 'MiB', 'GiB', 'TiB',     'PiB', 'EiB', 'ZiB', 'YiB']
 
     const i = Math.floor(Math.log(bytes) / Math.log(k))
 
@@ -161,7 +168,7 @@ export function jumpscare(url : string, permitAudio? : boolean) {
     if (permitAudio != null) {
         if (permitAudio == false) canAudio = false;
     }
-    var audio : HTMLAudioElement = new Audio(chrome.runtime.getURL(url+".mp3"));
+    var audio : HTMLAudioElement = new Audio(url+".mp3");
     var imgElement = document.createElement("img")
     imgElement.style.zIndex = "99999999";
     imgElement.style.position = "absolute"
@@ -177,7 +184,7 @@ export function jumpscare(url : string, permitAudio? : boolean) {
     imgElement.style.width = `${width}px`
     imgElement.style.height = `${height}px`
     imgElement.style.pointerEvents = "none"
-    imgElement.src = chrome.runtime.getURL(url+".png")
+    imgElement.src = url+".png"
     document.body.append(imgElement)
     setTimeout(() => {
         imgElement.animate(

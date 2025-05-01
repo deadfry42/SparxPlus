@@ -1,5 +1,5 @@
-import { Actions, Conditions, jumpscare, KeyboardMapping, Panel, SettingsPanel, SettingWarning, InputSetting, ToggleSetting, DescriptivePanel, BlankPanel, setCustomSettings, ClassMapping, TextSetting, getQuestion, getQuestionID, deserialiseQuestionID, QuestionData, formatBytes} from "../lib/defaults"
-import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent, log, baseLog } from "../lib/index";
+import { Actions, Conditions, jumpscare, KeyboardMapping, Panel, SettingsPanel, SettingWarning, InputSetting, ToggleSetting, DescriptivePanel, BlankPanel, setCustomSettings, ClassMapping, TextSetting, deserialiseQuestionID, QuestionData, formatBytes, getAsset} from "../lib/defaults"
+import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent, log } from "../lib/index";
 import { doWhiteboard } from "./features/whiteboard";
 
 // settings which are set by the user
@@ -497,7 +497,7 @@ export const classMapping : ClassMapping[] = [
         .addClassMatch("TimesTablesButton")
         .setIfMatched((element : HTMLElement, condition : Conditions) => {
             if (customSettings.darkMode) {
-                element.style.backgroundImage = `url(${chrome.runtime.getURL("assets/darkmode/images/TimesTableCard.png")})`
+                element.style.backgroundImage = `url(${getAsset("darkmode/images/TimesTableCard.png")})`
             }
         }),
 

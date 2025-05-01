@@ -1,4 +1,4 @@
-import { Actions, appendStyleContent, appendStyleSheet, BlankPanel, Conditions, createNewOptionInDDM, createNewSettingsPanel, createWarningBox, DescriptivePanel, deserialiseQuestionID, getDescendants, getQuestionID, getSVG, InputSetting, jumpscare, PanelType, PlatformID, QuestionData, QuestionID, sendNotification, Setting, SettingsPanel, SettingsType, ToggleSetting } from "../lib/defaults";
+import { Actions, appendStyleContent, appendStyleSheet, BlankPanel, Conditions, createNewOptionInDDM, createNewSettingsPanel, createWarningBox, DescriptivePanel, deserialiseQuestionID, getAsset, getDescendants, getQuestionID, getSVG, InputSetting, jumpscare, PanelType, PlatformID, QuestionData, QuestionID, sendNotification, Setting, SettingsPanel, SettingsType, ToggleSetting } from "../lib/defaults";
 import { baseLog, getLastUpdated, log } from "../lib/index";
 import { applySettingsPage } from "./features/settings";
 import { doSplashScreen } from "./features/splashscreen";
@@ -197,7 +197,7 @@ import { classMapping, customSettings, keyboardMapping, setUpdateDebugMenu, setT
 
         const settingsLoaded = (res : any) => {
             if (res.darkMode) {
-                appendStyleSheet("darkmodeSP", chrome.runtime.getURL("assets/css/darkmodemaths.css"));
+                appendStyleSheet("darkmodeSP", getAsset("css/darkmodemaths.css"));
             }
             if (res.test) {
                 addOptionToDDMenu(null, "SparxPlus Test", () => {
@@ -313,7 +313,7 @@ import { classMapping, customSettings, keyboardMapping, setUpdateDebugMenu, setT
                                         if (customSettings.enableCustomLogo) {
                                             var newImg = document.createElement("img");
                                             newImg.alt = "Sparx Maths"
-                                            newImg.src = chrome.runtime.getURL("./assets/titles/sparxmaths.png")
+                                            newImg.src = getAsset("titles/sparxmaths.png")
                                             newImg.style.width = "150px";
                                             
                                             n.className = n.className
@@ -358,7 +358,7 @@ import { classMapping, customSettings, keyboardMapping, setUpdateDebugMenu, setT
                             } else if (name.includes("PageBackgroundImage")) {
                                 if (customSettings.darkMode) {
                                     // log("CSS", "Changed the background gradient to the dark variant!")
-                                    (<HTMLImageElement>realnode).src = chrome.runtime.getURL("assets/darkmode/gradients/maths.svg")
+                                    (<HTMLImageElement>realnode).src = getAsset("darkmode/gradients/maths.svg")
                                 }
                             }
 
