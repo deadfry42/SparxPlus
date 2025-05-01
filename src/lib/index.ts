@@ -1,7 +1,9 @@
 var logs : string[] = [];
 var changedEvents : Function[] = [];
 
-export function log(department : string, msg : string) {
+import data from '../data.json'
+
+export function log(department : string, msg : string) : void {
     var res = "[SparxPlus] "+department+" // "+msg
     console.log(res)
     logs.push(res)
@@ -11,7 +13,7 @@ export function log(department : string, msg : string) {
     }
 }
 
-export function baseLog(msg : any) {
+export function baseLog(msg : any) : void {
     console.log(msg)
     logs.push(msg)
 
@@ -20,39 +22,39 @@ export function baseLog(msg : any) {
     }
 }
 
-export function isExperimental() {
+export function isExperimental() : boolean {
     return true;
 }
 
-export function getVersion() {
+export function getVersion() : string {
     return "v"+chrome.runtime.getManifest().version+""+(!getIsRelease() ? "-dev" : "")
 }
 
-export function getIsRelease() {
-    return false; // set automatically
+export function getIsRelease() : boolean {
+    return data.isRelease; // set automatically
 }
 
-export function getGithubLink() {
-    return "https://github.com/deadfry42/SparxPlus"
+export function getGithubLink() : string {
+    return data.links.github
 }
 
-export function getDiscordLink() {
-    return "https://discord.gg/uKbdBa4M5B"
+export function getDiscordLink() : string {
+    return data.links.discord
 }
 
-export function getGoogleLink() {
-    return "https://chromewebstore.google.com/detail/sparx-plus/mlkhfcljmcjcnemaajbgmojapbkhoaik"
+export function getGoogleLink() : string {
+    return data.links.extension
 }
 
-export function getLastUpdated() {
-    return "1st of May, 2025"
+export function getLastUpdated() : string {
+    return data.lastUpdated
 }
 
-export function getLogs() {
+export function getLogs() : string[] {
     return logs;
 }
 
-export function addChangedEvent(event : Function) {
+export function addChangedEvent(event : Function) : void {
     changedEvents.push(event);
 }
 

@@ -11,9 +11,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Set release to true
+      - name: "Set release flag"
         run: |
-          sed 's/return\ false\;\ \/\/\ set\ automatically/return\ true/g' src/lib/index.ts
+          sed 's/\"isRelease\"\: false\,/\"isRelease\"\: true\,/g' src/data.json > src/data.json
       - name: Build the extension
         run: |
           npm install
