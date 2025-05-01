@@ -1,318 +1,317 @@
-import { baseLog } from "../../lib"
-import { Conditions, createBlur, createBlurredMenu, DefaultPenWhiteboardStroke, deserialiseWhiteboardStroke, formatBytes, getCustomSettings, getQuestion, getSVG, PlatformID, TerminatedWhiteboardStroke, WhiteboardStroke } from "../../lib/defaults"
+import { createBlur, createBlurredMenu, DefaultPenWhiteboardStroke, deserialiseWhiteboardStroke, formatBytes, getCustomSettings, getQuestion, getSVG, PlatformID, TerminatedWhiteboardStroke, WhiteboardStroke } from "../../lib/defaults"
 
-export const doWhiteboard = (element : HTMLElement, condition : Conditions) => {
+export const doWhiteboard = (element : HTMLElement) => {
     var btn = document.createElement("button")
-            btn.textContent = "Whiteboard"
-            btn.className = "SparxPlusWhiteboardButton"
+    btn.textContent = "Whiteboard"
+    btn.className = "SparxPlusWhiteboardButton"
 
-            btn.onmouseup = async (e) => {
+    btn.onmouseup = async (e) => {
 
-                const distanceRequired = 3;
-                let lastX: number | null = null;
-                let lastY: number | null = null;
+        const distanceRequired = 3;
+        let lastX: number | null = null;
+        let lastY: number | null = null;
 
-                const question = getQuestion(PlatformID.SparxMaths);
-                if (question == null) return;
+        const question = getQuestion(PlatformID.SparxMaths);
+        if (question == null) return;
 
-                var blur = createBlur()
-                var menu = createBlurredMenu(blur, "Whiteboard", () => {
-                    setWhiteboardData()
-                })
+        var blur = createBlur()
+        var menu = createBlurredMenu(blur, "Whiteboard", () => {
+            setWhiteboardData()
+        })
 
-                var whiteboardData : string[] = []
-                var removedData : string[] = []
+        var whiteboardData : string[] = []
+        var removedData : string[] = []
 
-                var startIndex = 0;
+        var startIndex = 0;
 
-                var controlDiv = document.createElement("div")
-                controlDiv.className = "WhiteboardControlDiv"
-                controlDiv.style.marginLeft = "30px"
+        var controlDiv = document.createElement("div")
+        controlDiv.className = "WhiteboardControlDiv"
+        controlDiv.style.marginLeft = "30px"
 
-                var memoryDiv = document.createElement("div")
-                memoryDiv.className = "WhiteboardControlDiv"
-                memoryDiv.style.top = "30px"
-                memoryDiv.style.width = "auto"
+        var memoryDiv = document.createElement("div")
+        memoryDiv.className = "WhiteboardControlDiv"
+        memoryDiv.style.top = "30px"
+        memoryDiv.style.width = "auto"
 
-                var memoryText = document.createElement("p")
-                memoryText.innerText = ""
+        var memoryText = document.createElement("p")
+        memoryText.innerText = ""
 
-                var undoButton = document.createElement("button")
-                undoButton.setAttribute("aria-label", "Close")
-                undoButton.className = "SparxPlusIconButton"
-                undoButton.style.minWidth = "25px"
-                undoButton.style.marginRight = "5px"
-                undoButton.append(getSVG("undo"))
-                undoButton.onclick = () => {
-                    var reachedATerminator = false;
-                    while (true) {
-                        const i = whiteboardData.length;
-                        const data = whiteboardData[i-1];
-                        const stroke = deserialiseWhiteboardStroke(data);
+        var undoButton = document.createElement("button")
+        undoButton.setAttribute("aria-label", "Close")
+        undoButton.className = "SparxPlusIconButton"
+        undoButton.style.minWidth = "25px"
+        undoButton.style.marginRight = "5px"
+        undoButton.append(getSVG("undo"))
+        undoButton.onclick = () => {
+            var reachedATerminator = false;
+            while (true) {
+                const i = whiteboardData.length;
+                const data = whiteboardData[i-1];
+                const stroke = deserialiseWhiteboardStroke(data);
 
-                        if (stroke == null) {
-                            break;
-                        };
+                if (stroke == null) {
+                    break;
+                };
 
-                        if (stroke instanceof TerminatedWhiteboardStroke) {
-                            if (reachedATerminator) {
-                                break;
-                            }
-                            reachedATerminator = true;
-                        };
-
-                        var removal = whiteboardData.pop();
-                        if (removal != null) removedData.unshift(removal);
+                if (stroke instanceof TerminatedWhiteboardStroke) {
+                    if (reachedATerminator) {
+                        break;
                     }
-                    clear()
-                    redraw()
+                    reachedATerminator = true;
+                };
+
+                var removal = whiteboardData.pop();
+                if (removal != null) removedData.unshift(removal);
+            }
+            clear()
+            redraw()
+        }
+
+        var redoButton = document.createElement("button")
+        redoButton.setAttribute("aria-label", "Close")
+        redoButton.className = "SparxPlusIconButton"
+        redoButton.style.minWidth = "25px"
+        redoButton.style.marginRight = "5px"
+        redoButton.append(getSVG("redo"))
+        redoButton.onclick = () => {
+            if (removedData == null || removedData.length == 0) return;
+
+            var end = false;
+            var hasTerminator = false;
+            var count = 0;
+
+            for (let i = 0; i < removedData.length; i++) {
+                if (end == true) break;
+                const data = removedData[i];
+                const stroke = deserialiseWhiteboardStroke(data);
+                if (stroke == null) return;
+                if (stroke instanceof TerminatedWhiteboardStroke) {
+                    if (hasTerminator) end = true;
+                    hasTerminator = true;
                 }
+                whiteboardData.push(stroke.serialise());
+                count++;
+            }
 
-                var redoButton = document.createElement("button")
-                redoButton.setAttribute("aria-label", "Close")
-                redoButton.className = "SparxPlusIconButton"
-                redoButton.style.minWidth = "25px"
-                redoButton.style.marginRight = "5px"
-                redoButton.append(getSVG("redo"))
-                redoButton.onclick = () => {
-                    if (removedData == null || removedData.length == 0) return;
+            var newRemoved = removedData.reverse();
+            for (var i = 0; i < count; i++) {
+                newRemoved.pop();
+            }
+            removedData = newRemoved.reverse()
 
-                    var end = false;
-                    var hasTerminator = false;
-                    var count = 0;
-
-                    for (let i = 0; i < removedData.length; i++) {
-                        if (end == true) break;
-                        const data = removedData[i];
-                        const stroke = deserialiseWhiteboardStroke(data);
-                        if (stroke == null) return;
-                        if (stroke instanceof TerminatedWhiteboardStroke) {
-                            if (hasTerminator) end = true;
-                            hasTerminator = true;
-                        }
-                        whiteboardData.push(stroke.serialise());
-                        count++;
+            var addStop = true;
+            const data = whiteboardData[whiteboardData.length-1]
+            if (data != null) {
+                const stroke = deserialiseWhiteboardStroke(data);
+                if (stroke != null) {
+                    if (stroke instanceof TerminatedWhiteboardStroke) {
+                        var addStop = false;
                     }
+                } 
+            }
+            if (addStop) storeStop();
+            clear();
+            redraw();
+        }
 
-                    var newRemoved = removedData.reverse();
-                    for (var i = 0; i < count; i++) {
-                        newRemoved.pop();
-                    }
-                    removedData = newRemoved.reverse()
+        var clearButton = document.createElement("button")
+        clearButton.setAttribute("aria-label", "Close")
+        clearButton.className = "SparxPlusIconButton"
+        clearButton.style.minWidth = "25px"
+        clearButton.style.marginRight = "5px"
+        clearButton.append(getSVG("bin"))
+        clearButton.onclick = () => {
+            if (confirm("Are you sure you want to clear the whiteboard?")) {
+                whiteboardData = [];
+                startIndex = 0;
+                painting = false;
+                clear();
+                redraw();
+            }
+        }
 
-                    var addStop = true;
-                    const data = whiteboardData[whiteboardData.length-1]
-                    if (data != null) {
-                        const stroke = deserialiseWhiteboardStroke(data);
-                        if (stroke != null) {
-                            if (stroke instanceof TerminatedWhiteboardStroke) {
-                                var addStop = false;
-                            }
-                        } 
-                    }
-                    if (addStop) storeStop();
-                    clear();
-                    redraw();
-                }
+        controlDiv.append(undoButton, redoButton, clearButton)
 
-                var clearButton = document.createElement("button")
-                clearButton.setAttribute("aria-label", "Close")
-                clearButton.className = "SparxPlusIconButton"
-                clearButton.style.minWidth = "25px"
-                clearButton.style.marginRight = "5px"
-                clearButton.append(getSVG("bin"))
-                clearButton.onclick = () => {
-                    if (confirm("Are you sure you want to clear the whiteboard?")) {
-                        whiteboardData = [];
-                        startIndex = 0;
-                        painting = false;
-                        clear();
-                        redraw();
-                    }
-                }
+        menu.append(controlDiv)
 
-                controlDiv.append(undoButton, redoButton, clearButton)
+        var updateMemoryText = () => {};
 
-                menu.append(controlDiv)
+        if (getCustomSettings().whiteboardShowSize) {
+            memoryDiv.append(memoryText)
 
-                var updateMemoryText = () => {};
+            updateMemoryText = () => {
+                var string = JSON.stringify(whiteboardData);
+                var bytes = string.length*8;
+                memoryText.innerText = `Whiteboard size: ${formatBytes(bytes)}`
+            };
+            updateMemoryText();
 
-                if (getCustomSettings().whiteboardShowSize) {
-                    memoryDiv.append(memoryText)
+            menu.append(memoryDiv)
+        }
 
-                    updateMemoryText = () => {
-                        var string = JSON.stringify(whiteboardData);
-                        var bytes = string.length*8;
-                        memoryText.innerText = `Whiteboard size: ${formatBytes(bytes)}`
-                    };
-                    updateMemoryText();
+        var whiteboardContainer = document.createElement("div") 
+        whiteboardContainer.className = "SparxPlusVideoContainer SparxPlusWhiteboard"
+        menu.append(whiteboardContainer)
 
-                    menu.append(memoryDiv)
-                }
+        const setWhiteboardData = () => {
+            question.getData().setKey("Whiteboard", whiteboardData)
+            question.getData().updateUseDate();
+            question.getData().getData() .then((data : any) => {
+                question.getData().updateData(data);
+            })
+        }
 
-                var whiteboardContainer = document.createElement("div") 
-                whiteboardContainer.className = "SparxPlusVideoContainer SparxPlusWhiteboard"
-                menu.append(whiteboardContainer)
+        question.getData().getKey("Whiteboard") .then((val) => {
+            whiteboardData = val == null ? [] : <string[]>val;
 
-                const setWhiteboardData = () => {
-                    question.getData().setKey("Whiteboard", whiteboardData)
-                    question.getData().updateUseDate();
-                    question.getData().getData() .then((data : any) => {
-                        question.getData().updateData(data);
-                    })
-                }
+            canvas.width = canvas.getBoundingClientRect().width
+            canvas.height = canvas.getBoundingClientRect().height
+            redraw()
+        })
 
-                question.getData().getKey("Whiteboard") .then((val) => {
-                    whiteboardData = val == null ? [] : <string[]>val;
+        const canvas = document.createElement("canvas")
+        canvas.className = "SparxPlusWhiteboard"
+        canvas.style.width = "100%"
+        canvas.style.height = "100%"
+        if (!getCustomSettings().darkMode || getCustomSettings().whiteboardDarkModeOverride) {
+            canvas.style.backgroundColor = "white"
+        }
 
-                    canvas.width = canvas.getBoundingClientRect().width
-                    canvas.height = canvas.getBoundingClientRect().height
-                    redraw()
-                })
+        const ctx = canvas.getContext("2d")
+        if (ctx == null) return;
 
-                const canvas = document.createElement("canvas")
-                canvas.className = "SparxPlusWhiteboard"
-                canvas.style.width = "100%"
-                canvas.style.height = "100%"
-                if (!getCustomSettings().darkMode || getCustomSettings().whiteboardDarkModeOverride) {
-                    canvas.style.backgroundColor = "white"
-                }
+        whiteboardContainer.append(canvas)
 
-                const ctx = canvas.getContext("2d")
-                if (ctx == null) return;
+        let painting = false;
+        let brushColor = getCustomSettings().darkMode ? (getCustomSettings().whiteboardDarkModeOverride ? "#000000" : "#FFFFFF") : "#000000";
+        let brushSize = 5;
 
-                whiteboardContainer.append(canvas)
+        const clear = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
 
-                let painting = false;
-                let brushColor = getCustomSettings().darkMode ? (getCustomSettings().whiteboardDarkModeOverride ? "#000000" : "#FFFFFF") : "#000000";
-                let brushSize = 5;
-
-                const clear = () => {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                }
-
-                const redraw = () => {
-                    painting = false;
-                    for (var data of whiteboardData) {
-                        const stroke = deserialiseWhiteboardStroke(data);
-                        if (stroke == null) continue;
-                        if (stroke instanceof TerminatedWhiteboardStroke) {
-                            ctx.beginPath();
-                        } else {
-                            var x = stroke.getX();
-                            var y = stroke.getY();
-                            ctx.lineWidth = brushSize;
-                            ctx.lineCap = 'round';
-                            ctx.strokeStyle = stroke.getColour();
-
-                            ctx.lineTo(x, y);
-                            ctx.stroke();
-                            ctx.beginPath();
-                            ctx.moveTo(x, y);
-                        }
-                    }
+        const redraw = () => {
+            painting = false;
+            for (var data of whiteboardData) {
+                const stroke = deserialiseWhiteboardStroke(data);
+                if (stroke == null) continue;
+                if (stroke instanceof TerminatedWhiteboardStroke) {
                     ctx.beginPath();
-                    updateMemoryText();
-                }
-
-                const storeStop = () => {
-                    storeStroke(new TerminatedWhiteboardStroke())
-
-                }
-
-                const storeStroke = (stroke : WhiteboardStroke) => {
-                    whiteboardData.push(stroke.serialise())
-                }
-
-                const start = (e : MouseEvent) => {
-                    painting = true;
-                    lastX = null;
-                    lastY = null;
-                    draw(e)
-                }
-
-                const end = () => {
-                    painting = false;
-                    lastX = null;
-                    lastY = null;
-                    ctx.beginPath();
-                    storeStop();
-                    setWhiteboardData(); // save after every stroke to prevent data loss
-                }
-
-                const draw = (e : MouseEvent) => {
-                    if (!painting) return;
-
+                } else {
+                    var x = stroke.getX();
+                    var y = stroke.getY();
                     ctx.lineWidth = brushSize;
                     ctx.lineCap = 'round';
-                    ctx.strokeStyle = brushColor;
-                
-                    const rect = canvas.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
+                    ctx.strokeStyle = stroke.getColour();
 
-                    let canDraw : boolean | null = null;
-
-                    if (lastX == null || lastY == null) canDraw = true
-                    else {
-                        // sparx maths is actually helping whatttt
-                        let distance = Math.sqrt(Math.abs((x-lastX)^2 + (y-lastY)^2))
-                        canDraw = distance >= distanceRequired;
-                    }
-
-                    if (canDraw) {
-                        lastX = x;
-                        lastY = y;
-                        var newStroke = new DefaultPenWhiteboardStroke(x, y);
-                    
-                        ctx.lineTo(x, y);
-                        ctx.stroke();
-                        ctx.beginPath();
-                        ctx.moveTo(x, y);
-
-                        storeStroke(newStroke)
-                        updateMemoryText();
-                    }
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
                 }
-
-                canvas.addEventListener('mousedown', start);
-                canvas.addEventListener('mouseup', end);
-                canvas.addEventListener('mousemove', draw);
-
-                canvas.addEventListener('touchstart', (e) => {
-                    e.preventDefault()
-                    const touch = e.touches[0];
-                    const mouseEvent = new MouseEvent('mousedown', {
-                        clientX: touch.clientX,
-                        clientY: touch.clientY
-                    });
-                    canvas.dispatchEvent(mouseEvent);
-                });
-                canvas.addEventListener('touchend', () => {
-                    e.preventDefault()
-                    const mouseEvent = new MouseEvent('mouseup', {});
-                    canvas.dispatchEvent(mouseEvent);
-                });
-                
-                canvas.addEventListener('touchmove', (e) => {
-                    e.preventDefault()
-                    const touch = e.touches[0];
-                    const mouseEvent = new MouseEvent('mousemove', {
-                        clientX: touch.clientX,
-                        clientY: touch.clientY
-                    });
-                    canvas.dispatchEvent(mouseEvent);
-                });
-
-                window.addEventListener("resize", (e) => {
-                    canvas.width = canvas.getBoundingClientRect().width
-                    canvas.height = canvas.getBoundingClientRect().height
-
-                    redraw();
-                })
-
-                document.body.append(blur)
-                document.body.append(menu)
             }
-            element.append(btn)
+            ctx.beginPath();
+            updateMemoryText();
+        }
+
+        const storeStop = () => {
+            storeStroke(new TerminatedWhiteboardStroke())
+
+        }
+
+        const storeStroke = (stroke : WhiteboardStroke) => {
+            whiteboardData.push(stroke.serialise())
+        }
+
+        const start = (e : MouseEvent) => {
+            painting = true;
+            lastX = null;
+            lastY = null;
+            draw(e)
+        }
+
+        const end = () => {
+            painting = false;
+            lastX = null;
+            lastY = null;
+            ctx.beginPath();
+            storeStop();
+            setWhiteboardData(); // save after every stroke to prevent data loss
+        }
+
+        const draw = (e : MouseEvent) => {
+            if (!painting) return;
+
+            ctx.lineWidth = brushSize;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = brushColor;
+        
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            let canDraw : boolean | null = null;
+
+            if (lastX == null || lastY == null) canDraw = true
+            else {
+                // sparx maths is actually helping whatttt
+                let distance = Math.sqrt(Math.abs((x-lastX)^2 + (y-lastY)^2))
+                canDraw = distance >= distanceRequired;
+            }
+
+            if (canDraw) {
+                lastX = x;
+                lastY = y;
+                var newStroke = new DefaultPenWhiteboardStroke(x, y);
+            
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+
+                storeStroke(newStroke)
+                updateMemoryText();
+            }
+        }
+
+        canvas.addEventListener('mousedown', start);
+        canvas.addEventListener('mouseup', end);
+        canvas.addEventListener('mousemove', draw);
+
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault()
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousedown', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        });
+        canvas.addEventListener('touchend', () => {
+            e.preventDefault()
+            const mouseEvent = new MouseEvent('mouseup', {});
+            canvas.dispatchEvent(mouseEvent);
+        });
+        
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault()
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        });
+
+        window.addEventListener("resize", (e) => {
+            canvas.width = canvas.getBoundingClientRect().width
+            canvas.height = canvas.getBoundingClientRect().height
+
+            redraw();
+        })
+
+        document.body.append(blur)
+        document.body.append(menu)
+    }
+    element.append(btn)
 }

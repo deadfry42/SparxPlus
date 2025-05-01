@@ -562,7 +562,7 @@ export const classMapping : ClassMapping[] = [
         .addClassMatch("QuestionInfo")
         .addNewClass("SparxPlusQuestionInfo")
         .setIfMatched((element : HTMLElement, condition : Conditions) => {
-            doWhiteboard(element, condition)
+            doWhiteboard(element)
         }),
 
     new ClassMapping([Conditions.Modified, Conditions.Added])
