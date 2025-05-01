@@ -9,12 +9,14 @@ jobs:
     container:
       image: node:22
     steps:
-      - name: build extension
-      - uses: actions/checkout@v3
+      - name: checkout
+        uses: actions/checkout@v3
         with:
           node-version: 22
-      - run: npm install
-      - run: npm run build
+      - name: build
+        run: |
+          npm install
+          npm run build
       - name: create artifact
         uses: actions/upload-artifact@v4
         with:
