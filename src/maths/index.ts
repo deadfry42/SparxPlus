@@ -109,7 +109,7 @@ export const settingsFrontend : Panel[] = [
                     .setDescription("Use the light mode whiteboard even if in dark mode."))
         .addSetting(new ToggleSetting("whiteboardShowSize")
                     .setName("Show data size")
-                    .setDescription("Show the size of the whiteboard data (in bytes)"))
+                    .setDescription("Show the size of the whiteboard data"))
         .addSetting(new TextSetting("blank")
                     .operate((setting) => {
                         // this is promise-ception
