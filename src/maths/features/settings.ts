@@ -1,6 +1,6 @@
 import { customSettings, settingsFrontend } from "..";
 import { baseLog, getIsRelease, log } from "../../lib";
-import { SettingsPanel, DescriptivePanel, BlankPanel, SettingWarning, ToggleSetting, InputSetting, TextSetting } from "../../lib/classes/settingsClasses";
+import { SettingsPanel, DescriptivePanel, BlankPanel, SettingWarning, ToggleSetting, InputSetting, TextSetting, SettingDisclosure, SettingInformation } from "../../lib/classes/settingsClasses";
 import { getSVG } from "../../lib/constants/svgs";
 import { createWarningBox, createNewSettingsPanel } from "../../lib/helpers/elements";
 
@@ -87,27 +87,27 @@ const configureSettingsPanel = (panelConfig : SettingsPanel, panel : HTMLElement
         settingsOuterContainer.ariaOrientation = "vertical"
         settingsOuterContainer.setAttribute("data-orientation", "vertical")
 
-        let settingWarningConfig : SettingWarning | null = settingConfig.getWarning();
-        let settingWarningElement : HTMLElement | null = null;
+        let settingDisclosureConfig : SettingDisclosure | null = settingConfig.getDisclosure();
+        let settingDisclosureElement : HTMLElement | null = null;
         
-        if (settingWarningConfig != null) {
-            let text = settingWarningConfig.getText() == null ? "" : settingWarningConfig.getText()
-            let info = settingWarningConfig.getInformational() == null ? false : settingWarningConfig.getInformational()
-            settingWarningElement = createWarningBox(text,info);
-            settingWarningElement.style.display = "none";
+        if (settingDisclosureConfig != null) {
+            let text = settingDisclosureConfig.getText() == null ? "" : settingDisclosureConfig.getText()
+            let info = settingDisclosureConfig instanceof SettingInformation ? true : false
+            settingDisclosureElement = createWarningBox(text,info);
+            settingDisclosureElement.style.display = "none";
         }
 
         let changeWarningVisibility : Function = (warningVisibility : boolean) => {
-            if (settingWarningElement != null && settingWarningConfig != null) {
-                if (settingWarningConfig.getStatic()) {
-                    settingWarningElement.style.display = "block";
+            if (settingDisclosureElement != null && settingDisclosureConfig != null) {
+                if (settingDisclosureConfig.getStatic()) {
+                    settingDisclosureElement.style.display = "block";
                     return;
                 }
 
                 if (warningVisibility) {
-                    settingWarningElement.style.display = "block";
+                    settingDisclosureElement.style.display = "block";
                 } else {
-                    settingWarningElement.style.display = "none";
+                    settingDisclosureElement.style.display = "none";
                 }
             }
         };
@@ -161,7 +161,7 @@ const configureSettingsPanel = (panelConfig : SettingsPanel, panel : HTMLElement
             configureTextSetting(settingConfig, labelDiv, settingsOuterContainer, changeWarningVisibility, updateSettingsWarning);
         }
 
-        if (settingWarningElement != null) settingsOuterContainer.append(settingWarningElement)
+        if (settingDisclosureElement != null) settingsOuterContainer.append(settingDisclosureElement)
 
         panel.append(settingsOuterContainer)
     }

@@ -110,8 +110,8 @@ export class SettingsPanel implements Panel {
 };
 
 export interface Setting {
-    setWarning(warning : SettingWarning) : Setting;
-    getWarning() : SettingWarning | null;
+    setDisclosure(warning : SettingDisclosure) : Setting;
+    getDisclosure() : SettingDisclosure | null;
     getVariableName() : string;
     setExperimental(bool : boolean) : Setting;
     getExperimental() : boolean;
@@ -123,7 +123,7 @@ export interface Setting {
 
 export class TextSetting implements Setting {
     #value: string = "undefined";
-    #warning: SettingWarning | null = null;
+    #warning: SettingDisclosure | null = null;
     #variableName: string;
     #name: string | null = null;
     #description: string | null = null;
@@ -152,12 +152,12 @@ export class TextSetting implements Setting {
         return this.#value;
     }
 
-    setWarning(warning : SettingWarning) : TextSetting {
+    setDisclosure(warning : SettingDisclosure) : TextSetting {
         this.#warning = warning;
         return this;
     }
 
-    getWarning() : SettingWarning | null {
+    getDisclosure() : SettingDisclosure | null {
         return this.#warning;
     }
     
@@ -194,7 +194,7 @@ export class TextSetting implements Setting {
 };
 
 export class ToggleSetting implements Setting {
-    #warning: SettingWarning | null = null;
+    #warning: SettingDisclosure | null = null;
     #variableName: string;
     #name: string | null = null;
     #description: string | null = null;
@@ -204,12 +204,12 @@ export class ToggleSetting implements Setting {
         this.#variableName = variableName;
     }
 
-    setWarning(warning : SettingWarning) : ToggleSetting {
+    setDisclosure(warning : SettingDisclosure) : ToggleSetting {
         this.#warning = warning;
         return this;
     }
 
-    getWarning() : SettingWarning | null {
+    getDisclosure() : SettingDisclosure | null {
         return this.#warning;
     }
     
@@ -247,7 +247,7 @@ export class ToggleSetting implements Setting {
 
 export class InputSetting implements Setting {
     #placeholder : string | null = null;
-    #warning: SettingWarning | null = null;
+    #warning: SettingDisclosure | null = null;
     #variableName: string;
     #name: string | null = null;
     #description: string | null = null;
@@ -266,12 +266,12 @@ export class InputSetting implements Setting {
         return this.#placeholder;
     }
 
-    setWarning(warning : SettingWarning) : InputSetting {
+    setDisclosure(warning : SettingDisclosure) : InputSetting {
         this.#warning = warning;
         return this;
     }
 
-    getWarning() : SettingWarning | null {
+    getDisclosure() : SettingDisclosure | null {
         return this.#warning;
     }
     
@@ -307,9 +307,14 @@ export class InputSetting implements Setting {
     }
 };
 
-export class SettingWarning {
+export interface SettingDisclosure {
+    getText() : string;
+    setStatic(bool : boolean) : SettingDisclosure;
+    getStatic() : boolean | null;
+};
+
+export class SettingWarning implements SettingDisclosure {
     #static: boolean | null = null;
-    #informational: boolean | null = null;
     #text: string;
 
     constructor(text : string) {
@@ -320,16 +325,29 @@ export class SettingWarning {
         return this.#text;
     }
 
-    setInformational(bool : boolean) : SettingWarning {
-        this.#informational = bool;
+    setStatic(bool : boolean) : SettingWarning {
+        this.#static = bool;
         return this;
     }
 
-    getInformational() : boolean | null {
-        return this.#informational;
+    getStatic() : boolean | null {
+        return this.#static;
+    }
+};
+
+export class SettingInformation implements SettingDisclosure {
+    #static: boolean | null = null;
+    #text: string;
+
+    constructor(text : string) {
+        this.#text = text;
     }
 
-    setStatic(bool : boolean) : SettingWarning {
+    getText() : string {
+        return this.#text;
+    }
+
+    setStatic(bool : boolean) : SettingInformation {
         this.#static = bool;
         return this;
     }

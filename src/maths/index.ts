@@ -1,6 +1,6 @@
 import { KeyboardMapping, ClassMapping } from "../lib/classes/mappingClasses";
 import { QuestionData } from "../lib/classes/questionClasses";
-import { Panel, SettingsPanel, ToggleSetting, SettingWarning, InputSetting, TextSetting, DescriptivePanel, BlankPanel } from "../lib/classes/settingsClasses";
+import { Panel, SettingsPanel, ToggleSetting, SettingWarning, InputSetting, TextSetting, DescriptivePanel, BlankPanel, SettingInformation } from "../lib/classes/settingsClasses";
 import { Actions, Conditions } from "../lib/constants/enums";
 import { formatBytes, getAsset, setCustomSettings } from "../lib/helpers/defaults";
 import { deserialiseQuestionID } from "../lib/helpers/deserialisation";
@@ -72,7 +72,7 @@ export const settingsFrontend : Panel[] = [
                     .setName("Dark mode")
                     .setDescription("Enable a native dark mode for the website (doesn't support images unfortunately)")
                     .setExperimental(true)
-                    .setWarning(new SettingWarning("Dark mode is an experimental setting where it tries its best to adapt the CSS of the website. Do not expect this dark mode to be perfect - it will have issues.")))
+                    .setDisclosure(new SettingWarning("Dark mode is an experimental setting where it tries its best to adapt the CSS of the website. Do not expect this dark mode to be perfect - it will have issues.")))
         .addSetting(new ToggleSetting("progressiveDisclosure")
                     .setName("Progressive Disclosure")
                     .setDescription("Hide tasks which haven't yet completed, to motivate you to finish. Doesn't work on revision."))
@@ -83,13 +83,14 @@ export const settingsFrontend : Panel[] = [
         .addSetting(new ToggleSetting("keyboardShortcuts")
                     .setName("Enable keyboard shortcuts")
                     .setDescription("Enable shortcuts to make using Sparx on a keyboard easier")
-                    .setWarning(new SettingWarning("H - Open \"My Homework\" tab<br>R - Open \"Revision & Assessments\" tab<br>C - open Compulsary tab<br>X - open XP Boost tab<br>T - open Target tab<br>I - open Independent Learning tab<br>Q - Open the assignment at the top of the page<br>[1-9] - Open task 1-9<br>Esc - Use the back button, or press the logo if no back buttons exist.")
-                        .setInformational(true)))
+                    .setDisclosure(new SettingInformation(
+                        "H - Open \"My Homework\" tab<br>R - Open \"Revision & Assessments\" tab<br>C - open Compulsary tab<br>X - open XP Boost tab<br>T - open Target tab<br>I - open Independent Learning tab<br>Q - Open the assignment at the top of the page<br>[1-9] - Open task 1-9<br>Esc - Use the back button, or press the logo if no back buttons exist."
+                    )))
         .addSetting(new InputSetting("customCSS")
                     .setPlaceholder("Input custom CSS Code here.\nThis applies when you refresh the page.")
                     .setName("Custom CSS")
                     .setDescription("Input custom CSS code to style SparxMaths the way you want to.")
-                    .setWarning(new SettingWarning("The website may not appear as originally intended with Custom CSS."))),
+                    .setDisclosure(new SettingWarning("The website may not appear as originally intended with Custom CSS."))),
 
     new SettingsPanel("Hiding UI", "Hide certain parts of the UI for whatever reason")
         .addSetting(new ToggleSetting("hideVideoButton")
@@ -170,17 +171,17 @@ export const settingsFrontend : Panel[] = [
         .addSetting(new ToggleSetting("test")
                     .setName("Enable development features")
                     .setDescription("Enable features which are in development.")
-                    .setWarning(new SettingWarning("Development features are work in progress, and could cause issues with the website."))),
+                    .setDisclosure(new SettingWarning("Development features are work in progress, and could cause issues with the website."))),
 
     new SettingsPanel("Data management", "Manage the extension data")
         .addSetting(new ToggleSetting("resetSyncNextRefresh")
                     .setName("Reset Extension settings upon next refresh")
                     .setDescription("Reset the settings that the Extension currently has when the page is refreshed.")
-                    .setWarning(new SettingWarning("This setting will reset the extension's settings back to the defaults. Are you sure you want to continue?")))
+                    .setDisclosure(new SettingWarning("This setting will reset the extension's settings back to the defaults. Are you sure you want to continue?")))
         .addSetting(new ToggleSetting("resetLocalNextRefresh")
                     .setName("Reset Extension data upon next refresh")
                     .setDescription("Reset the data that the extension holds in regard to questions (eg. whiteboard data)")
-                    .setWarning(new SettingWarning("This setting will reset everything that the extension holds about Questions, eg. whiteboard data. Are you sure you want to continue?"))),
+                    .setDisclosure(new SettingWarning("This setting will reset everything that the extension holds about Questions, eg. whiteboard data. Are you sure you want to continue?"))),
 
     new DescriptivePanel("About", "About SparxPlus")
         .setText(`
