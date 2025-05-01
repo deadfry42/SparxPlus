@@ -116,6 +116,8 @@ export const settingsFrontend : Panel[] = [
 
                         var byteCount : number = 0; 
 
+                        setting.setValue("No data found!")
+
                         chrome.storage.local.get() .then((res) => {
                             for (var key in res) {
                                 var id = deserialiseQuestionID(key);
@@ -562,7 +564,7 @@ export const classMapping : ClassMapping[] = [
         .addClassMatch("QuestionInfo")
         .addNewClass("SparxPlusQuestionInfo")
         .setIfMatched((element : HTMLElement, condition : Conditions) => {
-            doWhiteboard(element)
+            if (customSettings.whiteboard) doWhiteboard(element)
         }),
 
     new ClassMapping([Conditions.Modified, Conditions.Added])
