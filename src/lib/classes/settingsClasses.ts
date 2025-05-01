@@ -1,3 +1,5 @@
+import { PlatformID } from "../constants/enums";
+
 export interface Panel {
     getDescription() : string | null;
     getTitle() : string;
@@ -119,6 +121,8 @@ export interface Setting {
     getName() : string | null;
     setDescription(text : string) : Setting;
     getDescription() : string | null;
+    addPlatforms(...platform : PlatformID[]) : Setting;
+    isAvailable(currentPlatform : PlatformID) : boolean;
 };
 
 export class TextSetting implements Setting {
@@ -128,9 +132,21 @@ export class TextSetting implements Setting {
     #name: string | null = null;
     #description: string | null = null;
     #experimental: boolean = false;
+    #platforms : PlatformID[] = [];
 
     constructor(variableName : string) {
         this.#variableName = variableName;
+    }
+
+    addPlatforms(...platform : PlatformID[]): TextSetting {
+        platform.forEach(p => {
+            this.#platforms.push(p)
+        });
+        return this;
+    }
+
+    isAvailable(currentPlatform : PlatformID) : boolean {
+        return this.#platforms.includes(currentPlatform);
     }
 
     setValue(text : string) : TextSetting {
@@ -199,9 +215,21 @@ export class ToggleSetting implements Setting {
     #name: string | null = null;
     #description: string | null = null;
     #experimental: boolean = false;
+    #platforms : PlatformID[] = [];
 
     constructor(variableName : string) {
         this.#variableName = variableName;
+    }
+
+    addPlatforms(...platform : PlatformID[]): ToggleSetting {
+        platform.forEach(p => {
+            this.#platforms.push(p)
+        });
+        return this;
+    }
+
+    isAvailable(currentPlatform : PlatformID) : boolean {
+        return this.#platforms.includes(currentPlatform);
     }
 
     setDisclosure(warning : SettingDisclosure) : ToggleSetting {
@@ -252,9 +280,21 @@ export class InputSetting implements Setting {
     #name: string | null = null;
     #description: string | null = null;
     #experimental: boolean = false;
+    #platforms : PlatformID[] = [];
 
     constructor(variableName : string) {
         this.#variableName = variableName;
+    }
+
+    addPlatforms(...platform : PlatformID[]): InputSetting {
+        platform.forEach(p => {
+            this.#platforms.push(p)
+        });
+        return this;
+    }
+
+    isAvailable(currentPlatform : PlatformID) : boolean {
+        return this.#platforms.includes(currentPlatform);
     }
 
     setPlaceholder(text : string) : InputSetting {

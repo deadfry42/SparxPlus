@@ -1,6 +1,7 @@
 import { customSettings, settingsFrontend } from "..";
 import { baseLog, getIsRelease, log } from "../../lib";
 import { SettingsPanel, DescriptivePanel, BlankPanel, SettingWarning, ToggleSetting, InputSetting, TextSetting, SettingDisclosure, SettingInformation } from "../../lib/classes/settingsClasses";
+import { PlatformID } from "../../lib/constants/enums";
 import { getSVG } from "../../lib/constants/svgs";
 import { createWarningBox, createNewSettingsPanel } from "../../lib/helpers/elements";
 
@@ -82,6 +83,9 @@ const configureSettingsPanel = (panelConfig : SettingsPanel, panel : HTMLElement
         let settingName : string = <string>settingConfig.getName() == null ? "Unknown" : <string>settingConfig.getName();
         let isExperimental : boolean = <boolean>settingConfig.getExperimental() == null ? false : <boolean>settingConfig.getExperimental();
         let settingDesc : string | null = <string>settingConfig.getDescription();
+
+        // TODO: Unhardcode SparxMaths
+        if (!settingConfig.isAvailable(PlatformID.SparxMaths)) continue;
         
         let settingsOuterContainer : HTMLDivElement = document.createElement("div");
         settingsOuterContainer.ariaOrientation = "vertical"
