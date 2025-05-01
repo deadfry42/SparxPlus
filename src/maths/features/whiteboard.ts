@@ -1,9 +1,10 @@
 import { TerminatedWhiteboardStroke, WhiteboardStroke, DefaultPenWhiteboardStroke } from "../../lib/classes/whiteboardClasses"
 import { PlatformID } from "../../lib/constants/enums"
 import { getSVG } from "../../lib/constants/svgs"
-import { getQuestion, getCustomSettings, formatBytes } from "../../lib/helpers/defaults"
+import { getCustomSettings, formatBytes } from "../../lib/helpers/defaults"
 import { deserialiseWhiteboardStroke } from "../../lib/helpers/deserialisation"
 import { createBlur, createBlurredMenu } from "../../lib/helpers/elements"
+import { getQuestion } from "../../lib/helpers/question"
 
 export const doWhiteboard = (element : HTMLElement) => {
     var btn = document.createElement("button")

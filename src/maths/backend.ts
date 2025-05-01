@@ -1,8 +1,9 @@
 import { QuestionData, QuestionID } from "../lib/classes/questionClasses";
 import { Conditions, PlatformID, Actions } from "../lib/constants/enums";
-import { getQuestionID, getAsset, getDescendants } from "../lib/helpers/defaults";
+import { getAsset, getDescendants } from "../lib/helpers/defaults";
 import { deserialiseQuestionID } from "../lib/helpers/deserialisation";
 import { appendStyleSheet, sendNotification, jumpscare, appendStyleContent, createNewOptionInDDM } from "../lib/helpers/elements";
+import { getQuestionID } from "../lib/helpers/question";
 import { baseLog, getLastUpdated, log } from "../lib/index";
 import { applySettingsPage } from "./features/settings";
 import { doSplashScreen } from "./features/splashscreen";
