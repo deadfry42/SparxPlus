@@ -29,7 +29,7 @@ export function getVersion() {
 }
 
 export function getIsRelease() {
-    return true;
+    return false; // set automatically
 }
 
 export function getGithubLink() {

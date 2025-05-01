@@ -9,15 +9,16 @@ jobs:
     container:
       image: node:22
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v3
-        with:
-          node-version: 22
-      - name: build
+      - name: Set release to true
+        run: |
+          sed 's/return\ false\;\ \/\/\ set\ automatically/return\ true/g' src/lib/index.ts
+      - name: Build the extension
         run: |
           npm install
           npm run build
-      - name: create artifact
+      - name: Upload extension artifact
         uses: actions/upload-artifact@v4
         with:
           name: dist
