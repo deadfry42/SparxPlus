@@ -14,6 +14,8 @@
     --colours-text-body: var(--palette-light-grey);
     --colours-text-body-inverted: var(--palette-light-grey);
 
+    --colours-popover-overlay-background: #3b3b37;
+
     --colours-locked: #202020;
     --colours-locked-dark: #3b3b37;
     --colours-disabled: #202020;
