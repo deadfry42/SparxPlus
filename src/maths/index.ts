@@ -38,6 +38,8 @@ export const customSettings : { [key: string]: any } = { // default settings
     whiteboardDarkModeOverride: false, // if is dark mode, pretend is light mode anyway.
     whiteboardShowSize: false, // show the size of the whiteboard data (in bytes)
 
+    // saveAnswer: true // save the answer when you get it wrong
+
     // goals:
     // calculatorButton: true, // click the "Calculator Allowed" button and bring up a calculator
     // bookworkTracker: false, // track the bookwork codes in a list, so that you can write them down later

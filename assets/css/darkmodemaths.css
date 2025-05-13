@@ -20,9 +20,11 @@
     --colours-locked-dark: #3b3b37;
     --colours-disabled: #202020;
 
-    --colours-light-background: #2a2a28; /* lets make it not that */
+    --colours-light-background: #202020; /* lets make it not that */ /*changed */
     --colours-background-info: #2a2a28;
     --colours-background-highlighted: #3b3b37;
+
+    --colours-background-white-transparent: #3b3b37;
 
     --colours-tab-hover: var(--palette-dark-blue);
 
@@ -60,7 +62,11 @@
 }
 
 p, h1, h2, h3, h4, h5, h6 {
-  color: var(--palette-light-grey) !important
+    color: var(--palette-light-grey) !important
+}
+
+span {
+    color: var(--palette-light-grey)
 }
 
 a {
