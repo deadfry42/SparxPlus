@@ -83,9 +83,6 @@ const configureSettingsPanel = (panelConfig : SettingsPanel, panel : HTMLElement
         let settingName : string = <string>settingConfig.getName() == null ? "Unknown" : <string>settingConfig.getName();
         let isExperimental : boolean = <boolean>settingConfig.getExperimental() == null ? false : <boolean>settingConfig.getExperimental();
         let settingDesc : string | null = <string>settingConfig.getDescription();
-
-        // TODO: Unhardcode SparxMaths
-        if (!settingConfig.isAvailable(PlatformID.SparxMaths)) continue;
         
         let settingsOuterContainer : HTMLDivElement = document.createElement("div");
         settingsOuterContainer.ariaOrientation = "vertical"
