@@ -1,7 +1,3 @@
-import { QuestionID, Question } from "../classes/questionClasses";
-import { PlatformID } from "../constants/enums";
-import { log } from "../index";
-
 export var customSettings : { [key: string]: any } = {};
 
 export function setCustomSettings(settings : { [key: string]: any }) {
