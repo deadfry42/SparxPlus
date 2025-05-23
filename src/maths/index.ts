@@ -1,7 +1,7 @@
 import { KeyboardMapping, ClassMapping } from "../lib/classes/mappingClasses";
 import { QuestionData } from "../lib/classes/questionClasses";
 import { Panel, SettingsPanel, ToggleSetting, SettingWarning, InputSetting, TextSetting, DescriptivePanel, BlankPanel, SettingInformation } from "../lib/classes/settingsClasses";
-import { Actions, Conditions, PlatformID } from "../lib/constants/enums";
+import { Actions, Conditions } from "../lib/constants/enums";
 import { formatBytes, getAsset, setCustomSettings } from "../lib/helpers/defaults";
 import { deserialiseQuestionID } from "../lib/helpers/deserialisation";
 import { jumpscare } from "../lib/helpers/elements";

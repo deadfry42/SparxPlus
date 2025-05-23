@@ -131,8 +131,6 @@ import { classMapping, customSettings, keyboardMapping, setUpdateDebugMenu, setT
 
         chrome.storage.local.get() .then((res) => {
             for (var key in res) {
-                var data = res[""+key]
-
                 var questionID = deserialiseQuestionID(key);
                 if (questionID == null) continue;
 
@@ -241,7 +239,6 @@ import { classMapping, customSettings, keyboardMapping, setUpdateDebugMenu, setT
             }
             if (!res.resetSyncNextRefresh) {
                 for (let object of Object.keys(res)) {
-                    //TODO: i probably broke this
                     customSettings[object] = res[object]
                 }
 

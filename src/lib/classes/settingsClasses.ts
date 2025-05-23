@@ -1,5 +1,3 @@
-import { PlatformID } from "../constants/enums";
-
 export interface Panel {
     getDescription() : string | null;
     getTitle() : string;

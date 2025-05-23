@@ -1,7 +1,6 @@
 import { customSettings, settingsFrontend } from "..";
 import { baseLog, getIsRelease, log } from "../../lib";
 import { SettingsPanel, DescriptivePanel, BlankPanel, ToggleSetting, InputSetting, TextSetting, SettingDisclosure, SettingInformation } from "../../lib/classes/settingsClasses";
-import { PlatformID } from "../../lib/constants/enums";
 import { getSVG } from "../../lib/constants/svgs";
 import { createWarningBox, createNewSettingsPanel } from "../../lib/helpers/elements";
 
