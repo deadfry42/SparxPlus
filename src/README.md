@@ -1,4 +1,5 @@
 # src
+
 info on src/:  
   
 * lib
@@ -7,5 +8,7 @@ info on src/:
   * folder containing code used for SparxMaths
 * science
   * folder containing code used for SparxScience
+* reader
+  * folder containing code used for SparxReader
 * data.json
   * a metadata file, literally just so that you can easily sed to remove the not tagged release error
