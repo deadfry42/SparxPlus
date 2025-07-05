@@ -596,11 +596,9 @@ export const classMapping : ClassMapping[] = [
                 var name = res.className;
                 if (name == null || name.includes == null) return;
                 if (name.includes("Incorrect")) {
-                    log("Maths", "Got question wrong!");
                     if (customSettings.jumpscareWhenWrong) jumpscare("assets/memes/wrong", customSettings.audio)
                     
                 } else if (name.includes("Correct")) {
-                    log("Maths", "Got question wrong!")
                     if (customSettings.jumpscareWhenCorrect) jumpscare("assets/memes/correct", customSettings.audio)
                 }
             }
