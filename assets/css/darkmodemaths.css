@@ -169,6 +169,10 @@ a:active {
   color: white !important;
 }
 
+.SparxPlusButtonGhost:not(:disabled):hover {
+    background-color: rgba(128, 128, 128, .2);
+}
+
 .WarningText {
     color: var(--colours-text-warning-message);
 }

@@ -514,6 +514,10 @@ export const classMapping : ClassMapping[] = [
         .addNewClass("SparxPlusIsCorrect"),
 
     new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
+        .addClassMatch("ButtonGhost")
+        .addNewClass("SparxPlusButtonGhost"),
+
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
         .addClassMatch("IsIncorrect")
         .addNewClass("SparxPlusIsIncorrect"),
 
