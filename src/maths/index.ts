@@ -5,7 +5,7 @@ import { Actions, Conditions } from "../lib/constants/enums";
 import { formatBytes, getAsset, setCustomSettings } from "../lib/helpers/defaults";
 import { deserialiseQuestionID } from "../lib/helpers/deserialisation";
 import { jumpscare } from "../lib/helpers/elements";
-import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent, log, baseLog } from "../lib/index";
+import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent } from "../lib/index";
 import { doWhiteboard } from "./features/whiteboard";
 
 // settings which are set by the user
