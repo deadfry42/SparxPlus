@@ -352,6 +352,10 @@ import { classMapping, customSettings, keyboardMapping, setUpdateDebugMenu, setT
                                 if (customSettings.disableXPInTopRight) {
                                     realnode.style.display = "none"
                                 }
+                            } else if (name.includes("NotificationsIconContainer")) {
+                                if (customSettings.disableNotificationsInTopRight) {
+                                    realnode.style.display = "none"
+                                }
                             } else if (name.includes("LQDContainer")) {
                                 if (customSettings.darkMode) {
                                     // i forgot what this was for but im keeping it incase i accidentally fuck something up

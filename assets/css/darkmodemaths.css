@@ -61,7 +61,7 @@
     --spx-shadow-lg-top: 0px -3px 11px rgba(128, 128, 128, .2);
 }
 
-p, h1, h2, h3, h4, h5, h6 {
+p, h1, h2, h3, h4, h5, h6, .SparxPlusSubHeading {
     color: var(--palette-light-grey) !important
 }
 
@@ -153,6 +153,10 @@ a:active {
 
 .SparxPlusMarkByPart {
     background-color: rgb(93 80 80) !important;
+}
+
+.SparxPlusSelectShared {
+    background-color: #3b3b37 !important;
 }
 
 .SparxPlusTextFieldComponent,

@@ -22,6 +22,7 @@ export const customSettings : {[index: string]:any} = { // default settings
     progressiveDisclosure: false, // hide incomplete questions
     disableNameInTopright: false, // hide name in top right
     disableXPInTopRight: false, // hide xp in top right
+    disableNotificationsInTopRight: false, // hide notifications in top right
     customCSS: "", // add custom css
     darkMode: false, // DARK MODE!!!
     audio: true, // extension audio
@@ -39,6 +40,7 @@ export const customSettings : {[index: string]:any} = { // default settings
     whiteboardShowSize: false, // show the size of the whiteboard data (in bytes)
 
     // saveAnswer: true // save the answer when you get it wrong
+    // addZoomFixes: false
 
     // goals:
     // calculatorButton: true, // click the "Calculator Allowed" button and bring up a calculator
@@ -104,6 +106,9 @@ export const settingsFrontend : Panel[] = [
         .addSetting(new ToggleSetting("disableXPInTopRight")
                     .setName("Hide XP Count")
                     .setDescription("Hide the XP in the top right corner of the screen."))
+        .addSetting(new ToggleSetting("disableNotificationsInTopRight")
+                    .setName("Hide Notifications")
+                    .setDescription("Hide the Notification button in the top right corner of the screen."))
         .addSetting(new ToggleSetting("hideColourOverlay")
                     .setName("Hide Colour overlay")
                     .setDescription("Disable the colour overlay and the settings panel (so that if the extension fails or isn't available, you still have the colour overlay)")),
@@ -516,6 +521,18 @@ export const classMapping : ClassMapping[] = [
     new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
         .addClassMatch("ButtonGhost")
         .addNewClass("SparxPlusButtonGhost"),
+
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
+        .addClassMatch("ZoomDiv")
+        .addNewClass("SparxPlusZoomDiv"),
+
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
+        .addClassMatch("SelectShared")
+        .addNewClass("SparxPlusSelectShared"),
+
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
+        .addClassMatch("SubHeading")
+        .addNewClass("SparxPlusSubHeading"),
 
     new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
         .addClassMatch("IsIncorrect")
