@@ -161,6 +161,10 @@ a:active {
   color: white !important;
 }
 
+.WarningText {
+    color: var(--colours-text-warning-message);
+}
+
 /* make loading screen dark, make question flashing disappear */
 body {
     background-color: #2a2a28;
