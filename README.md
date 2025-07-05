@@ -4,8 +4,9 @@ A browser (chromium based / firefox based) extension for [Sparx-Learning](https:
   
 Compatible with:
 
-* <img width=14 src="assets/icon/sparx/maths.svg"> [SparxMaths](https://maths.sparx-learning.com).
-* <img width=14 src="assets/icon/sparx/science.svg"> [SparxScience](https://science.sparx-learning.com). (Planned, not yet supported)
+* <img width=14 src="assets/icon/sparx/mathss.png"> [SparxMaths](https://maths.sparx-learning.com).
+* <img width=14 src="assets/icon/sparx/sciencee.png"> [SparxScience](https://science.sparx-learning.com). (Planned, not yet supported)
+* <img width=14 src="assets/icon/sparx/readerr.png"> [SparxReader](https://reader.sparx-learning.com). (Planned, not yet supported)
 
 > [!WARNING]
 > This is not officially supported by Sparx, and can be removed, banned or stop working whenever.  
@@ -24,7 +25,15 @@ This extension is not affiliated with Sparx, otherwise known as [Sparx-Learning]
   * A native (albeit experimental) dark mode
   * Progressive Disclosure, a feature which hides tasks that you aren't currently doing, and the amount of tasks
   * Whiteboard (To do working out)
-  
+
+## Why is this code open-source?
+
+Due to the nature of Sparx, it requires a login. These logins require you to be a part of an academy which pays Sparx-Learning for accounts, and you must be provided a login to properly test this extension. This means that, especially for the Chrome Web Store (sorry guys im not giving you my account details), it's harder to test the extension.
+
+In order to make sure that people feel comfortable using this extension, I have made the source code of this extension fully open source, under GPL-3.0 (meaning forks must also have the same license), so the code can be audited and checked for the skeptical like me.
+
+It's also open-source, because I like open-source code :)
+
 ## Instructions on how to build from source
 
 * Clone this repository eg. `git clone https://github.com/deadfry42/SparxPlus.git`
