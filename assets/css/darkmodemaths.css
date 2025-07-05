@@ -181,6 +181,14 @@ a:active {
     color: var(--colours-text-warning-message);
 }
 
+.SparxPlusWarning span {
+    color: var(--colours-text-warning-message);
+}
+
+.InfoText {
+    color: rgb(42 169 173);
+}
+
 /* make loading screen dark, make question flashing disappear */
 body {
     background-color: #2a2a28;

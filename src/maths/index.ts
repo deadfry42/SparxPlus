@@ -531,6 +531,10 @@ export const classMapping : ClassMapping[] = [
         .addNewClass("SparxPlusSelectShared"),
 
     new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
+        .addClassMatch("Warning")
+        .addNewClass("SparxPlusWarning"),
+
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
         .addClassMatch("SubHeading")
         .addNewClass("SparxPlusSubHeading"),
 
