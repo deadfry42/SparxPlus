@@ -156,11 +156,11 @@ export const settingsFrontend : Panel[] = [
     new SettingsPanel("Fun Settings", "Fun small additions to make Sparx more enjoyable to use!")
         .addSetting(new ToggleSetting("jumpscareWhenWrong")
                     .setName("Jumpscare upon incorrect answer")
-                    .setDescription("Play a funny animation whenever you get a question wrong (it's scary) (requires audio)")
+                    .setDescription("Play a funny animation whenever you get a question wrong (it's scary and VERY LOUD) (May not always work)")
                     .setExperimental(true))
         .addSetting(new ToggleSetting("jumpscareWhenCorrect")
                     .setName("Jumpscare upon correct answer")
-                    .setDescription("Play a funny animation whenever you get a question correct (it's scary) (requires audio)")
+                    .setDescription("Play a funny animation whenever you get a question correct (it's scary and VERY LOUD) (May not always work)")
                     .setExperimental(true)),
 
     new SettingsPanel("Extension Settings", "Settings that manage the extension itself")
