@@ -1,11 +1,13 @@
+import { log } from "..";
 import { getSVG } from "../constants/svgs";
+import { getAsset } from "./defaults";
 
 export function jumpscare(url : string, permitAudio? : boolean) {
     var canAudio = true;
     if (permitAudio != null) {
         if (permitAudio == false) canAudio = false;
     }
-    var audio : HTMLAudioElement = new Audio(url+".mp3");
+    var audio : HTMLAudioElement = new Audio(getAsset(url+".mp3"));
     var imgElement = document.createElement("img")
     imgElement.style.zIndex = "99999999";
     imgElement.style.position = "absolute"
@@ -21,7 +23,7 @@ export function jumpscare(url : string, permitAudio? : boolean) {
     imgElement.style.width = `${width}px`
     imgElement.style.height = `${height}px`
     imgElement.style.pointerEvents = "none"
-    imgElement.src = url+".png"
+    imgElement.src = getAsset(url+".png")
     document.body.append(imgElement)
     setTimeout(() => {
         imgElement.animate(
