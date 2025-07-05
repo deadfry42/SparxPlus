@@ -12,6 +12,7 @@ Compatible with:
 > This is not officially supported by Sparx, and can be removed, banned or stop working whenever.  
 > Issues you may encounter while using Sparx may be caused by this extension, as it modifies the html page heavily.  
 > This is considered an experimental extension.  
+
 > [!NOTE]
 > This is NOT intended to be a browser extension that does your Sparx homework for you, but to make the experience better.
 > Features considered cheating (eg. autosolving) are not planned and will never happen.
