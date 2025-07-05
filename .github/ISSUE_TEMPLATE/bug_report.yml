@@ -1,0 +1,49 @@
+name: "Bug report"
+description: "Create a bug report to help us improve"
+assignees: Snowiiii
+body:
+  - type: checkboxes
+    id: duplicate
+    attributes:
+      label: "I've searched existing issues and couldn't find a duplicate."
+      description: "I confirm this is not a duplicate."
+      options:
+        - label: "I confirm this is not a duplicate."
+          required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating System
+      description: "What is your Operating System?"
+      placeholder: "eg. Windows 10, macOS Tahoe, Ubuntu 24.04 LTS etc."
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: "Extension version"
+      description: "The version of the extension in use. You can check the bottom of the about section in Settings." 
+      placeholder: "eg. v0.3.1 (release)"
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: "Issue"
+      description: "Describe the bug, and what it affects."
+    validations:
+      required: true
+  - type: textarea
+    id: instructions
+    attributes:
+      label: "Instructions"
+      description: "Step-by-step instructions on how to make this bug occur."
+    validations:
+      required: true
+  - type: textarea
+    id: additional-notes
+    attributes:
+      label: "Additional notes"
+      description: "Add any notes you'd like to say about the bug"
+    validations:
+      required: true
