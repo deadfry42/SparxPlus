@@ -1,11 +1,19 @@
-export var customSettings : { [key: string]: any } = {};
+export var customSettings : {[index: string]:any} = {};
 
-export function setCustomSettings(settings : { [key: string]: any }) {
+export function setCustomSettings(settings : any) {
     customSettings = settings;
 }
 
-export function getCustomSettings() : { [key: string]: any } {
+export function getCustomSettings() : {[index: string]:any} {
     return customSettings;
+}
+
+export function getCustomSetting(settingName : string) : any {
+    try {
+        return customSettings[settingName];
+    } catch(e) {
+        return
+    }
 }
 
 export function convertNumberToLetter(num : number) {

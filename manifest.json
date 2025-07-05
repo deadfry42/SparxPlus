@@ -10,18 +10,18 @@
         }
     },
     "host_permissions": [
-        "*://www.sparxmaths.uk/*",
-        "*://app.sparxscience.com/*",
         "*://maths.sparx-learning.com/*",
-        "*://science.sparx-learning.com/*"
+        "*://science.sparx-learning.com/*",
+        "*://reader.sparx-learning.com/*"
     ],
     "web_accessible_resources": [
         {
         "resources": ["src/lib/*", "assets/*", "src/css/*"],
-        "matches": ["*://www.sparxmaths.uk/*",
-        "*://app.sparxscience.com/*",
-        "*://maths.sparx-learning.com/*",
-        "*://science.sparx-learning.com/*"]
+        "matches": [
+                "*://maths.sparx-learning.com/*",
+                "*://science.sparx-learning.com/*",
+                "*://reader.sparx-learning.com/*"
+            ]
         }
     ],
     "icons": {
@@ -33,9 +33,19 @@
     },
     "content_scripts": [
         {
-            "matches": ["*://www.sparxmaths.uk/*", "*://maths.sparx-learning.com/*"],
+            "matches": ["*://maths.sparx-learning.com/*"],
             "css": ["assets/css/maths.css"],
             "js": ["maths.js"]
+        },
+        {
+            "matches": ["*://maths.sparx-learning.com/*"],
+            "css": ["assets/css/reader.css"],
+            "js": ["reader.js"]
+        },
+        {
+            "matches": ["*://maths.sparx-learning.com/*"],
+            "css": ["assets/css/science.css"],
+            "js": ["science.js"]
         }
     ]
 }

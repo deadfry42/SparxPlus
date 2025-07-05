@@ -13,7 +13,7 @@ import { doWhiteboard } from "./features/whiteboard";
 
 // note: this is not synced by default.
 // they are synced when the page loads, in api.js
-export const customSettings : { [key: string]: any } = { // default settings
+export const customSettings : {[index: string]:any} = { // default settings
     hideVideoButton: false, // hide video button for extreme++ mega challenge >:)
     jumpscareWhenWrong: false, // animation when q wrong (slighly broken)
     jumpscareWhenCorrect: false, // animation when q correct (slighly broken)

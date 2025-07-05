@@ -5,7 +5,11 @@ const path = require('path')
 module.exports = {
     mode: 'production',
     target: 'web',
-    entry: {maths: './src/maths/backend.ts',},
+    entry: {
+      maths: './src/maths/backend.ts',
+      science: './src/science/backend.ts',
+      reader: './src/reader/backend.ts',
+    },
     module: {
       rules: [
         {
@@ -17,9 +21,10 @@ module.exports = {
     },
     resolve: {
         alias: {
-            maths: path.resolve(__dirname, 'src/maths/'),
-            lib: path.resolve(__dirname, 'src/lib/'),
-            science: path.resolve(__dirname, 'src/science/'),
+          lib: path.resolve(__dirname, 'src/lib/'),
+          maths: path.resolve(__dirname, 'src/maths/'),
+          science: path.resolve(__dirname, 'src/science/'),
+          reader: path.resolve(__dirname, 'src/reader/'),
         },
         extensions: ['.ts']
     },
