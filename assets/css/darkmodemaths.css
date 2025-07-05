@@ -147,6 +147,14 @@ a:active {
     border-width: 5px;
 }
 
+.SparxPlusMarkByPart.SparxPlusIsCorrect {
+    background-color: #434d49 !important;
+}
+
+.SparxPlusMarkByPart {
+    background-color: rgb(93 80 80) !important;
+}
+
 .SparxPlusTextFieldComponent,
 .SparxPlusTextField {
     background: #3b3b37 !important;

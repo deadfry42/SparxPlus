@@ -505,6 +505,18 @@ export const classMapping : ClassMapping[] = [
         .addClassMatch("InlineSlotOptions")
         .addNewClass("SparxPlusInlineSlotOptions"),
 
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
+        .addClassMatch("MarkByPart")
+        .addNewClass("SparxPlusMarkByPart"),
+
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
+        .addClassMatch("IsCorrect")
+        .addNewClass("SparxPlusIsCorrect"),
+
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
+        .addClassMatch("IsIncorrect")
+        .addNewClass("SparxPlusIsIncorrect"),
+
     new ClassMapping([Conditions.Modified, Conditions.Added])
         .addClassMatch("TimesTablesButton")
         .setIfMatched((element : HTMLElement, condition : Conditions) => {
