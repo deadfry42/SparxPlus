@@ -7,23 +7,20 @@ export const confirmationPrompt = (
     prompt: string,
     onconfirm: (menu: PopupMenu) => void,
 ) => {
-    var menu: PopupMenu = createBlurredMenu(createBlur(), "Confirmation")
+    var menu: PopupMenu = createBlurredMenu(createBlur(), title)
 
     var contentDiv = document.createElement("div")
     contentDiv.style.margin = "auto"
     contentDiv.style.textAlign = "center"
 
     var headerText = document.createElement("h1")
-    headerText.innerText = `Deleting ${prompt}`
+    headerText.innerText = heading
     headerText.style.marginLeft = "15px"
 
     var content = document.createElement("span")
     content.style.color = "var(--colours-text-body)"
     content.style.fontSize = "20px"
-    content.innerText = `Are you sure that you want to delete the ${prompt}?
-    This action is IRREVERSIBLE, and your settings will be reset.
-    
-    Are you still sure you want to continue?`
+    content.innerText = prompt
     
     var options = document.createElement("div")
     options.style.marginTop = "30px"

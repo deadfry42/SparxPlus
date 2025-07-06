@@ -80,9 +80,27 @@ export const doSplashScreen = () => {
         
         Enjoy, and I hope this extension helps!`
     
+        var options = document.createElement("div")
+        options.style.marginTop = "30px"
+        options.style.marginBottom = "30px"
+        options.style.gap = "20px"
+        options.style.display = "flex"
+        options.style.justifyContent = "center"
+
+        var confirmBtn = document.createElement("button")
+        confirmBtn.className = `SparxPlusButtonBase SparxPlusButtonShared SparxPlusButtonDefault SparxPlusButtonLarge SparxPlusButtonPrimary`
+        confirmBtn.innerText = "Close"
+
+        confirmBtn.onclick = () => {
+            menu.close()
+        }
+
+        options.append(confirmBtn)
+
         contentDiv.append(content)
         menu.getMenuDiv().append(contentDiv)
-    
+        menu.getMenuDiv().append(options)
+
         document.body.append(menu.getBlurDiv())
         document.body.append(menu.getMenuDiv())
 

@@ -7,6 +7,7 @@ import { getQuestionID } from "../lib/helpers/question";
 import { baseLog, getLastUpdated, log } from "../lib/index";
 import { applySettingsPage } from "./features/settings";
 import { doSplashScreen } from "./features/splashscreen";
+import { startYippee } from "./features/yippee_server";
 import { classMapping, customSettings, keyboardMapping, setUpdateDebugMenu, setToggleDebugMenu, toggleDebugMenu } from "./index";
 
 (async () => {
@@ -230,6 +231,9 @@ import { classMapping, customSettings, keyboardMapping, setUpdateDebugMenu, setT
                 (async () => {
                     cleanUpExpiredData();
                 })
+            }
+            if (res.yippee) {
+                startYippee();
             }
         }
 

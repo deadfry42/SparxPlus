@@ -5,7 +5,7 @@ import { Actions, ButtonType, Conditions } from "../lib/constants/enums";
 import { formatBytes, getAsset, setCustomSettings } from "../lib/helpers/defaults";
 import { deserialiseQuestionID } from "../lib/helpers/deserialisation";
 import { jumpscare } from "../lib/helpers/elements";
-import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent, log } from "../lib/index";
+import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent } from "../lib/index";
 import { doWhiteboard } from "./features/whiteboard";
 import { confirmResetLocalData, confirmResetSyncData, openWhiteboardDataMenu } from "./features/data_management";
 
@@ -16,8 +16,6 @@ import { confirmResetLocalData, confirmResetSyncData, openWhiteboardDataMenu } f
 // they are synced when the page loads, in api.js
 export const customSettings : {[index: string]:any} = { // default settings
     hideVideoButton: false, // hide video button for extreme++ mega challenge >:)
-    jumpscareWhenWrong: false, // animation when q wrong (slighly broken)
-    jumpscareWhenCorrect: false, // animation when q correct (slighly broken)
     enableStartupNotification: false, // show notification when sparx plus loads
     enableCustomLogo: true, // show logo in top left
     progressiveDisclosure: false, // hide incomplete questions
@@ -41,7 +39,11 @@ export const customSettings : {[index: string]:any} = { // default settings
     whiteboardShowSize: false, // show the size of the whiteboard data (in bytes)
     whiteboardAutoClear: true, // delete week old whiteboard data
 
-    addZoomFixes: false // puts a percentage in zooming dialogue
+    addZoomFixes: false, // puts a percentage in zooming dialogue
+
+    jumpscareWhenWrong: false, // animation when q wrong (slighly broken)
+    jumpscareWhenCorrect: false, // animation when q correct (slighly broken)
+    yippee: false, // play yippee sound when anything is pressed
 
     // saveAnswer: true // save the answer when you get it wrong
     // addZoomFixes: false
@@ -171,11 +173,15 @@ export const settingsFrontend : Panel[] = [
     new SettingsPanel("Fun Settings", "Fun small additions to make Sparx more enjoyable to use!")
         .addSetting(new ToggleSetting("jumpscareWhenWrong")
                     .setName("Jumpscare upon incorrect answer")
-                    .setDescription("Play a funny animation whenever you get a question wrong (it's scary and VERY LOUD) (May not always work)")
+                    .setDescription("Play a fullscreen jumpscare whenever you get a question wrong (it's scary and VERY LOUD) (May not always work)")
                     .setExperimental(true))
         .addSetting(new ToggleSetting("jumpscareWhenCorrect")
                     .setName("Jumpscare upon correct answer")
-                    .setDescription("Play a funny animation whenever you get a question correct (it's scary and VERY LOUD) (May not always work)")
+                    .setDescription("Play a fullscreen jumpscare whenever you get a question correct (it's scary and VERY LOUD) (May not always work)")
+                    .setExperimental(true))
+        .addSetting(new ToggleSetting("yippee")
+                    .setName("yippee")
+                    .setDescription("yippee (requires audio)")
                     .setExperimental(true)),
 
     new SettingsPanel("Extension Settings", "Settings that manage the extension itself")
