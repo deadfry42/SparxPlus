@@ -197,15 +197,6 @@ export const settingsFrontend : Panel[] = [
                     .setDisclosure(new SettingWarning("Development features are work in progress, and could cause issues with the website."))),
 
     new SettingsPanel("Data management", "Manage the extension data")
-        // .addSetting(new ToggleSetting("resetSyncNextRefresh")
-        //             .setName("Reset Extension settings upon next refresh")
-        //             .setDescription("Reset the settings that the Extension currently has when the page is refreshed.")
-        //             .setDisclosure(new SettingWarning("This setting will reset the extension's settings back to the defaults. Are you sure you want to continue?")))
-        // .addSetting(new ToggleSetting("resetLocalNextRefresh")
-        //             .setName("Reset Extension data upon next refresh")
-        //             .setDescription("Reset the data that the extension holds in regard to questions (eg. whiteboard data)")
-        //             .setDisclosure(new SettingWarning("This setting will reset everything that the extension holds about Questions, eg. whiteboard data. Are you sure you want to continue?"))),
-
         .addSetting(new ButtonSetting("deleteSync")
                     .setName("Reset Extension settings")
                     .setDescription("Reset the extensions' settings for SparxMaths.")
