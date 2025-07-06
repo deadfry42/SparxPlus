@@ -7,6 +7,7 @@ import { deserialiseQuestionID } from "../lib/helpers/deserialisation";
 import { jumpscare } from "../lib/helpers/elements";
 import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent, log } from "../lib/index";
 import { doWhiteboard } from "./features/whiteboard";
+import { openWhiteboardDataMenu } from "./features/whiteboard_data_manager";
 
 // settings which are set by the user
 // and used to determine what features should be available
@@ -135,7 +136,7 @@ export const settingsFrontend : Panel[] = [
                     .setButtonType(ButtonType.Secondary)
                     .setLabel("Open")
                     .onclick(() => {
-                        log("StorageManager", "init")
+                        openWhiteboardDataMenu()
                     })
                 )
         .addSetting(new TextSetting("blank")

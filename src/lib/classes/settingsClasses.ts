@@ -204,9 +204,19 @@ export class ButtonSetting implements Setting {
     #experimental: boolean = false;
     #buttonType: ButtonType = ButtonType.Primary;
     #buttonSize: ButtonSize = ButtonSize.Small;
+    #onclick: () => void = () => {};
 
     constructor(variableName : string) {
         this.#variableName = variableName;
+    }
+
+    onclick(func: () => void) : ButtonSetting {
+        this.#onclick = func;
+        return this;
+    }
+
+    getOnclick() : () => void {
+        return this.#onclick;
     }
 
     setButtonType(type: ButtonType) : ButtonSetting {
@@ -235,13 +245,6 @@ export class ButtonSetting implements Setting {
     getLabel() : string {
         return this.#label;
     }
-
-
-    onclick(func : () => void) : ButtonSetting {
-        func()
-        return this;
-    }
-
     
     setDisclosure(warning : SettingDisclosure) : ButtonSetting {
         this.#warning = warning;

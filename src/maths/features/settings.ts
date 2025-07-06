@@ -232,7 +232,11 @@ const configureButtonSetting = (settingConfig : ButtonSetting, settingsLabelDiv 
 
     let btnContainer = document.createElement("div")
 
-    let btn = document.createElement("button")
+    let btn: HTMLButtonElement = document.createElement("button");
+
+    btn.onclick = (() => {
+        settingConfig.getOnclick()();
+    });
 
     // this setting type doesn't support warnings
     // why would it need it anyway
