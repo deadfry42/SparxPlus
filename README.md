@@ -10,8 +10,7 @@ Compatible with:
 
 > [!WARNING]
 > This is not officially supported by Sparx, and can be removed, banned or stop working whenever.  
-> Issues you may encounter while using Sparx may be caused by this extension, as it modifies the html page heavily.  
-> This is considered an experimental extension.  
+> This is considered an experimental extension, so you may encounter issues while using SparxPlus. Please make sure to report these issues in the issues tab.
 
 > [!NOTE]
 > This is NOT intended to be a browser extension that does your Sparx homework for you, but to make the experience better.
