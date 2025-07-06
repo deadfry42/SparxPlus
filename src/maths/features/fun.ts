@@ -14,3 +14,9 @@ export const startYippee = () => {
         playYippee()
     });
 }
+
+export const startOneko = () => {
+    // reference (oneko.js): https://github.com/adryd325/oneko.js
+
+
+}

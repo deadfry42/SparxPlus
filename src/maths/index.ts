@@ -182,7 +182,12 @@ export const settingsFrontend : Panel[] = [
         .addSetting(new ToggleSetting("yippee")
                     .setName("yippee")
                     .setDescription("yippee (requires audio)")
-                    .setExperimental(true)),
+                    .setExperimental(true))
+        .addSetting(new ToggleSetting("oneko")
+                    .setName("oneko")
+                    .setDescription("A cat that chases around your cursor")
+                    .setExperimental(true))
+                    ,
 
     new SettingsPanel("Extension Settings", "Settings that manage the extension itself")
         .addSetting(new ToggleSetting("enableCustomLogo")

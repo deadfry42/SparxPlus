@@ -7,7 +7,7 @@ import { getQuestionID } from "../lib/helpers/question";
 import { baseLog, getLastUpdated, log } from "../lib/index";
 import { applySettingsPage } from "./features/settings";
 import { doSplashScreen } from "./features/splashscreen";
-import { startYippee } from "./features/yippee_server";
+import { startOneko, startYippee } from "./features/fun";
 import { classMapping, customSettings, keyboardMapping, setUpdateDebugMenu, setToggleDebugMenu, toggleDebugMenu } from "./index";
 
 (async () => {
@@ -234,6 +234,9 @@ import { classMapping, customSettings, keyboardMapping, setUpdateDebugMenu, setT
             }
             if (res.yippee) {
                 startYippee();
+            }
+            if (res.oneko) {
+                startOneko();
             }
         }
 
