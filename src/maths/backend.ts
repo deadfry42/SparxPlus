@@ -234,26 +234,11 @@ import { classMapping, customSettings, keyboardMapping, setUpdateDebugMenu, setT
         }
 
         chrome.storage.sync.get().then((res) => {
-            if (res.resetLocalNextRefresh) {
-                res.resetLocalNextRefresh = false;
-                chrome.storage.sync.set({resetLocalNextRefresh: false})
-                chrome.storage.local.clear();
-                log("Data", "Successfully cleared extension question data!")
+            for (let object of Object.keys(res)) {
+                customSettings[object] = res[object]
             }
-            if (!res.resetSyncNextRefresh) {
-                for (let object of Object.keys(res)) {
-                    customSettings[object] = res[object]
-                }
 
-                settingsLoaded(res)
-            } else {
-                (async () => {
-                    chrome.storage.sync.clear();
-                    log("Data", "Successfully cleared extension settings!")
-                })();
-                
-                settingsLoaded(customSettings)
-            }
+            settingsLoaded(res)
 
             log("Settings", "Successfully synced settings!")
         })

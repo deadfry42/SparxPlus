@@ -1,4 +1,5 @@
 import { log } from "..";
+import { PopupMenu } from "../classes/menuClasses";
 import { getSVG } from "../constants/svgs";
 import { getAsset } from "./defaults";
 
@@ -83,7 +84,7 @@ export function createBlur() {
     return blur;
 }
 
-export function createBlurredMenu(blur : HTMLDivElement, titleText : string, onClose? : Function) {
+export function createBlurredMenu(blur : HTMLDivElement, titleText : string) : PopupMenu {
     var div = document.createElement("div")
     div.setAttribute("role", "dialog")
     div.setAttribute("data-state", "open")
@@ -91,16 +92,13 @@ export function createBlurredMenu(blur : HTMLDivElement, titleText : string, onC
     div.tabIndex = -1;
     div.className = "SparxPlusDialogContent FullWidth WithZIndex"
 
+    let popup = new PopupMenu(
+        div,
+        blur
+    )
+
     const close = () => {
-        if (onClose != null) {
-            onClose(div);
-        }
-        blur.setAttribute("data-state", "closed")
-        div.setAttribute("data-state", "closed")
-        setTimeout(() => {
-            blur.remove()
-            div.remove()
-        }, 200);
+        popup.close()
     }
 
     var title = document.createElement("h2")
@@ -119,7 +117,7 @@ export function createBlurredMenu(blur : HTMLDivElement, titleText : string, onC
     }
     div.append(closeXButton)
 
-    return div;
+    return popup;
 }
 
 export function createNewOptionInDDM(classNameA : string, classNameDiv : string, icon : Node, string : string) {

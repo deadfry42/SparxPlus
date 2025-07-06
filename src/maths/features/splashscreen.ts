@@ -1,4 +1,5 @@
 import { isExperimental, log } from "../../lib";
+import { PopupMenu } from "../../lib/classes/menuClasses";
 import { getAsset } from "../../lib/helpers/defaults";
 import { createBlur, createBlurredMenu, createWarningBox } from "../../lib/helpers/elements";
 
@@ -25,11 +26,12 @@ const setSeen = () => {
 export const doSplashScreen = () => {
 
     const instructions = () => {
-        var blur = createBlur()
-        var menu = createBlurredMenu(blur, "Welcome to SparxPlus!", () => {
+        var menu: PopupMenu = createBlurredMenu(createBlur(), "Welcome to SparxPlus!")
+    
+        menu.onclose(() => {
             setSeen()
         })
-    
+
         var header = document.createElement("div")
         header.style.display = "flex"
         header.ariaOrientation = "horizontal"
@@ -47,7 +49,7 @@ export const doSplashScreen = () => {
         headerText.style.marginLeft = "15px"
         header.append(headerText);
     
-        menu.append(header)
+        menu.getMenuDiv().append(header)
     
         var contentDiv = document.createElement("div")
         contentDiv.style.marginLeft = "auto"
@@ -79,10 +81,10 @@ export const doSplashScreen = () => {
         Enjoy, and I hope this extension helps!`
     
         contentDiv.append(content)
-        menu.append(contentDiv)
+        menu.getMenuDiv().append(contentDiv)
     
-        document.body.append(blur)
-        document.body.append(menu)
+        document.body.append(menu.getBlurDiv())
+        document.body.append(menu.getMenuDiv())
 
         log("SplashScreen", "Splash Screen Created!")
     }

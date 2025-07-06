@@ -1,3 +1,4 @@
+import { PopupMenu } from "../../lib/classes/menuClasses"
 import { TerminatedWhiteboardStroke, WhiteboardStroke, DefaultPenWhiteboardStroke } from "../../lib/classes/whiteboardClasses"
 import { PlatformID } from "../../lib/constants/enums"
 import { getSVG } from "../../lib/constants/svgs"
@@ -20,8 +21,8 @@ export const doWhiteboard = (element : HTMLElement) => {
         const question = getQuestion(PlatformID.SparxMaths);
         if (question == null) return;
 
-        var blur = createBlur()
-        var menu = createBlurredMenu(blur, "Whiteboard", () => {
+        var menu: PopupMenu = createBlurredMenu(createBlur(), "Whiteboard")
+        menu.onclose(() => {
             setWhiteboardData()
         })
 
@@ -135,7 +136,7 @@ export const doWhiteboard = (element : HTMLElement) => {
 
         controlDiv.append(undoButton, redoButton, clearButton)
 
-        menu.append(controlDiv)
+        menu.getMenuDiv().append(controlDiv)
 
         var updateMemoryText = () => {};
 
@@ -149,12 +150,12 @@ export const doWhiteboard = (element : HTMLElement) => {
             };
             updateMemoryText();
 
-            menu.append(memoryDiv)
+            menu.getMenuDiv().append(memoryDiv)
         }
 
         var whiteboardContainer = document.createElement("div") 
         whiteboardContainer.className = "SparxPlusVideoContainer SparxPlusWhiteboard"
-        menu.append(whiteboardContainer)
+        menu.getMenuDiv().append(whiteboardContainer)
 
         const setWhiteboardData = () => {
             question.getData().setKey("Whiteboard", whiteboardData)
@@ -313,8 +314,8 @@ export const doWhiteboard = (element : HTMLElement) => {
             redraw();
         })
 
-        document.body.append(blur)
-        document.body.append(menu)
+        document.body.append(menu.getBlurDiv())
+        document.body.append(menu.getMenuDiv())
     }
     element.append(btn)
 }
