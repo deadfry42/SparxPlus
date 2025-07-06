@@ -1,5 +1,6 @@
 import { PopupMenu } from "../../lib/classes/menuClasses"
 import { createBlur, createBlurredMenu } from "../../lib/helpers/elements"
+import { confirmationPrompt } from "../../lib/helpers/menus"
 
 export const openWhiteboardDataMenu = () => {
     var menu: PopupMenu = createBlurredMenu(createBlur(), "Whiteboard data manager")
@@ -8,65 +9,16 @@ export const openWhiteboardDataMenu = () => {
     document.body.append(menu.getMenuDiv())
 }
 
-const doResetPrompt = (
-    prompt: string,
-    onconfirm: (menu: PopupMenu) => void,
-) => {
-    var menu: PopupMenu = createBlurredMenu(createBlur(), "Confirmation")
-
-    var contentDiv = document.createElement("div")
-    contentDiv.style.margin = "auto"
-    contentDiv.style.textAlign = "center"
-
-    var headerText = document.createElement("h1")
-    headerText.innerText = `Deleting ${prompt}`
-    headerText.style.marginLeft = "15px"
-
-    var content = document.createElement("span")
-    content.style.color = "var(--colours-text-body)"
-    content.style.fontSize = "20px"
-    content.innerText = `Are you sure that you want to delete the ${prompt}?
-    This action is IRREVERSIBLE, and your settings will be reset.
-    
-    Are you still sure you want to continue?`
-    
-    var options = document.createElement("div")
-    options.style.marginTop = "30px"
-    options.style.gap = "20px"
-    options.style.display = "flex"
-    options.style.justifyContent = "center"
-
-    var confirmBtn = document.createElement("button")
-    confirmBtn.className = `SparxPlusButtonBase SparxPlusButtonShared SparxPlusButtonDefault SparxPlusButtonLarge SparxPlusButtonSecondary`
-    confirmBtn.innerText = "Reset"
-
-
-    confirmBtn.onclick = () => {
-        onconfirm(menu)
-    }
-
-    var declineBtn = document.createElement("button")
-    declineBtn.className = `SparxPlusButtonBase SparxPlusButtonShared SparxPlusButtonDefault SparxPlusButtonLarge SparxPlusButtonPrimary`
-    declineBtn.innerText = "Deny"
-
-    declineBtn.onclick = () => {
-        menu.close()
-    }
-
-    options.append(confirmBtn)
-    options.append(declineBtn)
-
-    contentDiv.append(headerText)
-    contentDiv.append(content)
-    contentDiv.append(options)
-
-    menu.getMenuDiv().append(contentDiv)
-    document.body.append(menu.getBlurDiv())
-    document.body.append(menu.getMenuDiv())
-}
-
 export const confirmResetLocalData = () => {
-    doResetPrompt("Extension Data", (menu: PopupMenu) => {
+    confirmationPrompt(
+        "Data management",
+        "Resetting Extension Data",
+        `Are you sure that you want to delete the extension's data?
+        (eg. ALL Whiteboard data)
+        This action is IRREVERSIBLE, and your data will be reset.
+        
+        Are you still sure you want to continue?`,
+        (menu: PopupMenu) => {
         menu.close()
         chrome.storage.local.clear();
         window.location.href = window.location.href
@@ -74,7 +26,14 @@ export const confirmResetLocalData = () => {
 }
 
 export const confirmResetSyncData = () => {
-    doResetPrompt("Extension Settings", (menu: PopupMenu) => {
+    confirmationPrompt(
+        "Data management",
+        "Resetting Extension Settings",
+        `Are you sure that you want to delete the extension's settings?
+        This action is IRREVERSIBLE, and your settings will be reset.
+        
+        Are you still sure you want to continue?`,
+        (menu: PopupMenu) => {
         menu.close()
         chrome.storage.sync.clear();
         window.location.href = window.location.href
