@@ -1,6 +1,7 @@
 import { customSettings, settingsFrontend } from "..";
 import { baseLog, getIsRelease, log } from "../../lib";
-import { SettingsPanel, DescriptivePanel, BlankPanel, ToggleSetting, InputSetting, TextSetting, SettingDisclosure, SettingInformation } from "../../lib/classes/settingsClasses";
+import { SettingsPanel, DescriptivePanel, BlankPanel, ToggleSetting, InputSetting, TextSetting, SettingDisclosure, SettingInformation, ButtonSetting } from "../../lib/classes/settingsClasses";
+import { ButtonSize, ButtonType } from "../../lib/constants/enums";
 import { getSVG } from "../../lib/constants/svgs";
 import { createWarningBox, createNewSettingsPanel } from "../../lib/helpers/elements";
 
@@ -159,6 +160,8 @@ const configureSettingsPanel = (panelConfig : SettingsPanel, panel : HTMLElement
             configureInputSetting(settingConfig, labelDiv, settingsOuterContainer, changeWarningVisibility, updateSettingsWarning);
         } else if (settingConfig instanceof TextSetting) {
             configureTextSetting(settingConfig, labelDiv, settingsOuterContainer, changeWarningVisibility, updateSettingsWarning);
+        } else if (settingConfig instanceof ButtonSetting) {
+            configureButtonSetting(settingConfig, labelDiv, settingsOuterContainer, changeWarningVisibility, updateSettingsWarning);
         }
 
         if (settingDisclosureElement != null) settingsOuterContainer.append(settingDisclosureElement)
@@ -221,6 +224,57 @@ const configureTextSetting = (settingConfig : TextSetting, settingsLabelDiv : HT
     settingsOuterContainer.append(inputLabel)
 }
 
+const configureButtonSetting = (settingConfig : ButtonSetting, settingsLabelDiv : HTMLDivElement, settingsOuterContainer : HTMLDivElement, changeWarningVisibility : Function, updateSettingsWarning : Function) => {
+    let value : string | null = settingConfig.getLabel();
+
+    let settingsInnerContainer = document.createElement("div")
+    settingsInnerContainer.style.display = "flex";  
+
+    let btnContainer = document.createElement("div")
+
+    let btn = document.createElement("button")
+
+    // this setting type doesn't support warnings
+    // why would it need it anyway
+
+    let buttonSizeClassName = "SparxPlusButtonSmall"
+    let buttonTypeClassName = "SparxPlusButtonPrimary"
+
+    switch (settingConfig.getButtonSize()) {
+        case ButtonSize.Small:
+            buttonSizeClassName = "SparxPlusButtonSmall"
+            break;
+
+        case ButtonSize.Medium:
+            buttonSizeClassName = "SparxPlusButtonMedium"
+            break;
+
+        case ButtonSize.Large:
+            buttonSizeClassName = "SparxPlusButtonLarge"
+            break;
+    }
+
+    switch (settingConfig.getButtonType()) {
+        case ButtonType.Primary:
+            buttonTypeClassName = "SparxPlusButtonPrimary"
+            break;
+
+        case ButtonType.Secondary:
+            buttonTypeClassName = "SparxPlusButtonSecondary"
+            break;
+    }
+
+    btn.className = `SparxPlusButtonBase SparxPlusButtonShared SparxPlusButtonDefault ${buttonSizeClassName} ${buttonTypeClassName}`
+    btn.style.marginTop = "10px"
+    btn.innerText = value;
+
+    btnContainer.append(btn)
+
+    settingsInnerContainer.append(btnContainer)
+    settingsInnerContainer.append(settingsLabelDiv)
+
+    settingsOuterContainer.append(settingsInnerContainer)
+}
 
 const configureInputSetting = (settingConfig : InputSetting, settingsLabelDiv : HTMLDivElement, settingsOuterContainer : HTMLDivElement, changeWarningVisibility : Function, updateSettingsWarning : Function) => {
     let settingVariableName = settingConfig.getVariableName();

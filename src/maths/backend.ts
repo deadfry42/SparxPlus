@@ -151,8 +151,6 @@ import { classMapping, customSettings, keyboardMapping, setUpdateDebugMenu, setT
         log("Data", `Cleaned up expired data!`)
     }
 
-    cleanUpExpiredData();
-
     // put it in this wrapeper thingy to visually distinguish from the rest
     // and also async
     (async () => {
@@ -227,6 +225,11 @@ import { classMapping, customSettings, keyboardMapping, setUpdateDebugMenu, setT
             }
             if (res.enableDebugByDefault) {
                 if (toggleDebugMenu != null) toggleDebugMenu();
+            }
+            if (res.whiteboardAutoClear) {
+                (async () => {
+                    cleanUpExpiredData();
+                })
             }
         }
 

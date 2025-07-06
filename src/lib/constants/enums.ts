@@ -27,8 +27,21 @@ export const enum SettingsType {
 export const enum PlatformID {
     SparxMaths,
     SparxScience,
+    SparxReader,
     Unknown
 };
+
+export const enum ButtonSize {
+    Small,
+    Medium,
+    Large
+};
+
+export const enum ButtonType {
+    Primary,
+    Secondary,
+};
+
 
 export const StrokeType = {
     Stroke: 0,

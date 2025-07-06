@@ -377,3 +377,130 @@
 .SparxPlusDebugMenuHidden {
   display: none;
 }
+
+.SparxPlusButtonBase {
+  position:relative;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  text-decoration:none;
+  font-family:inherit;
+  cursor:pointer;
+  display:inline-flex;
+  transition:background-color .2s var(--spx-ease-1),background .2s var(--spx-ease-1),border-color .2s var(--spx-ease-1),opacity .2s var(--spx-ease-1),color .2s var(--spx-ease-1)
+}
+.SparxPlusButtonBase:focus-visible {
+  outline:3px solid var(--sxd-palette-orange-9)
+}
+
+.SparxPlusButtonShared {
+  border-radius:var(--spx-radius-full);
+  font-weight:700;
+  line-height:1.5;
+  --button-border-width: 1px;
+  --disabled-opacity: 1;
+  --focus-width: 3px
+}
+
+.SparxPlusButtonSmall {
+  padding:var(--spx-unit-1) var(--spx-unit-3);
+  font-size:var(--spx-font-size-base)
+}
+.SparxPlusButtonMedium {
+  padding:var(--spx-unit-1) var(--spx-unit-4);
+  font-size:var(--spx-font-size-xl)
+}
+.SparxPlusButtonLarge {
+  padding:var(--spx-unit-1) var(--spx-unit-5);
+  font-size:var(--spx-font-size-2xl)
+}
+
+.SparxPlusButtonDefault {
+  --primary-col: var(--sw2-white);
+  --primary-bg: var(--sw2-blue-60);
+  --primary-bg-hover: var(--sw2-blue-20);
+  --primary-border-col: var(--sw2-blue-60);
+  --primary-focus: var(--focus-col);
+  --primary-bg-hover-opacity: 1;
+  --primary-col-disabled: var(--sw2-grey-40);
+  --primary-bg-disabled: var(--sw2-grey-70);
+  --primary-border-col-disabled: var(--sw2-grey-70);
+  --secondary-col: var(--sw2-blue-60);
+  --secondary-col-hover: var(--sw2-blue-20);
+  --secondary-bg: var(--sw2-white);
+  --secondary-border-col: var(--sw2-blue-60);
+  --secondary-bg-hover: var(--sw2-blue-100);
+  --secondary-focus: var(--focus-col);
+  --secondary-col-disabled: var(--sw2-grey-40);
+  --secondary-bg-disabled: var(--sxd-palette-white);
+  --secondary-border-col-disabled: var(--sxd-palette-white);
+  --ghost-focus: var(--focus-col)
+}
+
+.SparxPlusButtonPrimary {
+  -webkit-text-fill-color:initial;
+  color:var(--primary-col);
+  background:var(--primary-bg);
+  border:var(--button-border-width) solid var(--primary-border-col);
+  box-shadow:var(--box-shadow)
+}
+.SparxPlusButtonPrimary:visited {
+  -webkit-text-fill-color:initial;
+  color:var(--primary-col)
+}
+.SparxPlusButtonPrimary:not(:disabled):hover {
+  background:var(--primary-bg-hover);
+  border:var(--button-border-width) solid var(--primary-bg-hover);
+  opacity:var(--primary-bg-hover-opacity, 1)
+}
+.SparxPlusButtonPrimary:not(:disabled):active {
+  background:var(--primary-bg-active, var(--primary-bg-hover));
+  border:var(--button-border-width) solid var(--primary-bg-active, var(--primary-bg-hover));
+  box-shadow:var(--box-shadow-active)
+}
+.SparxPlusButtonPrimary:disabled {
+  -webkit-text-fill-color:initial;
+  color:var(--primary-col-disabled);
+  border-color:var(--primary-border-col-disabled);
+  background:var(--primary-bg-disabled);
+  cursor:not-allowed;
+  opacity:var(--disabled-opacity);
+  box-shadow:var(--box-shadow-disabled)
+}
+.SparxPlusButtonPrimary:not(:disabled):focus-visible {
+  outline:var(--focus-width) solid var(--primary-focus);
+  outline-offset:0
+}
+
+.SparxPlusButtonSecondary {
+  -webkit-text-fill-color:initial;
+  color:var(--secondary-col);
+  background:var(--secondary-bg);
+  border:var(--button-border-width) solid var(--secondary-border-col);
+  box-shadow:var(--box-shadow)
+}
+.SparxPlusButtonSecondary:visited {
+  -webkit-text-fill-color:initial;
+  color:var(--secondary-col)
+}
+.SparxPlusButtonSecondary:not(:disabled):hover {
+  background:var(--secondary-bg-hover);
+  opacity:var(--secondary-bg-hover-opacity, 1)
+}
+.SparxPlusButtonSecondary:not(:disabled):active {
+  background:var(--secondary-bg-active, var(--secondary-bg-hover));
+  box-shadow:var(--box-shadow-active)
+}
+.SparxPlusButtonSecondary:disabled {
+  -webkit-text-fill-color:initial;
+  color:var(--secondary-col-disabled);
+  border-color:var(--secondary-border-col-disabled);
+  background:var(--secondary-bg-disabled);
+  cursor:not-allowed;
+  opacity:var(--disabled-opacity);
+  box-shadow:var(--box-shadow-disabled)
+}
+.SparxPlusButtonSecondary:not(:disabled):focus-visible {
+  outline:var(--focus-width) solid var(--secondary-focus);
+  outline-offset:0
+}

@@ -1,3 +1,5 @@
+import { ButtonSize, ButtonType } from "../constants/enums";
+
 export interface Panel {
     getDescription() : string | null;
     getTitle() : string;
@@ -184,6 +186,95 @@ export class TextSetting implements Setting {
     }
 
     setDescription(text : string) : TextSetting {
+        this.#description = text;
+        return this;
+    }
+
+    getDescription() : string | null {
+        return this.#description;
+    }
+};
+
+export class ButtonSetting implements Setting {
+    #label: string = "undefined";
+    #warning: SettingDisclosure | null = null;
+    #variableName: string;
+    #name: string | null = null;
+    #description: string | null = null;
+    #experimental: boolean = false;
+    #buttonType: ButtonType = ButtonType.Primary;
+    #buttonSize: ButtonSize = ButtonSize.Small;
+
+    constructor(variableName : string) {
+        this.#variableName = variableName;
+    }
+
+    setButtonType(type: ButtonType) : ButtonSetting {
+        this.#buttonType = type;
+        return this;
+    }
+
+    getButtonType() : ButtonType {
+        return this.#buttonType;
+    }
+
+    setButtonSize(size: ButtonSize) : ButtonSetting {
+        this.#buttonSize = size;
+        return this;
+    }
+
+    getButtonSize() : ButtonSize {
+        return this.#buttonSize;
+    }
+
+    setLabel(text : string) : ButtonSetting {
+        this.#label = text;
+        return this;
+    }
+
+    getLabel() : string {
+        return this.#label;
+    }
+
+
+    onclick(func : () => void) : ButtonSetting {
+        func()
+        return this;
+    }
+
+    
+    setDisclosure(warning : SettingDisclosure) : ButtonSetting {
+        this.#warning = warning;
+        return this;
+    }
+
+    getDisclosure() : SettingDisclosure | null {
+        return this.#warning;
+    }
+    
+    getVariableName() : string {
+        return this.#variableName
+    }
+
+    setExperimental(bool : boolean) : ButtonSetting {
+        this.#experimental = bool;
+        return this;
+    }
+
+    getExperimental() : boolean {
+        return this.#experimental;
+    }
+
+    setName(name : string) : ButtonSetting {
+        this.#name = name;
+        return this;
+    }
+
+    getName() : string | null {
+        return this.#name;
+    }
+
+    setDescription(text : string) : ButtonSetting {
         this.#description = text;
         return this;
     }

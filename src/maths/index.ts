@@ -1,11 +1,11 @@
 import { KeyboardMapping, ClassMapping } from "../lib/classes/mappingClasses";
 import { QuestionData } from "../lib/classes/questionClasses";
-import { Panel, SettingsPanel, ToggleSetting, SettingWarning, InputSetting, TextSetting, DescriptivePanel, BlankPanel, SettingInformation } from "../lib/classes/settingsClasses";
-import { Actions, Conditions } from "../lib/constants/enums";
+import { Panel, SettingsPanel, ToggleSetting, SettingWarning, InputSetting, TextSetting, DescriptivePanel, BlankPanel, SettingInformation, ButtonSetting } from "../lib/classes/settingsClasses";
+import { Actions, ButtonType, Conditions } from "../lib/constants/enums";
 import { formatBytes, getAsset, setCustomSettings } from "../lib/helpers/defaults";
 import { deserialiseQuestionID } from "../lib/helpers/deserialisation";
 import { jumpscare } from "../lib/helpers/elements";
-import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent } from "../lib/index";
+import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent, log } from "../lib/index";
 import { doWhiteboard } from "./features/whiteboard";
 
 // settings which are set by the user
@@ -38,13 +38,15 @@ export const customSettings : {[index: string]:any} = { // default settings
     whiteboard: false, // add a draw button, and show a whiteboard on screen (similar to video popup) and let the user draw
     whiteboardDarkModeOverride: false, // if is dark mode, pretend is light mode anyway.
     whiteboardShowSize: false, // show the size of the whiteboard data (in bytes)
+    whiteboardAutoClear: true, // delete week old whiteboard data
+
+    addZoomFixes: false // puts a percentage in zooming dialogue
 
     // saveAnswer: true // save the answer when you get it wrong
     // addZoomFixes: false
 
     // goals:
     // calculatorButton: true, // click the "Calculator Allowed" button and bring up a calculator
-    // bookworkTracker: false, // track the bookwork codes in a list, so that you can write them down later
 };
 
 setCustomSettings(customSettings)
@@ -123,7 +125,19 @@ export const settingsFrontend : Panel[] = [
                     .setDescription("Use the light mode whiteboard even if in dark mode."))
         .addSetting(new ToggleSetting("whiteboardShowSize")
                     .setName("Show data size")
-                    .setDescription("Show the size of the whiteboard data"))
+                    .setDescription("Show the size of the whiteboard data in the menu."))
+        .addSetting(new ToggleSetting("whiteboardAutoClear")
+                    .setName("Clear out old data")
+                    .setDescription("Automatically delete whiteboard data that is atleast one week old."))
+        .addSetting(new ButtonSetting("blank")
+                    .setName("Manage whiteboard data")
+                    .setDescription("See old whiteboard data, and delete unused data to save space.")
+                    .setButtonType(ButtonType.Secondary)
+                    .setLabel("Open")
+                    .onclick(() => {
+                        log("StorageManager", "init")
+                    })
+                )
         .addSetting(new TextSetting("blank")
                     .setName("Current size of all whiteboard data")
                     .operate((setting) => {
