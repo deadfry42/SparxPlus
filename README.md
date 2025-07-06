@@ -49,6 +49,25 @@ It's also open-source, because I like open-source code :)
 Visit `https://nikodem.co.uk/` and check the "Sparx Plus" Tab.  
 > Available for Chrome & Firefox, with Safari planned in the future.
 
+## Tested environments
+
+* Desktop
+  * Windows 10
+    * Zen browser (firefox)
+    * Opera GX (chromium)
+  * Windows 11
+    * Brave (chromium)
+  * (Arch) Linux
+    * Zen browser (firefox)
+    * Firefox (firefox)
+    * Brave browser (chromium)
+    * Chromium (chromium)
+* Mobile
+  * Android
+    * Firefox for android (firefox)
+  * iOS
+    * Safari (safari-web-extension-converter & XCode, only 1 week at a time)
+
 ## Discord
 
 Join the discord server, see some more information about it!  
