@@ -93,7 +93,7 @@ export const settingsFrontend : Panel[] = [
                     .setName("Enable keyboard shortcuts")
                     .setDescription("Enable shortcuts to make using Sparx on a keyboard easier")
                     .setDisclosure(new SettingInformation(
-                        "H - Open \"My Homework\" tab<br>R - Open \"Revision & Assessments\" tab<br>C - open Compulsary tab<br>X - open XP Boost tab<br>T - open Target tab<br>I - open Independent Learning tab<br>Q - Open the assignment at the top of the page<br>[1-9] - Open task 1-9<br>Esc - Use the back button, or press the logo if no back buttons exist."
+                        "H - Open \"My Homework\" tab<br>R - Open \"Revision & Assessments\" tab<br>C - open Compulsory tab<br>X - open XP Boost tab<br>T - open Target tab<br>I - open Independent Learning tab<br>Q - Open the assignment at the top of the page<br>[1-9] - Open task 1-9<br>Esc - Use the back button, or press the logo if no back buttons exist."
                     )))
         .addSetting(new InputSetting("customCSS")
                     .setPlaceholder("Input custom CSS Code here.\nThis applies when you refresh the page.")
