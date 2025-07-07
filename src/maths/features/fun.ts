@@ -34,8 +34,8 @@ export const startOneko = () => {
 
         MouseX: 0,
         MouseY: 0,
-        PosX: 0,
-        PosY: 0,
+        PosX: Math.random()*window.innerWidth,
+        PosY: Math.random()*window.innerHeight,
         LastFrameTimestamp: 0,
     }
 
@@ -125,8 +125,8 @@ export const startOneko = () => {
     oneko.style.height = "32px";
     oneko.style.imageRendering = "pixelated";
     oneko.style.position = "absolute"
-    oneko.style.top = "0px"
-    oneko.style.left = "0px"
+    oneko.style.left = `${onekoData.PosX - 16}px`;
+    oneko.style.top = `${onekoData.PosY - 16}px`;
     oneko.style.pointerEvents = "none";
 
     const onekoLoop = (timestamp : number) => {
