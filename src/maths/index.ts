@@ -186,8 +186,7 @@ export const settingsFrontend : Panel[] = [
         .addSetting(new ToggleSetting("oneko")
                     .setName("oneko")
                     .setDescription("A cat that chases around your cursor")
-                    .setExperimental(true))
-                    ,
+                    ),
 
     new SettingsPanel("Extension Settings", "Settings that manage the extension itself")
         .addSetting(new ToggleSetting("enableCustomLogo")

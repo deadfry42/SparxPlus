@@ -42,9 +42,31 @@ export const enum ButtonType {
     Secondary,
 };
 
-
 export const StrokeType = {
     Stroke: 0,
     Terminator: 1,
     Unknown: -1,
+};
+
+export const enum OnekoAnimation {
+    // single framed
+    Idle,
+    Alert,
+    Tired,
+    // triple framed
+    ScratchSelf,
+    // double framed
+    ScratchWallNorth,
+    ScratchWallSouth,
+    ScratchWallEast,
+    ScratchWallWest,
+    Sleeping,
+    MovingNorth,
+    MovingNorthEast,
+    MovingEast,
+    MovingSouthEast,
+    MovingSouth,
+    MovingSouthWest,
+    MovingWest,
+    MovingNorthWest,
 };
