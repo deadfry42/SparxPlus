@@ -185,7 +185,7 @@ export const settingsFrontend : Panel[] = [
                     .setExperimental(true))
         .addSetting(new ToggleSetting("oneko")
                     .setName("oneko")
-                    .setDescription("A cat that chases around your cursor")
+                    .setDescription("A cat that chases around your cursor (inspired by the oneko.js implementation by adryd325)")
                     ),
 
     new SettingsPanel("Extension Settings", "Settings that manage the extension itself")

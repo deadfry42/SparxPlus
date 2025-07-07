@@ -9,11 +9,11 @@ const playYippee = () => {
 
 export const startYippee = () => {
     // this doesn't get annoying
-    addEventListener("keydown", (event) => {
+    addEventListener("keydown", (_) => {
         playYippee()
     });
 
-    addEventListener("mousedown", (event) => {
+    addEventListener("mousedown", (_) => {
         playYippee()
     });
 }
