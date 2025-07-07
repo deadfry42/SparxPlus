@@ -67,4 +67,4 @@ body:
       label: "Additional notes"
       description: "Add any notes you'd like to say about the bug"
     validations:
-      required: true
+      required: false
