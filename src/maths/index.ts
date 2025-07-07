@@ -221,7 +221,10 @@ export const settingsFrontend : Panel[] = [
                     .setLabel("Reset")
                     .onclick(() => {
                         confirmResetLocalData()
-                    })
+                    }))
+        .addSetting(new TextSetting("blank")
+                    .setName("Disclosure")
+                    .setValue("Your extension data will NEVER be shared externally to a server, unless you explicitly share it manually. If you reset your extension data, you are responsible for the data loss, and we cannot help you recover that data.")
                 ),
 
     new DescriptivePanel("About", "About SparxPlus")
