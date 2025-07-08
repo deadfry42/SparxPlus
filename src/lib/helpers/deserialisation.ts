@@ -3,7 +3,7 @@ import { TerminatedWhiteboardStroke, DefaultPenWhiteboardStroke, WhiteboardStrok
 import { StrokeType } from "../constants/enums";
 
 export function deserialiseQuestionID(questionID : string) {
-    const tokens = questionID.split("/")
+    var tokens = questionID.split("/")
 
     var questionidtext;
     var platformid;
@@ -20,7 +20,7 @@ export function deserialiseQuestionID(questionID : string) {
         platformid = parseInt(platformid);
         questiontype = questiontype == "Rev" ? true : false;
         
-        const idTokens = encodedQuestionID.split(":")
+        var idTokens = encodedQuestionID.split(":")
         var uri = idTokens[0]
         var task = parseInt(idTokens[1]);
         var question = parseInt(idTokens[2]);

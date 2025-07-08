@@ -131,20 +131,17 @@ import { classMapping, customSettings, keyboardMapping, setUpdateDebugMenu, setT
         // unless you just grind sparx that hard for some reason
 
         chrome.storage.local.get() .then((res) => {
-            for (var key in res) {
-                var questionID = deserialiseQuestionID(key);
+            for (let key in res) {
+                let questionID = deserialiseQuestionID(key);
                 if (questionID == null) continue;
 
-                var questionData = new QuestionData(questionID);
+                let questionData = new QuestionData(questionID);
                 if (questionData == null) continue;
-                questionData.syncData() .then(() => {
-                    (async () => {
-                        const lastUsed : number = (<number>await questionData.getUseDate());
-                        const days = 7;
-                        if (lastUsed < Date.now() - (days*24*60*1000)) {
-                            chrome.storage.local.remove([key])
-                        }
-                    })()
+                questionData.getUseDate() .then(async (lastUsed) => {
+                    const days = 7;
+                    if (lastUsed < Date.now() - (days*24*60*1000)) {
+                        chrome.storage.local.remove([key])
+                    }
                 })
             }
         })
@@ -228,9 +225,7 @@ import { classMapping, customSettings, keyboardMapping, setUpdateDebugMenu, setT
                 if (toggleDebugMenu != null) toggleDebugMenu();
             }
             if (res.whiteboardAutoClear) {
-                (async () => {
-                    cleanUpExpiredData();
-                })
+                cleanUpExpiredData();
             }
             if (res.yippee) {
                 startYippee();

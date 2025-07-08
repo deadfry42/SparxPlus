@@ -121,6 +121,7 @@ export const startOneko = () => {
     const oneko = document.createElement("div")
     oneko.style.backgroundImage = `url(${getAsset("assets/memes/oneko.png")})`
     oneko.id = "oneko"
+    oneko.style.zIndex = "2147483647";
     oneko.style.width = "32px";
     oneko.style.height = "32px";
     oneko.style.imageRendering = "pixelated";

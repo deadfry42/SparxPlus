@@ -36,8 +36,10 @@ export class QuestionData {
         this.#data = new Promise((resolve, reject) => {
             chrome.storage.local.get([this.#questionID.getID()]) .then((res) => {
                 for (var key in res){
-                    resolve(res[key])
-                    return;
+                    if (key == this.#questionID.getID()) {
+                        resolve(res[key])
+                        return;
+                    }
                 }
                 resolve({}); // fresh data
             }) .catch((e) => {
