@@ -26,8 +26,12 @@ export function isExperimental() : boolean {
     return true;
 }
 
-export function getVersion() : string {
-    return "v"+chrome.runtime.getManifest().version+""+(!getIsRelease() ? "-dev" : "")
+export function getVersion(truncated? : boolean) : string {
+    return `v${chrome.runtime.getManifest().version}${!getIsRelease() ? "-dev" : ""}${truncated == true ? "" : getCodename() == null ? "" : ` - \"${getCodename()}\"`}`
+}
+
+export function getCodename() : string | null {
+    return data.version_codename
 }
 
 export function getIsRelease() : boolean {
@@ -58,4 +62,4 @@ export function addChangedEvent(event : Function) : void {
     changedEvents.push(event);
 }
 
-log("SparxPlus", `SparxPlus library file initiated, running version ${getVersion()}`)
+log("SparxPlus", `SparxPlus library file initiated, running version ${getVersion(true)}`)
