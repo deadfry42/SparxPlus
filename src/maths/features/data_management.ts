@@ -1,5 +1,7 @@
 import { PopupMenu } from "../../lib/classes/menuClasses"
 import { QuestionData, QuestionID } from "../../lib/classes/questionClasses"
+import { getSVG } from "../../lib/constants/svgs"
+import { getCustomSettings } from "../../lib/helpers/defaults"
 import { deserialiseQuestionID } from "../../lib/helpers/deserialisation"
 import { createBlur, createBlurredMenu } from "../../lib/helpers/elements"
 import { confirmationPrompt } from "../../lib/helpers/menus"
@@ -28,14 +30,44 @@ export const openWhiteboardDataMenu = () => {
                     new_item.style.padding = "1em"
                     new_item.style.margin = "1em"
 
-                    let readable_date = ``
-                    let readable_title = `${questionID.getAlphabeticID()} ${questionID.isRevisionQuestion() ? "(Revision) " : ""}- `
+                    let date = new Date(parseInt(lastUsed))
+                    let readable_date = date.toLocaleString()
+                    let readable_title = `${questionID.getAlphabeticID()} ${questionID.isRevisionQuestion() ? "(Revision) " : ""}- ${readable_date}`
 
-                    let header = document.createElement("h1")
-                    header.title = questionID.getID()
-                    header.innerText = readable_title
+                    var clearButton = document.createElement("button")
+                    clearButton.style.float = "right"
+                    clearButton.setAttribute("aria-label", "Close")
+                    clearButton.className = "SparxPlusIconButton"
+                    clearButton.style.minWidth = "25px"
+                    clearButton.style.marginRight = "5px"
+                    clearButton.append(getSVG("bin"))
+                    clearButton.onclick = () => {
+                        if (confirm("Test")) {
+                            
+                        }
+                    }
 
+                    let canvasDiv = document.createElement("div")
+
+                    let canvas = document.createElement("canvas")
+                    canvas.className = "SparxPlusWhiteboard"
+                    canvas.style.borderRadius = "1em"
+                    if (!getCustomSettings().darkMode || getCustomSettings().whiteboardDarkModeOverride) {
+                        canvas.style.backgroundColor = "white"
+                    }
+
+                    canvasDiv.append(canvas)
+
+                    let header = document.createElement("div")
+
+                    let header_text = document.createElement("h1")
+                    header_text.title = questionID.getID()
+                    header_text.innerText = readable_title
+
+                    header.append(clearButton)
+                    header.append(header_text)
                     new_item.append(header)
+                    new_item.append(canvasDiv)
 
                     new_item.style.borderRadius = "1em"
                     new_item.style.backgroundColor = "var(--colours-nested-item)"
