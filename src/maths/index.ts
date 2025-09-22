@@ -24,6 +24,10 @@ export const customSettings : {[index: string]:any} = { // default settings
     disableNotificationsInTopRight: false, // hide notifications in top right
     customCSS: "", // add custom css
     darkMode: false, // DARK MODE!!!
+    selectText: true, // SEE BELOW
+    // :root {
+    //     --user-select-accessibility-setting: default !important;
+    // }
     audio: true, // extension audio
     test: false, // test idk
     keyboardShortcuts: false, // navigate Sparx with a keyboard
@@ -79,12 +83,12 @@ export const settingsFrontend : Panel[] = [
     new SettingsPanel("UI Tweaks", "Small UI tweaks to fix issues with Sparx.")
         .addSetting(new ToggleSetting("darkMode")
                     .setName("Dark mode")
-                    .setDescription("Enable a native dark mode for the website (doesn't support images unfortunately)")
+                    .setDescription("Enable a native Dark Mode version of the website.")
                     .setExperimental(true)
-                    .setDisclosure(new SettingWarning("Dark mode is an experimental setting where it tries its best to adapt the CSS of the website. Do not expect this dark mode to be perfect - it will have issues.")))
+                    .setDisclosure(new SettingWarning("This website was not designed with Dark Mode in mind, and thus certain elements of the website may be broken. Do not expect Dark Mode to be perfect.")))
         .addSetting(new ToggleSetting("progressiveDisclosure")
                     .setName("Progressive Disclosure")
-                    .setDescription("Hide tasks which haven't yet completed, to motivate you to finish. Doesn't work on revision."))
+                    .setDescription("Hide tasks which haven't yet completed, to motivate you to finish (doesn't work on revision)"))
         // .addSetting(new ToggleSetting("calculator")
         //             .setName("Enable built-in calculator")
         //             .setDescription("Allow you to press on the calculator button to show a calculator to work out your answer.")
@@ -95,6 +99,9 @@ export const settingsFrontend : Panel[] = [
                     .setDisclosure(new SettingInformation(
                         "H - Open \"My Homework\" tab<br>R - Open \"Revision & Assessments\" tab<br>C - open Compulsory tab<br>X - open XP Boost tab<br>T - open Target tab<br>I - open Independent Learning tab<br>Q - Open the assignment at the top of the page<br>[1-9] - Open task 1-9<br>Esc - Use the back button, or press the logo if no back buttons exist."
                     )))
+        .addSetting(new ToggleSetting("selectText")
+                    .setName("Allow selecting of text")
+                    .setDescription("Allow all text on the website to be highlighted (eg. for copying)"))
         .addSetting(new InputSetting("customCSS")
                     .setPlaceholder("Input custom CSS Code here.\nThis applies when you refresh the page.")
                     .setName("Custom CSS")
@@ -133,7 +140,8 @@ export const settingsFrontend : Panel[] = [
                     .setName("Clear out old data")
                     .setDescription("Automatically delete whiteboard data that is atleast one week old."))
         .addSetting(new ButtonSetting("blank")
-                    .setName("Manage whiteboard data")
+                    .setExperimental(true)
+                    .setName("Manage whiteboard data (WIP)")
                     .setDescription("See old whiteboard data, and delete unused data to save space.")
                     .setButtonType(ButtonType.Secondary)
                     .setLabel("Open")

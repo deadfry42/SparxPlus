@@ -198,6 +198,9 @@ import { classMapping, customSettings, keyboardMapping, setUpdateDebugMenu, setT
             if (res.darkMode) {
                 appendStyleSheet("darkmodeSP", getAsset("css/darkmodemaths.css"));
             }
+            if (res.selectText) {
+                appendStyleContent("selectableText", ":root {--user-select-accessibility-setting: default !important;}")
+            }
             if (res.test) {
                 addOptionToDDMenu(null, "SparxPlus Test", () => {
                     sendNotification("Testing!", 2500)
