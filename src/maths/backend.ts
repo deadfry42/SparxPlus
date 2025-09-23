@@ -8,7 +8,7 @@ import { baseLog, getLastUpdated, log } from "../lib/index";
 import { applySettingsPage } from "./features/settings";
 import { doSplashScreen } from "./features/splashscreen";
 import { startOneko, startYippee } from "./features/fun";
-import { classMapping, customSettings, keyboardMapping, setUpdateDebugMenu, setToggleDebugMenu, toggleDebugMenu } from "./index";
+import { classMapping, customSettings, keyboardMapping, setUpdateDebugMenu, setToggleDebugMenu, toggleDebugMenu, settingsFrontend } from "./index";
 
 (async () => {
     log("Maths", "Sparx Plus started with SparxMaths!")
@@ -243,7 +243,7 @@ import { classMapping, customSettings, keyboardMapping, setUpdateDebugMenu, setT
                 customSettings[object] = res[object]
             }
 
-            settingsLoaded(res)
+            settingsLoaded(res == null ? settingsFrontend : res)
 
             log("Settings", "Successfully synced settings!")
         })

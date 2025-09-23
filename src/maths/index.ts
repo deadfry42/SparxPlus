@@ -24,7 +24,7 @@ export const customSettings : {[index: string]:any} = { // default settings
     disableNotificationsInTopRight: false, // hide notifications in top right
     customCSS: "", // add custom css
     darkMode: false, // DARK MODE!!!
-    selectText: true, // SEE BELOW
+    selectText: false, // SEE BELOW
     // :root {
     //     --user-select-accessibility-setting: default !important;
     // }
