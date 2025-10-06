@@ -504,7 +504,7 @@ export const classMapping : ClassMapping[] = [
             return false;
         })
         .setIfMatched((element : HTMLElement, condition : Conditions) => {
-            if (getCustomSettings().darkModeImages == true) element.style.filter = "invert(1)";
+            if (getCustomSettings().darkModeImages == true) element.style.filter = "invert(0.8)";
         }),
 
     new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
