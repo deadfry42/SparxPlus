@@ -48,3 +48,11 @@ export function getDescendants(node : Node, accum? : ChildNode[]) {
     }
     return accum;
 }
+
+export function convertChildNodeToHTMLElement(childNode: Node | null): HTMLElement | null {
+    if (childNode == null) return null;
+    if (childNode.nodeType === Node.ELEMENT_NODE) {
+        return childNode as HTMLElement;
+    }
+    return null;
+}

@@ -2,7 +2,7 @@ import { KeyboardMapping, ClassMapping } from "../lib/classes/mappingClasses";
 import { QuestionData } from "../lib/classes/questionClasses";
 import { Panel, SettingsPanel, ToggleSetting, SettingWarning, InputSetting, TextSetting, DescriptivePanel, BlankPanel, SettingInformation, ButtonSetting } from "../lib/classes/settingsClasses";
 import { Actions, ButtonType, Conditions } from "../lib/constants/enums";
-import { formatBytes, getAsset, getCustomSettings, setCustomSettings } from "../lib/helpers/defaults";
+import { convertChildNodeToHTMLElement, formatBytes, getAsset, getCustomSettings, setCustomSettings } from "../lib/helpers/defaults";
 import { deserialiseQuestionID } from "../lib/helpers/deserialisation";
 import { jumpscare } from "../lib/helpers/elements";
 import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent } from "../lib/index";
@@ -501,6 +501,17 @@ export const classMapping : ClassMapping[] = [
         .addNewClass("SparxPlusImageInverted")
         .setElementCheck((element : HTMLElement, condition : Conditions) => {
             if (element.nodeName.toLowerCase() == "img" && element.draggable == false) return true;
+            return false;
+        })
+        .setIfMatched((element : HTMLElement, condition : Conditions) => {
+            if (getCustomSettings().darkModeImages == true) element.style.filter = "invert(0.8)";
+        }),
+
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
+        .addClassMatch("Video")
+        .addNewClass("SparxPlusVideoInverted")
+        .setElementCheck((element : HTMLElement, condition : Conditions) => {
+            if (element.nodeName.toLowerCase() == "video" && element.role == "application") return true;
             return false;
         })
         .setIfMatched((element : HTMLElement, condition : Conditions) => {
