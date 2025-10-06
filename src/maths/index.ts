@@ -2,7 +2,7 @@ import { KeyboardMapping, ClassMapping } from "../lib/classes/mappingClasses";
 import { QuestionData } from "../lib/classes/questionClasses";
 import { Panel, SettingsPanel, ToggleSetting, SettingWarning, InputSetting, TextSetting, DescriptivePanel, BlankPanel, SettingInformation, ButtonSetting } from "../lib/classes/settingsClasses";
 import { Actions, ButtonType, Conditions } from "../lib/constants/enums";
-import { formatBytes, getAsset, setCustomSettings } from "../lib/helpers/defaults";
+import { formatBytes, getAsset, getCustomSettings, setCustomSettings } from "../lib/helpers/defaults";
 import { deserialiseQuestionID } from "../lib/helpers/deserialisation";
 import { jumpscare } from "../lib/helpers/elements";
 import { getDiscordLink, getGithubLink, getGoogleLink, getVersion, getLastUpdated, getLogs, addChangedEvent } from "../lib/index";
@@ -24,6 +24,7 @@ export const customSettings : {[index: string]:any} = { // default settings
     disableNotificationsInTopRight: false, // hide notifications in top right
     customCSS: "", // add custom css
     darkMode: false, // DARK MODE!!!
+    darkModeImages: false, // invert all images via css
     selectText: false, // SEE BELOW
     // :root {
     //     --user-select-accessibility-setting: default !important;
@@ -86,6 +87,10 @@ export const settingsFrontend : Panel[] = [
                     .setDescription("Enable a native Dark Mode version of the website.")
                     .setExperimental(true)
                     .setDisclosure(new SettingWarning("This website was not designed with Dark Mode in mind, and thus certain elements of the website may be broken. Do not expect Dark Mode to be perfect.")))
+        .addSetting(new ToggleSetting("darkModeImages")
+                    .setName("Dark mode images")
+                    .setDescription("Makes the question images easier on the eyes by inverting them.")
+                    .setExperimental(true))
         .addSetting(new ToggleSetting("progressiveDisclosure")
                     .setName("Progressive Disclosure")
                     .setDescription("Hide tasks which haven't yet completed, to motivate you to finish (doesn't work on revision)"))
@@ -489,6 +494,17 @@ export const classMapping : ClassMapping[] = [
                     }
                 }
             }
+        }),
+
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
+        .addClassMatch("Image")
+        .addNewClass("SparxPlusImageInverted")
+        .setElementCheck((element : HTMLElement, condition : Conditions) => {
+            if (element.nodeName.toLowerCase() == "img" && element.draggable == false) return true;
+            return false;
+        })
+        .setIfMatched((element : HTMLElement, condition : Conditions) => {
+            if (getCustomSettings().darkModeImages == true) element.style.filter = "invert(1)";
         }),
 
     new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
