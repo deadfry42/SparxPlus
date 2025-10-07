@@ -504,3 +504,11 @@
   outline:var(--focus-width) solid var(--secondary-focus);
   outline-offset:0
 }
+
+.SparxPlusVideoNudgeOverlay {
+  opacity: 0.75 !important;
+}
+
+.SparxPlusImageInverted{
+  filter: invert(0.8) !important;
+}

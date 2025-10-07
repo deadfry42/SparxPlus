@@ -500,22 +500,28 @@ export const classMapping : ClassMapping[] = [
         .addClassMatch("Image")
         .addNewClass("SparxPlusImageInverted")
         .setElementCheck((element : HTMLElement, condition : Conditions) => {
+            if (getCustomSettings().darkModeImages == false) return false;
             if (element.nodeName.toLowerCase() == "img" && element.draggable == false) return true;
             return false;
-        })
-        .setIfMatched((element : HTMLElement, condition : Conditions) => {
-            if (getCustomSettings().darkModeImages == true) element.style.filter = "invert(0.8)";
+        }),
+
+        // video nudge doesnt properly work
+    new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
+        .addClassMatch("VideoNudgePoster")
+        .addNewClass("SparxPlusImageInverted")
+        .setElementCheck((element : HTMLElement, condition : Conditions) => {
+            if (getCustomSettings().darkModeImages == false) return false;
+            if (element.nodeName.toLowerCase() == "img" && element.draggable == false) return true;
+            return false;
         }),
 
     new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
         .addClassMatch("Video")
-        .addNewClass("SparxPlusVideoInverted")
+        .addNewClass("SparxPlusImageInverted")
         .setElementCheck((element : HTMLElement, condition : Conditions) => {
+            if (getCustomSettings().darkModeImages == false) return false;
             if (element.nodeName.toLowerCase() == "video" && element.role == "application") return true;
             return false;
-        })
-        .setIfMatched((element : HTMLElement, condition : Conditions) => {
-            if (getCustomSettings().darkModeImages == true) element.style.filter = "invert(0.8)";
         }),
 
     new ClassMapping([Conditions.ModifiedTransitionPage, Conditions.Modified, Conditions.Added])
@@ -686,5 +692,10 @@ export const classMapping : ClassMapping[] = [
     new ClassMapping([Conditions.Modified, Conditions.Added])
         .addClassMatch("!SparxPlusDisabled")
         .addClassMatch("Disabled")
-        .addNewClass("SparxPlusDisabled")
+        .addNewClass("SparxPlusDisabled"),
+
+    new ClassMapping([Conditions.Modified, Conditions.Added])
+        .addClassMatch("!SparxPlusVideoNudgeOverlay")
+        .addClassMatch("VideoNudgeOverlay")
+        .addNewClass("SparxPlusVideoNudgeOverlay")
 ];
