@@ -1,6 +1,6 @@
 {
   "name": "sparxplus",
-  "version": "0.3.1",
+  "version": "0.4.1",
   "description": "A browser extension for Sparx-Learning web apps to improve QoL (without sacrificing learning!)",
   "main": "index.js",
   "type": "module",
